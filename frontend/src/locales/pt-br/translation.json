@@ -1,0 +1,16 @@
+{
+    "app": {
+        "title": "PDF Gravity",
+        "subtitle": "Converta HTML para PDF em segundos"
+    },
+    "editor": {
+        "placeholder": "Cole seu código HTML aqui...",
+        "btn_download": "Baixar PDF",
+        "btn_preview": "Visualizar",
+        "generating": "Processando..."
+    },
+    "feedback": {
+        "success": "Sucesso!",
+        "error": "Erro na conversão. Verifique seu HTML."
+    }
+}

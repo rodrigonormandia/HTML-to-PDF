@@ -1,0 +1,23 @@
+services:
+  # Backend Service (Docker)
+  - type: web
+    name: pdf-gravity-api
+    env: docker
+    plan: free
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 8000
+
+  # Frontend Service (Static Site)
+  - type: web
+    name: pdf-gravity-web
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: pdf-gravity-api
+          property: url
