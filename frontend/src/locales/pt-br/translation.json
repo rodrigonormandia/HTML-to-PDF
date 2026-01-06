@@ -38,6 +38,30 @@
         "try_again": "Tente novamente. Se o erro persistir, recarregue a página.",
         "check_connection": "Verifique sua conexão com a internet."
     },
+    "settings": {
+        "title": "Configurações do PDF",
+        "page_size": "Tamanho da página",
+        "orientation": "Orientação",
+        "portrait": "Retrato",
+        "landscape": "Paisagem",
+        "margins": "Margens",
+        "margin_top": "Superior",
+        "margin_bottom": "Inferior",
+        "margin_left": "Esquerda",
+        "margin_right": "Direita",
+        "margin_unit": "Unidade",
+        "page_numbers": "Incluir números de página",
+        "page_numbers_hint": "Exibe 'Página X de Y' no rodapé de cada página"
+    },
+    "theme": {
+        "toggle": "Alternar tema",
+        "light": "Modo claro",
+        "dark": "Modo escuro"
+    },
+    "legal": {
+        "privacy": "Privacidade",
+        "terms": "Termos de Uso"
+    },
     "footer": {
         "apiDocs": "API Docs (Swagger)",
         "apiRedoc": "API Docs (ReDoc)",

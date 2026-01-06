@@ -39,10 +39,10 @@
 ## 🟡 Versão 1.2 - MÉDIA PRIORIDADE (1 mês)
 
 ### Customização de PDF
-- [ ] Seletor de tamanho (A4, Letter, Custom)
-- [ ] Orientação (Portrait/Landscape)
-- [ ] Margens customizáveis
-- [ ] Header/Footer personalizados
+- [x] Seletor de tamanho (A4, Letter, Custom)
+- [x] Orientação (Portrait/Landscape)
+- [x] Margens customizáveis
+- [x] Header/Footer personalizados (números de página)
 
 ### Editor
 - [ ] Integrar CodeMirror ou Monaco Editor
@@ -58,10 +58,10 @@
 - [ ] Botão "Usar template"
 
 ### Tema
-- [ ] Modo escuro
-- [ ] Toggle dark/light mode
-- [ ] Salvar preferência no localStorage
-- [ ] Respeitar preferência do sistema
+- [x] Modo escuro
+- [x] Toggle dark/light mode
+- [x] Salvar preferência no localStorage
+- [x] Respeitar preferência do sistema
 
 ---
 
@@ -115,7 +115,7 @@
 ### DevOps
 - [ ] Unit tests (pytest para backend)
 - [ ] E2E tests (Playwright para frontend)
-- [ ] CI/CD com GitHub Actions
+- [x] CI/CD com GitHub Actions
 - [ ] Testes automatizados em PRs
 - [ ] Coverage reports
 
@@ -156,19 +156,19 @@
 - [x] Logo criada
 - [x] Favicon adicionado
 - [x] Open Graph images
-- [ ] Animações e micro-interações
+- [x] Animações e micro-interações
 - [ ] Ilustrações customizadas
-- [ ] Design system completo
+- [x] Design system completo
 
 ---
 
 ## 🔒 Segurança e Compliance
 
-- [ ] HTTPS obrigatório
-- [ ] CSP (Content Security Policy)
-- [ ] GDPR compliance
-- [ ] Política de privacidade
-- [ ] Termos de uso
+- [x] HTTPS obrigatório
+- [x] CSP (Content Security Policy)
+- [x] GDPR compliance
+- [x] Política de privacidade
+- [x] Termos de uso
 
 ---
 
@@ -212,8 +212,10 @@
 - [x] robots.txt e sitemap.xml
 - [x] Schema.org JSON-LD
 - [x] Internacionalização (pt-BR)
+- [x] Documentação da API (Swagger/ReDoc)
+- [x] Deploy no Portainer com Traefik
 
 ---
 
 **Última atualização:** 2026-01-06
-**Versão atual:** v1.0.4
+**Versão atual:** v1.2.0

@@ -101,11 +101,45 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for MVP
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://htmltopdf.buscarid.com",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000"
+    ],
+    allow_credentials=False,
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
+
+
+# Security Headers Middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+
+    # Content Security Policy
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; "
+        "img-src 'self' data: https:; "
+        "font-src 'self' data:; "
+        "connect-src 'self' http://localhost:* https://*.buscarid.com; "
+        "frame-ancestors 'none'"
+    )
+
+    # Other security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+
+    # HSTS for HTTPS connections
+    if request.url.scheme == "https":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+    return response
 
 class PDFRequest(BaseModel):
     """Modelo de requisição para conversão de HTML para PDF."""
@@ -124,6 +158,55 @@ class PDFRequest(BaseModel):
             "example": "preview"
         }
     )
+    page_size: str = Field(
+        default="A4",
+        description="Tamanho da página: A4, Letter, A3, A5 ou dimensões customizadas (ex: '210mm 297mm').",
+        json_schema_extra={
+            "example": "A4"
+        }
+    )
+    orientation: str = Field(
+        default="portrait",
+        description="Orientação da página: 'portrait' (retrato) ou 'landscape' (paisagem).",
+        json_schema_extra={
+            "example": "portrait"
+        }
+    )
+    margin_top: str = Field(
+        default="2cm",
+        description="Margem superior (ex: '2cm', '1in', '20mm').",
+        json_schema_extra={
+            "example": "2cm"
+        }
+    )
+    margin_bottom: str = Field(
+        default="2cm",
+        description="Margem inferior.",
+        json_schema_extra={
+            "example": "2cm"
+        }
+    )
+    margin_left: str = Field(
+        default="2cm",
+        description="Margem esquerda.",
+        json_schema_extra={
+            "example": "2cm"
+        }
+    )
+    margin_right: str = Field(
+        default="2cm",
+        description="Margem direita.",
+        json_schema_extra={
+            "example": "2cm"
+        }
+    )
+    include_page_numbers: bool = Field(
+        default=False,
+        description="Se True, adiciona números de página no rodapé (Página X de Y).",
+        json_schema_extra={
+            "example": False
+        }
+    )
 
     @field_validator('html_content')
     @classmethod
@@ -132,6 +215,26 @@ class PDFRequest(BaseModel):
         if len(v.encode('utf-8')) > MAX_HTML_SIZE:
             raise ValueError(f'HTML excede o limite de 2MB')
         return v
+
+    @field_validator('orientation')
+    @classmethod
+    def validate_orientation(cls, v: str) -> str:
+        """Valida a orientação da página."""
+        if v.lower() not in ['portrait', 'landscape']:
+            raise ValueError("Orientação deve ser 'portrait' ou 'landscape'")
+        return v.lower()
+
+    @field_validator('page_size')
+    @classmethod
+    def validate_page_size(cls, v: str) -> str:
+        """Valida o tamanho da página."""
+        valid_sizes = ['A3', 'A4', 'A5', 'Letter', 'Legal', 'B4', 'B5']
+        if v.upper() in [s.upper() for s in valid_sizes]:
+            return v
+        # Permite tamanhos customizados no formato "NNNmm NNNmm"
+        if 'mm' in v or 'cm' in v or 'in' in v:
+            return v
+        raise ValueError(f"Tamanho de página inválido. Use: {', '.join(valid_sizes)} ou dimensões customizadas.")
 
 @app.post(
     "/api/convert",
@@ -199,7 +302,16 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
 
     # 3. Gerar PDF
     try:
-        pdf_bytes = generate_pdf_from_html(clean_html)
+        pdf_bytes = generate_pdf_from_html(
+            html=clean_html,
+            page_size=pdf_request.page_size,
+            orientation=pdf_request.orientation,
+            margin_top=pdf_request.margin_top,
+            margin_bottom=pdf_request.margin_bottom,
+            margin_left=pdf_request.margin_left,
+            margin_right=pdf_request.margin_right,
+            include_page_numbers=pdf_request.include_page_numbers
+        )
 
         headers = {
             "Content-Type": "application/pdf",
