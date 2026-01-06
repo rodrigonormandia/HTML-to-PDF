@@ -106,6 +106,29 @@ const EXAMPLE_HTML = `<!DOCTYPE html>
     </table>
   </div>
 
+  <!-- QUEBRA DE PÁGINA: use class="page-break" para forçar nova página -->
+  <div class="page-break"></div>
+
+  <!-- PÁGINA 2 -->
+  <div class="header">
+    <span class="logo">PDF Gravity</span>
+    <span class="badge">Página 2</span>
+  </div>
+
+  <h1 class="text-2xl font-bold mb-4">Segunda Página</h1>
+
+  <div class="card">
+    <h2 class="text-lg font-semibold mb-2">Quebra de Página</h2>
+    <p>Use a classe <code class="bg-gray-200 px-1 rounded">page-break</code> para forçar uma nova página:</p>
+    <pre class="bg-gray-800 text-green-400 p-3 rounded mt-2 text-sm">&lt;div class="page-break"&gt;&lt;/div&gt;</pre>
+    <p class="mt-3">Classes disponíveis:</p>
+    <ul class="list-disc list-inside mt-2 space-y-1">
+      <li><code class="bg-gray-200 px-1 rounded">page-break</code> - quebra após o elemento</li>
+      <li><code class="bg-gray-200 px-1 rounded">page-break-before</code> - quebra antes do elemento</li>
+      <li><code class="bg-gray-200 px-1 rounded">avoid-break</code> - evita quebra dentro do elemento</li>
+    </ul>
+  </div>
+
   <div class="footer">
     Gerado com PDF Gravity | htmltopdf.buscarid.com
   </div>
@@ -127,6 +150,15 @@ function App() {
   const [margins, setMargins] = useState({ top: '2', bottom: '2', left: '2', right: '2' });
   const [marginUnit, setMarginUnit] = useState('cm');
   const [includePageNumbers, setIncludePageNumbers] = useState(false);
+
+  // Header/Footer Settings
+  const [headerHtml, setHeaderHtml] = useState('');
+  const [footerHtml, setFooterHtml] = useState('');
+  const [headerHeight, setHeaderHeight] = useState('2');
+  const [footerHeight, setFooterHeight] = useState('2');
+  const [headerFooterUnit, setHeaderFooterUnit] = useState('cm');
+  const [excludeHeaderPages, setExcludeHeaderPages] = useState('');
+  const [excludeFooterPages, setExcludeFooterPages] = useState('');
 
   const showErrorWithSuggestion = (errorKey: string, suggestionKey: string) => {
     toast.error(
@@ -160,7 +192,13 @@ function App() {
           margin_bottom: `${margins.bottom}${marginUnit}`,
           margin_left: `${margins.left}${marginUnit}`,
           margin_right: `${margins.right}${marginUnit}`,
-          include_page_numbers: includePageNumbers
+          include_page_numbers: includePageNumbers,
+          header_html: headerHtml || null,
+          footer_html: footerHtml || null,
+          header_height: `${headerHeight}${headerFooterUnit}`,
+          footer_height: `${footerHeight}${headerFooterUnit}`,
+          exclude_header_pages: excludeHeaderPages || null,
+          exclude_footer_pages: excludeFooterPages || null
         },
         {
           responseType: 'blob',
@@ -229,10 +267,22 @@ function App() {
 
   const handleClear = () => {
     setHtmlContent('');
+    setHeaderHtml('');
+    setFooterHtml('');
+    setHeaderHeight('2');
+    setFooterHeight('2');
+    setExcludeHeaderPages('');
+    setExcludeFooterPages('');
+    setIncludePageNumbers(false);
   };
 
   const handleLoadExample = () => {
     setHtmlContent(EXAMPLE_HTML);
+    setHeaderHtml('<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:10pt;">\n  <span style="font-weight:bold; color:#3b82f6;">PDF Gravity</span>\n  <span style="color:#666;">Relatório de Demonstração</span>\n</div>');
+    setFooterHtml('<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:9pt; color:#888;">\n  <span>Documento gerado em ' + new Date().toLocaleDateString('pt-BR') + '</span>\n  <span>Página {{page}} de {{pages}}</span>\n</div>');
+    setHeaderHeight('1.5');
+    setFooterHeight('1');
+    setIncludePageNumbers(true);
     toast.info(t('editor.example_loaded'));
   };
 
@@ -444,6 +494,130 @@ function App() {
                       <span className="text-sm text-gray-700 dark:text-gray-300">{t('settings.page_numbers')}</span>
                     </label>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-6">{t('settings.page_numbers_hint')}</p>
+                  </div>
+
+                  {/* Header/Footer Section */}
+                  <div className="md:col-span-2 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                      {t('settings.headers_footers')}
+                    </h3>
+
+                    {/* Header HTML */}
+                    <div className="mb-4">
+                      <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">
+                        {t('settings.header_html')}
+                      </label>
+                      <textarea
+                        value={headerHtml}
+                        onChange={(e) => setHeaderHtml(e.target.value)}
+                        placeholder={t('settings.header_placeholder')}
+                        className="w-full h-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-mono bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      />
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{t('settings.height')}:</span>
+                        <input
+                          type="number"
+                          min="0.5"
+                          max="10"
+                          step="0.5"
+                          value={headerHeight}
+                          onChange={(e) => setHeaderHeight(e.target.value)}
+                          className="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        />
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{headerFooterUnit}</span>
+                      </div>
+                    </div>
+
+                    {/* Footer HTML */}
+                    <div className="mb-4">
+                      <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">
+                        {t('settings.footer_html')}
+                      </label>
+                      <textarea
+                        value={footerHtml}
+                        onChange={(e) => setFooterHtml(e.target.value)}
+                        placeholder={t('settings.footer_placeholder')}
+                        className="w-full h-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-mono bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      />
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{t('settings.height')}:</span>
+                        <input
+                          type="number"
+                          min="0.5"
+                          max="10"
+                          step="0.5"
+                          value={footerHeight}
+                          onChange={(e) => setFooterHeight(e.target.value)}
+                          className="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        />
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{headerFooterUnit}</span>
+                      </div>
+                    </div>
+
+                    {/* Height Unit Selector */}
+                    <div className="mb-4">
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                        {t('settings.header_footer_unit')}
+                      </label>
+                      <select
+                        value={headerFooterUnit}
+                        onChange={(e) => setHeaderFooterUnit(e.target.value)}
+                        className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      >
+                        <option value="cm">cm</option>
+                        <option value="mm">mm</option>
+                        <option value="in">in</option>
+                      </select>
+                    </div>
+
+                    {/* Page Exclusions */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                          {t('settings.exclude_header_pages')}
+                        </label>
+                        <input
+                          type="text"
+                          value={excludeHeaderPages}
+                          onChange={(e) => setExcludeHeaderPages(e.target.value)}
+                          placeholder="1, 3, 5"
+                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                          {t('settings.exclude_footer_pages')}
+                        </label>
+                        <input
+                          type="text"
+                          value={excludeFooterPages}
+                          onChange={(e) => setExcludeFooterPages(e.target.value)}
+                          placeholder="1, 3, 5"
+                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {t('settings.exclude_pages_hint')}
+                    </p>
+                  </div>
+
+                  {/* Page Break Info */}
+                  <div className="md:col-span-2 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      {t('settings.page_break_title')}
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                      {t('settings.page_break_description')}
+                    </p>
+                    <div className="bg-gray-100 dark:bg-gray-800 rounded p-2 font-mono text-xs">
+                      <code className="text-blue-600 dark:text-blue-400">&lt;div class="page-break"&gt;&lt;/div&gt;</code>
+                    </div>
+                    <ul className="text-xs text-gray-500 dark:text-gray-400 mt-2 space-y-1">
+                      <li><code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">page-break</code> - {t('settings.page_break_after')}</li>
+                      <li><code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">page-break-before</code> - {t('settings.page_break_before')}</li>
+                      <li><code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">avoid-break</code> - {t('settings.avoid_break')}</li>
+                    </ul>
                   </div>
                 </div>
               </div>

@@ -207,3 +207,180 @@ class TestGeneratePdfContent:
         """Generated PDF should contain EOF marker."""
         result = generate_pdf_from_html(valid_html)
         assert b"%%EOF" in result
+
+
+class TestGeneratePdfHeaderFooter:
+    """Tests for header/footer functionality."""
+
+    def test_generate_pdf_with_header_only(self, valid_html):
+        """PDF should be generated with header only."""
+        result = generate_pdf_from_html(
+            valid_html,
+            header_html="<div style='text-align:center;'>My Header</div>",
+            header_height="2cm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_with_footer_only(self, valid_html):
+        """PDF should be generated with footer only."""
+        result = generate_pdf_from_html(
+            valid_html,
+            footer_html="<div style='text-align:center;'>My Footer</div>",
+            footer_height="2cm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_with_header_and_footer(self, valid_html):
+        """PDF should be generated with both header and footer."""
+        result = generate_pdf_from_html(
+            valid_html,
+            header_html="<div><strong>Company Name</strong></div>",
+            footer_html="<div>Confidential Document</div>",
+            header_height="2cm",
+            footer_height="2cm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_with_complex_header_html(self, valid_html):
+        """PDF should handle complex header HTML with styles."""
+        header = """
+        <div style="display:flex; justify-content:space-between; width:100%;">
+            <span style="font-weight:bold;">Left Text</span>
+            <span>Center</span>
+            <span style="font-style:italic;">Right Text</span>
+        </div>
+        """
+        result = generate_pdf_from_html(
+            valid_html,
+            header_html=header,
+            header_height="3cm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_header_with_different_heights(self, valid_html):
+        """PDF should handle different header/footer heights."""
+        result = generate_pdf_from_html(
+            valid_html,
+            header_html="<div>Header</div>",
+            footer_html="<div>Footer</div>",
+            header_height="3cm",
+            footer_height="1.5cm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_header_with_mm_unit(self, valid_html):
+        """PDF should handle header height in mm."""
+        result = generate_pdf_from_html(
+            valid_html,
+            header_html="<div>Header</div>",
+            header_height="25mm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_header_with_in_unit(self, valid_html):
+        """PDF should handle header height in inches."""
+        result = generate_pdf_from_html(
+            valid_html,
+            footer_html="<div>Footer</div>",
+            footer_height="0.75in"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_with_page_numbers_in_footer(self, valid_html):
+        """PDF should integrate page numbers with custom footer."""
+        result = generate_pdf_from_html(
+            valid_html,
+            footer_html="<div>Page {{page}} of {{pages}}</div>",
+            footer_height="2cm",
+            include_page_numbers=True
+        )
+        assert result[:4] == b"%PDF"
+
+
+class TestGeneratePdfPageExclusions:
+    """Tests for page exclusion functionality."""
+
+    def test_generate_pdf_exclude_header_first_page(self, complex_html):
+        """PDF should handle header exclusion for first page."""
+        result = generate_pdf_from_html(
+            complex_html,
+            header_html="<div>Header</div>",
+            header_height="2cm",
+            exclude_header_pages="1"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_exclude_footer_first_page(self, complex_html):
+        """PDF should handle footer exclusion for first page."""
+        result = generate_pdf_from_html(
+            complex_html,
+            footer_html="<div>Footer</div>",
+            footer_height="2cm",
+            exclude_footer_pages="1"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_exclude_multiple_pages(self, complex_html):
+        """PDF should handle exclusion for multiple pages."""
+        result = generate_pdf_from_html(
+            complex_html,
+            header_html="<div>Header</div>",
+            footer_html="<div>Footer</div>",
+            header_height="2cm",
+            footer_height="2cm",
+            exclude_header_pages="1, 3, 5",
+            exclude_footer_pages="2, 4"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_generate_pdf_exclusion_without_header_footer(self, valid_html):
+        """Exclusion should be ignored if no header/footer is defined."""
+        result = generate_pdf_from_html(
+            valid_html,
+            exclude_header_pages="1"
+        )
+        assert result[:4] == b"%PDF"
+
+
+class TestGeneratePdfHeaderFooterCombinations:
+    """Tests for combined header/footer with other configurations."""
+
+    def test_landscape_with_header_footer(self, valid_html):
+        """Landscape orientation with header/footer should work."""
+        result = generate_pdf_from_html(
+            valid_html,
+            orientation="landscape",
+            header_html="<div>Header</div>",
+            footer_html="<div>Footer</div>",
+            header_height="2cm",
+            footer_height="2cm"
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_a3_with_header_footer_and_page_numbers(self, valid_html):
+        """A3 size with header/footer and page numbers should work."""
+        result = generate_pdf_from_html(
+            valid_html,
+            page_size="A3",
+            header_html="<div>Report Header</div>",
+            footer_html="<div>Page {{page}}</div>",
+            header_height="2cm",
+            footer_height="1.5cm",
+            include_page_numbers=True
+        )
+        assert result[:4] == b"%PDF"
+
+    def test_letter_landscape_custom_margins_header_footer(self, valid_html):
+        """Letter size landscape with custom margins and header/footer."""
+        result = generate_pdf_from_html(
+            valid_html,
+            page_size="Letter",
+            orientation="landscape",
+            margin_left="1in",
+            margin_right="1in",
+            header_html="<div style='text-align:right;'>Company Logo</div>",
+            footer_html="<div style='text-align:center;'>Confidential</div>",
+            header_height="1in",
+            footer_height="0.5in"
+        )
+        assert result[:4] == b"%PDF"

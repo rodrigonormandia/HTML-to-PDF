@@ -134,3 +134,170 @@ class TestPDFRequestValidation:
         with pytest.raises(ValidationError) as exc_info:
             PDFRequest(html_content=large_html)
         assert "2mb" in str(exc_info.value).lower() or "excede" in str(exc_info.value).lower()
+
+
+class TestPDFRequestHeaderFooterValidation:
+    """Tests for header/footer field validation."""
+
+    def test_header_footer_default_values(self):
+        """Default header/footer values should be set correctly."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>"
+        )
+        assert request.header_html is None
+        assert request.footer_html is None
+        assert request.header_height == "2cm"
+        assert request.footer_height == "2cm"
+        assert request.exclude_header_pages is None
+        assert request.exclude_footer_pages is None
+
+    def test_valid_header_html(self):
+        """Valid header HTML should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            header_html="<div style='text-align:center;'>My Header</div>"
+        )
+        assert request.header_html is not None
+
+    def test_valid_footer_html(self):
+        """Valid footer HTML should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            footer_html="<div>Page footer</div>"
+        )
+        assert request.footer_html is not None
+
+    def test_valid_header_height_cm(self):
+        """Header height in cm should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            header_height="2.5cm"
+        )
+        assert request.header_height == "2.5cm"
+
+    def test_valid_header_height_mm(self):
+        """Header height in mm should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            header_height="25mm"
+        )
+        assert request.header_height == "25mm"
+
+    def test_valid_header_height_in(self):
+        """Header height in inches should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            header_height="1in"
+        )
+        assert request.header_height == "1in"
+
+    def test_valid_footer_height(self):
+        """Footer height should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            footer_height="1.5cm"
+        )
+        assert request.footer_height == "1.5cm"
+
+    def test_invalid_header_height_no_unit(self):
+        """Header height without unit should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                header_height="2"
+            )
+        assert "altura" in str(exc_info.value).lower() or "height" in str(exc_info.value).lower()
+
+    def test_invalid_header_height_wrong_unit(self):
+        """Header height with invalid unit should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                header_height="2px"
+            )
+        assert "altura" in str(exc_info.value).lower() or "height" in str(exc_info.value).lower()
+
+    def test_invalid_footer_height_text(self):
+        """Footer height with text should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                footer_height="large"
+            )
+        assert "altura" in str(exc_info.value).lower() or "height" in str(exc_info.value).lower()
+
+    def test_valid_exclude_header_pages_single(self):
+        """Single page exclusion should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            exclude_header_pages="1"
+        )
+        assert request.exclude_header_pages == "1"
+
+    def test_valid_exclude_header_pages_multiple(self):
+        """Multiple page exclusions should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            exclude_header_pages="1, 3, 5"
+        )
+        assert request.exclude_header_pages == "1, 3, 5"
+
+    def test_valid_exclude_footer_pages(self):
+        """Footer page exclusion should be accepted."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            exclude_footer_pages="2, 4, 6"
+        )
+        assert request.exclude_footer_pages == "2, 4, 6"
+
+    def test_invalid_exclude_pages_negative(self):
+        """Negative page numbers should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                exclude_header_pages="-1"
+            )
+        assert "página" in str(exc_info.value).lower() or "page" in str(exc_info.value).lower()
+
+    def test_invalid_exclude_pages_zero(self):
+        """Zero page number should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                exclude_footer_pages="0"
+            )
+        assert "página" in str(exc_info.value).lower() or "page" in str(exc_info.value).lower()
+
+    def test_invalid_exclude_pages_text(self):
+        """Text in page exclusion should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                exclude_header_pages="first"
+            )
+        assert "página" in str(exc_info.value).lower() or "page" in str(exc_info.value).lower()
+
+    def test_invalid_exclude_pages_mixed(self):
+        """Mixed valid and invalid page numbers should raise ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            PDFRequest(
+                html_content="<p>Test content with enough characters.</p>",
+                exclude_header_pages="1, abc, 3"
+            )
+        assert "página" in str(exc_info.value).lower() or "page" in str(exc_info.value).lower()
+
+    def test_empty_exclude_pages_returns_none(self):
+        """Empty string for page exclusion should return None."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            exclude_header_pages=""
+        )
+        assert request.exclude_header_pages is None
+
+    def test_whitespace_exclude_pages_returns_none(self):
+        """Whitespace-only string for page exclusion should return None."""
+        request = PDFRequest(
+            html_content="<p>Test content with enough characters.</p>",
+            exclude_footer_pages="   "
+        )
+        assert request.exclude_footer_pages is None

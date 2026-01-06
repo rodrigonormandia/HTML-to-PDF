@@ -278,3 +278,174 @@ class TestFilename:
         filename2 = response2.headers.get("content-disposition", "")
         # Filenames should be different due to different timestamps
         assert filename1 != filename2
+
+
+class TestHeaderFooterAPI:
+    """Tests for header/footer API functionality."""
+
+    def test_convert_with_header_only(self, client, valid_html):
+        """Convert should work with header only."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div style='text-align:center;'>My Header</div>",
+                "header_height": "2cm"
+            }
+        )
+        assert response.status_code == 200
+        assert response.headers["content-type"] == "application/pdf"
+
+    def test_convert_with_footer_only(self, client, valid_html):
+        """Convert should work with footer only."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "footer_html": "<div style='text-align:center;'>My Footer</div>",
+                "footer_height": "1.5cm"
+            }
+        )
+        assert response.status_code == 200
+        assert response.headers["content-type"] == "application/pdf"
+
+    def test_convert_with_header_and_footer(self, client, valid_html):
+        """Convert should work with both header and footer."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div><strong>Company Name</strong></div>",
+                "footer_html": "<div>Confidential Document</div>",
+                "header_height": "2cm",
+                "footer_height": "2cm"
+            }
+        )
+        assert response.status_code == 200
+        assert response.content[:4] == b"%PDF"
+
+    def test_convert_header_height_mm(self, client, valid_html):
+        """Convert should accept header height in mm."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div>Header</div>",
+                "header_height": "25mm"
+            }
+        )
+        assert response.status_code == 200
+
+    def test_convert_footer_height_in(self, client, valid_html):
+        """Convert should accept footer height in inches."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "footer_html": "<div>Footer</div>",
+                "footer_height": "0.75in"
+            }
+        )
+        assert response.status_code == 200
+
+    def test_convert_invalid_header_height_returns_422(self, client, valid_html):
+        """Convert with invalid header height should return 422."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div>Header</div>",
+                "header_height": "invalid"
+            }
+        )
+        assert response.status_code == 422
+
+    def test_convert_with_page_exclusions(self, client, valid_html):
+        """Convert should accept page exclusion parameters."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div>Header</div>",
+                "footer_html": "<div>Footer</div>",
+                "exclude_header_pages": "1",
+                "exclude_footer_pages": "1"
+            }
+        )
+        assert response.status_code == 200
+
+    def test_convert_invalid_page_exclusion_returns_422(self, client, valid_html):
+        """Convert with invalid page exclusion should return 422."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div>Header</div>",
+                "exclude_header_pages": "first"
+            }
+        )
+        assert response.status_code == 422
+
+    def test_convert_header_footer_with_landscape(self, client, valid_html):
+        """Convert should work with header/footer in landscape mode."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "orientation": "landscape",
+                "header_html": "<div>Header</div>",
+                "footer_html": "<div>Footer</div>",
+                "header_height": "2cm",
+                "footer_height": "2cm"
+            }
+        )
+        assert response.status_code == 200
+
+    def test_convert_header_footer_with_page_numbers(self, client, valid_html):
+        """Convert should work with header/footer and page numbers."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div>Report</div>",
+                "footer_html": "<div>Page {{page}} of {{pages}}</div>",
+                "include_page_numbers": True
+            }
+        )
+        assert response.status_code == 200
+
+    def test_convert_sanitizes_header_html(self, client, valid_html):
+        """Header HTML with script tags should be sanitized."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "header_html": "<div>Header<script>alert('xss')</script></div>"
+            }
+        )
+        # Should still succeed (script tag removed during sanitization)
+        assert response.status_code == 200
+
+    def test_convert_sanitizes_footer_html(self, client, valid_html):
+        """Footer HTML with onclick should be sanitized."""
+        response = client.post(
+            "/api/convert",
+            json={
+                "html_content": valid_html,
+                "action": "preview",
+                "footer_html": "<div onclick='alert()'>Footer</div>"
+            }
+        )
+        # Should still succeed (onclick removed during sanitization)
+        assert response.status_code == 200

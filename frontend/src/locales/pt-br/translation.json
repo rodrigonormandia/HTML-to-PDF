@@ -51,7 +51,22 @@
         "margin_right": "Direita",
         "margin_unit": "Unidade",
         "page_numbers": "Incluir números de página",
-        "page_numbers_hint": "Exibe 'Página X de Y' no rodapé de cada página"
+        "page_numbers_hint": "Exibe 'Página X de Y' no rodapé de cada página",
+        "headers_footers": "Cabeçalho e Rodapé",
+        "header_html": "HTML do Cabeçalho",
+        "footer_html": "HTML do Rodapé",
+        "header_placeholder": "<div style=\"text-align:center;\">Meu Cabeçalho</div>",
+        "footer_placeholder": "<div style=\"text-align:center;\">Meu Rodapé</div>",
+        "height": "Altura",
+        "header_footer_unit": "Unidade de altura",
+        "exclude_header_pages": "Excluir cabeçalho das páginas",
+        "exclude_footer_pages": "Excluir rodapé das páginas",
+        "exclude_pages_hint": "Números separados por vírgula (ex: 1, 3, 5)",
+        "page_break_title": "Quebra de Página",
+        "page_break_description": "Use as classes CSS abaixo no seu HTML para controlar quebras de página:",
+        "page_break_after": "quebra após o elemento",
+        "page_break_before": "quebra antes do elemento",
+        "avoid_break": "evita quebra dentro do elemento"
     },
     "theme": {
         "toggle": "Alternar tema",

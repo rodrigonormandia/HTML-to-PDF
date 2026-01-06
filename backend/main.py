@@ -304,6 +304,48 @@ class PDFRequest(BaseModel):
             "example": True
         }
     )
+    header_html: str | None = Field(
+        default=None,
+        description="HTML personalizado para o cabeçalho de cada página. Suporta HTML completo com estilos inline.",
+        json_schema_extra={
+            "example": "<div style='text-align:center; font-size:12pt;'><strong>Minha Empresa</strong></div>"
+        }
+    )
+    footer_html: str | None = Field(
+        default=None,
+        description="HTML personalizado para o rodapé de cada página. Suporta HTML completo com estilos inline.",
+        json_schema_extra={
+            "example": "<div style='text-align:center; font-size:10pt;'>Documento Confidencial</div>"
+        }
+    )
+    header_height: str = Field(
+        default="2cm",
+        description="Altura do cabeçalho. Aceita valores em cm, mm ou in. Exemplos: '2cm', '20mm', '0.5in'.",
+        json_schema_extra={
+            "example": "2cm"
+        }
+    )
+    footer_height: str = Field(
+        default="2cm",
+        description="Altura do rodapé. Aceita valores em cm, mm ou in.",
+        json_schema_extra={
+            "example": "2cm"
+        }
+    )
+    exclude_header_pages: str | None = Field(
+        default=None,
+        description="Números de páginas onde o cabeçalho NÃO deve aparecer, separados por vírgula. Ex: '1, 3, 5'.",
+        json_schema_extra={
+            "example": "1"
+        }
+    )
+    exclude_footer_pages: str | None = Field(
+        default=None,
+        description="Números de páginas onde o rodapé NÃO deve aparecer, separados por vírgula. Ex: '1, 3, 5'.",
+        json_schema_extra={
+            "example": "1"
+        }
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -354,6 +396,31 @@ class PDFRequest(BaseModel):
         if 'mm' in v or 'cm' in v or 'in' in v:
             return v
         raise ValueError(f"Tamanho de página inválido. Use: {', '.join(valid_sizes)} ou dimensões customizadas.")
+
+    @field_validator('header_height', 'footer_height')
+    @classmethod
+    def validate_height(cls, v: str) -> str:
+        """Valida o formato da altura (número + unidade cm/mm/in)."""
+        import re
+        v = v.strip()
+        if not re.match(r'^[\d.]+\s*(cm|mm|in)$', v):
+            raise ValueError("Altura deve ser um número seguido de cm, mm ou in. Exemplos: '2cm', '20mm', '0.5in'")
+        return v
+
+    @field_validator('exclude_header_pages', 'exclude_footer_pages')
+    @classmethod
+    def validate_page_exclusion(cls, v: str | None) -> str | None:
+        """Valida o formato de exclusão de páginas (números inteiros positivos separados por vírgula)."""
+        if v is None:
+            return None
+        v = v.strip()
+        if not v:
+            return None
+        pages = [p.strip() for p in v.split(',')]
+        for page in pages:
+            if not page.isdigit() or int(page) < 1:
+                raise ValueError("Números de páginas devem ser inteiros positivos separados por vírgula. Exemplo: '1, 3, 5'")
+        return v
 
 @app.post(
     "/api/convert",
@@ -600,7 +667,11 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
     # 2. Sanitizar HTML
     clean_html = sanitize_html(pdf_request.html_content)
 
-    # 3. Gerar PDF
+    # 3. Sanitizar header/footer HTML (se fornecido)
+    clean_header = sanitize_html(pdf_request.header_html) if pdf_request.header_html else None
+    clean_footer = sanitize_html(pdf_request.footer_html) if pdf_request.footer_html else None
+
+    # 4. Gerar PDF
     try:
         pdf_bytes = generate_pdf_from_html(
             html=clean_html,
@@ -610,7 +681,13 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
             margin_bottom=pdf_request.margin_bottom,
             margin_left=pdf_request.margin_left,
             margin_right=pdf_request.margin_right,
-            include_page_numbers=pdf_request.include_page_numbers
+            include_page_numbers=pdf_request.include_page_numbers,
+            header_html=clean_header,
+            footer_html=clean_footer,
+            header_height=pdf_request.header_height,
+            footer_height=pdf_request.footer_height,
+            exclude_header_pages=pdf_request.exclude_header_pages,
+            exclude_footer_pages=pdf_request.exclude_footer_pages
         )
 
         # Generate dynamic filename with timestamp
