@@ -3,3 +3,5 @@ uvicorn
 weasyprint
 pydantic
 python-multipart
+bleach>=6.0.0
+slowapi>=0.1.9

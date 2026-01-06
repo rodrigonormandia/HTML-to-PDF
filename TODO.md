@@ -17,10 +17,10 @@
 ## 🔴 Versão 1.1 - ALTA PRIORIDADE (2 semanas)
 
 ### Segurança
-- [ ] Validação de HTML no backend
-- [ ] Sanitização de HTML antes de processar
-- [ ] Rate limiting por IP
-- [ ] Limite de tamanho de input (1MB)
+- [x] Validação de HTML no backend
+- [x] Sanitização de HTML antes de processar
+- [x] Rate limiting por IP (30 req/min)
+- [x] Limite de tamanho de input (2MB)
 
 ### UX
 - [ ] Barra de progresso durante conversão
@@ -215,5 +215,5 @@
 
 ---
 
-**Última atualização:** 2026-01-06  
-**Versão atual:** v1.0.3
+**Última atualização:** 2026-01-06
+**Versão atual:** v1.0.4
