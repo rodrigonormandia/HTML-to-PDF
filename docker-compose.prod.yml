@@ -2,9 +2,7 @@ version: "3.8"
 
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/engenhariabucariid/pdf-gravity-api:latest
     restart: unless-stopped
     environment:
       - PORT=8000
@@ -20,11 +18,7 @@ services:
       - traefik_network
 
   web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - VITE_API_URL=https://htmltopdf.buscarid.com
+    image: ghcr.io/engenhariabucariid/pdf-gravity-web:latest
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
