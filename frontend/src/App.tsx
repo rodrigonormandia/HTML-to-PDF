@@ -111,7 +111,7 @@ function App() {
             {t('footer.apiRedoc')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Gravity v1.0.2 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Gravity v1.0.3 | {t('footer.developer')}</div>
       </footer>
 
       <ToastContainer position="bottom-right" />
