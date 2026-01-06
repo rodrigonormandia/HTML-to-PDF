@@ -5,6 +5,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import bleach
+from datetime import datetime
 from .pdf_service import generate_pdf_from_html
 
 # Constantes de segurança
@@ -73,25 +74,85 @@ app = FastAPI(
     description="""
 ## API para conversão de HTML para PDF
 
-Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade.
+Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade usando WeasyPrint.
 
-### Funcionalidades:
-- **Preview**: Visualize o PDF diretamente no navegador
-- **Download**: Baixe o PDF como arquivo
+### Funcionalidades
 
-### Segurança:
-- Rate limiting: 30 requisições por minuto por IP
-- Limite de tamanho: 2MB
-- Sanitização de HTML (remoção de scripts e elementos perigosos)
+| Recurso | Descrição |
+|---------|-----------|
+| **Preview** | Visualize o PDF diretamente no navegador |
+| **Download** | Baixe o PDF como arquivo |
+| **Tamanho de Página** | A4, Letter, A3, A5, Legal, B4, B5 ou customizado |
+| **Orientação** | Retrato (portrait) ou Paisagem (landscape) |
+| **Margens** | Customizáveis em cm, mm ou polegadas |
+| **Numeração** | Números de página automáticos no rodapé |
 
-### Uso:
-Envie seu conteúdo HTML para o endpoint `/api/convert` e receba o PDF gerado.
-O TailwindCSS é injetado automaticamente para estilização.
+### Configurações de PDF
+
+```json
+{
+  "page_size": "A4",
+  "orientation": "portrait",
+  "margin_top": "2cm",
+  "margin_bottom": "2cm",
+  "margin_left": "2cm",
+  "margin_right": "2cm",
+  "include_page_numbers": false
+}
+```
+
+### Tamanhos de Página Suportados
+
+- **A3**: 297mm × 420mm
+- **A4**: 210mm × 297mm (padrão)
+- **A5**: 148mm × 210mm
+- **Letter**: 8.5in × 11in
+- **Legal**: 8.5in × 14in
+- **B4**: 250mm × 353mm
+- **B5**: 176mm × 250mm
+- **Customizado**: ex: `"210mm 297mm"`
+
+### Segurança
+
+- ⏱️ Rate limiting: 30 requisições por minuto por IP
+- 📦 Limite de tamanho: 2MB
+- 🛡️ Sanitização de HTML (remoção de scripts e elementos perigosos)
+- 🔒 Headers de segurança (CSP, X-Frame-Options, etc.)
+
+### Exemplo de Uso
+
+```bash
+curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "html_content": "<h1>Hello World</h1>",
+    "action": "download",
+    "page_size": "A4",
+    "orientation": "portrait"
+  }' \\
+  --output documento.pdf
+```
+
+### Links Úteis
+
+- 🌐 [PDF Gravity App](https://htmltopdf.buscarid.com)
+- 📖 [Documentação ReDoc](/api/redoc)
+- 📜 [Termos de Uso](https://htmltopdf.buscarid.com/terms.html)
+- 🔐 [Política de Privacidade](https://htmltopdf.buscarid.com/privacy.html)
     """,
-    version="1.1.0",
+    version="1.2.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    openapi_url="/api/openapi.json",
+    contact={
+        "name": "Rodrigo Normandia",
+        "url": "https://htmltopdf.buscarid.com",
+        "email": "contato@buscarid.com"
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT"
+    }
 )
 
 # Configurar rate limiter
@@ -118,6 +179,10 @@ app.add_middleware(
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
 
+    # Skip CSP for API documentation pages (Swagger/ReDoc need external CDN resources)
+    if request.url.path in ["/api/docs", "/api/redoc", "/api/openapi.json"]:
+        return response
+
     # Content Security Policy
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
@@ -142,71 +207,125 @@ async def add_security_headers(request: Request, call_next):
     return response
 
 class PDFRequest(BaseModel):
-    """Modelo de requisição para conversão de HTML para PDF."""
+    """
+    Modelo de requisição para conversão de HTML para PDF.
+
+    Todos os parâmetros de configuração do PDF são opcionais e possuem valores padrão.
+    Apenas o campo `html_content` é obrigatório.
+    """
 
     html_content: str = Field(
         ...,
-        description="Conteúdo HTML a ser convertido em PDF. Pode ser HTML completo ou apenas um fragmento. Máximo 2MB.",
+        description="Conteúdo HTML a ser convertido em PDF. Pode ser um documento HTML completo ou apenas um fragmento. O TailwindCSS é injetado automaticamente. Máximo: 2MB.",
+        min_length=10,
         json_schema_extra={
-            "example": "<h1>Meu Documento</h1><p>Este é um exemplo de conteúdo HTML.</p>"
+            "example": """<!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Documento</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>Relatório Mensal</h1>
+    <p>Este é um exemplo de documento PDF gerado pelo PDF Gravity.</p>
+    <table class="w-full border-collapse">
+        <tr class="bg-gray-100">
+            <th class="border p-2">Item</th>
+            <th class="border p-2">Valor</th>
+        </tr>
+        <tr>
+            <td class="border p-2">Produto A</td>
+            <td class="border p-2">R$ 100,00</td>
+        </tr>
+    </table>
+</body>
+</html>"""
         }
     )
     action: str = Field(
         default="preview",
-        description="Ação a ser realizada: 'preview' para visualizar inline ou 'download' para baixar o arquivo.",
+        description="Ação a ser realizada. Use 'preview' para abrir o PDF no navegador ou 'download' para baixar como arquivo.",
         json_schema_extra={
-            "example": "preview"
+            "example": "download",
+            "enum": ["preview", "download"]
         }
     )
     page_size: str = Field(
         default="A4",
-        description="Tamanho da página: A4, Letter, A3, A5 ou dimensões customizadas (ex: '210mm 297mm').",
+        description="Tamanho da página. Valores aceitos: A3, A4, A5, Letter, Legal, B4, B5, ou dimensões customizadas (ex: '210mm 297mm').",
         json_schema_extra={
-            "example": "A4"
+            "example": "A4",
+            "enum": ["A3", "A4", "A5", "Letter", "Legal", "B4", "B5"]
         }
     )
     orientation: str = Field(
         default="portrait",
-        description="Orientação da página: 'portrait' (retrato) ou 'landscape' (paisagem).",
+        description="Orientação da página. Use 'portrait' para retrato (vertical) ou 'landscape' para paisagem (horizontal).",
         json_schema_extra={
-            "example": "portrait"
+            "example": "portrait",
+            "enum": ["portrait", "landscape"]
         }
     )
     margin_top: str = Field(
         default="2cm",
-        description="Margem superior (ex: '2cm', '1in', '20mm').",
+        description="Margem superior. Aceita valores em cm (centímetros), mm (milímetros) ou in (polegadas). Exemplos: '2cm', '20mm', '0.5in'.",
         json_schema_extra={
             "example": "2cm"
         }
     )
     margin_bottom: str = Field(
         default="2cm",
-        description="Margem inferior.",
+        description="Margem inferior. Aceita valores em cm, mm ou in.",
         json_schema_extra={
             "example": "2cm"
         }
     )
     margin_left: str = Field(
         default="2cm",
-        description="Margem esquerda.",
+        description="Margem esquerda. Aceita valores em cm, mm ou in.",
         json_schema_extra={
             "example": "2cm"
         }
     )
     margin_right: str = Field(
         default="2cm",
-        description="Margem direita.",
+        description="Margem direita. Aceita valores em cm, mm ou in.",
         json_schema_extra={
             "example": "2cm"
         }
     )
     include_page_numbers: bool = Field(
         default=False,
-        description="Se True, adiciona números de página no rodapé (Página X de Y).",
+        description="Quando True, adiciona numeração de páginas no rodapé de cada página no formato 'Página X de Y'.",
         json_schema_extra={
-            "example": False
+            "example": True
         }
     )
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "html_content": "<h1>Documento Simples</h1><p>Conteúdo do documento.</p>",
+                    "action": "preview"
+                },
+                {
+                    "html_content": "<h1>Relatório Completo</h1><p>Com todas as configurações.</p>",
+                    "action": "download",
+                    "page_size": "A4",
+                    "orientation": "landscape",
+                    "margin_top": "1.5cm",
+                    "margin_bottom": "1.5cm",
+                    "margin_left": "2cm",
+                    "margin_right": "2cm",
+                    "include_page_numbers": True
+                }
+            ]
+        }
+    }
 
     @field_validator('html_content')
     @classmethod
@@ -288,7 +407,188 @@ Converte conteúdo HTML em um documento PDF.
             }
         }
     },
-    tags=["Conversão"]
+    tags=["Conversão"],
+    openapi_extra={
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "simples": {
+                            "summary": "Exemplo Simples",
+                            "description": "Conversão básica com valores padrão",
+                            "value": {
+                                "html_content": "<h1>Olá Mundo!</h1><p>Este é um teste simples de conversão HTML para PDF.</p>",
+                                "action": "preview"
+                            }
+                        },
+                        "completo": {
+                            "summary": "Exemplo Completo",
+                            "description": "Conversão com todas as configurações personalizadas",
+                            "value": {
+                                "html_content": """<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório de Vendas</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #3b82f6; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .total { font-weight: bold; background-color: #e0f2fe; }
+    </style>
+</head>
+<body>
+    <h1>📊 Relatório de Vendas - Janeiro 2026</h1>
+    <p>Gerado em: 06/01/2026</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unit.</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Notebook Dell</td>
+                <td>15</td>
+                <td>R$ 4.500,00</td>
+                <td>R$ 67.500,00</td>
+            </tr>
+            <tr>
+                <td>Monitor LG 27"</td>
+                <td>25</td>
+                <td>R$ 1.200,00</td>
+                <td>R$ 30.000,00</td>
+            </tr>
+            <tr>
+                <td>Teclado Mecânico</td>
+                <td>50</td>
+                <td>R$ 350,00</td>
+                <td>R$ 17.500,00</td>
+            </tr>
+            <tr class="total">
+                <td colspan="3">TOTAL GERAL</td>
+                <td>R$ 115.000,00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px; color: #666;">
+        <em>Este relatório foi gerado automaticamente pelo PDF Gravity.</em>
+    </p>
+</body>
+</html>""",
+                                "action": "download",
+                                "page_size": "A4",
+                                "orientation": "portrait",
+                                "margin_top": "2cm",
+                                "margin_bottom": "2cm",
+                                "margin_left": "2.5cm",
+                                "margin_right": "2.5cm",
+                                "include_page_numbers": True
+                            }
+                        },
+                        "landscape": {
+                            "summary": "Paisagem com Tabela Larga",
+                            "description": "PDF em orientação paisagem para tabelas com muitas colunas",
+                            "value": {
+                                "html_content": """<html>
+<head>
+    <style>
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th, td { border: 1px solid #333; padding: 8px; }
+        th { background: #2563eb; color: white; }
+    </style>
+</head>
+<body>
+    <h2>Planilha de Funcionários</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Departamento</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Admissão</th>
+            <th>Salário</th>
+        </tr>
+        <tr>
+            <td>001</td>
+            <td>Maria Silva</td>
+            <td>Gerente</td>
+            <td>Vendas</td>
+            <td>maria@empresa.com</td>
+            <td>(11) 99999-0001</td>
+            <td>15/03/2020</td>
+            <td>R$ 12.000</td>
+        </tr>
+        <tr>
+            <td>002</td>
+            <td>João Santos</td>
+            <td>Analista</td>
+            <td>TI</td>
+            <td>joao@empresa.com</td>
+            <td>(11) 99999-0002</td>
+            <td>22/06/2021</td>
+            <td>R$ 8.500</td>
+        </tr>
+    </table>
+</body>
+</html>""",
+                                "action": "download",
+                                "page_size": "A4",
+                                "orientation": "landscape",
+                                "margin_top": "1.5cm",
+                                "margin_bottom": "1.5cm",
+                                "margin_left": "1cm",
+                                "margin_right": "1cm",
+                                "include_page_numbers": True
+                            }
+                        },
+                        "tailwind": {
+                            "summary": "Com TailwindCSS",
+                            "description": "Usando classes TailwindCSS (injetado automaticamente)",
+                            "value": {
+                                "html_content": """<div class="p-8 max-w-2xl mx-auto">
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-lg shadow-lg mb-6">
+        <h1 class="text-3xl font-bold">PDF Gravity</h1>
+        <p class="text-blue-100 mt-2">Converta HTML para PDF com estilo!</p>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">✨ Funcionalidades</h2>
+        <ul class="space-y-2">
+            <li class="flex items-center text-gray-600">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                Suporte completo a TailwindCSS
+            </li>
+            <li class="flex items-center text-gray-600">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                Tamanhos de página customizáveis
+            </li>
+            <li class="flex items-center text-gray-600">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                Numeração automática de páginas
+            </li>
+        </ul>
+    </div>
+</div>""",
+                                "action": "preview",
+                                "page_size": "A4",
+                                "orientation": "portrait"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 )
 @limiter.limit("30/minute")
 async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
@@ -313,14 +613,18 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
             include_page_numbers=pdf_request.include_page_numbers
         )
 
+        # Generate dynamic filename with timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"pdfGravity_{timestamp}.pdf"
+
         headers = {
             "Content-Type": "application/pdf",
         }
 
         if pdf_request.action == "download":
-            headers["Content-Disposition"] = 'attachment; filename="document.pdf"'
+            headers["Content-Disposition"] = f'attachment; filename="{filename}"'
         else:
-            headers["Content-Disposition"] = 'inline; filename="preview.pdf"'
+            headers["Content-Disposition"] = f'inline; filename="{filename}"'
 
         return Response(content=pdf_bytes, media_type="application/pdf", headers=headers)
 

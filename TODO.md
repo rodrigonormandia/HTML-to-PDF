@@ -67,12 +67,6 @@
 
 ## 🟢 Versão 2.0 - LONGO PRAZO (3 meses)
 
-### Exportação
-- [ ] Exportar como PNG
-- [ ] Exportar como DOCX
-- [ ] Exportar como Markdown
-- [ ] Exportar HTML estático
-
 ### API Pública
 - [ ] Sistema de API Keys
 - [ ] Rate limiting por usuário
@@ -113,11 +107,11 @@
 - [ ] Navegação por teclado
 
 ### DevOps
-- [ ] Unit tests (pytest para backend)
-- [ ] E2E tests (Playwright para frontend)
+- [x] Unit tests (pytest para backend)
+- [x] E2E tests (Playwright para frontend)
 - [x] CI/CD com GitHub Actions
-- [ ] Testes automatizados em PRs
-- [ ] Coverage reports
+- [x] Testes automatizados em PRs
+- [x] Coverage reports
 
 ---
 
