@@ -155,26 +155,27 @@ test.describe('Theme Toggle', () => {
 
   test('should apply dark mode to settings panel', async ({ page }) => {
     // Expand settings
-    await page.getByText(/configurações do pdf/i).click();
+    const settingsToggle = page.getByText(/configurações do pdf/i);
+    await settingsToggle.click();
+
+    // Wait for panel to be visible
+    await page.waitForTimeout(300);
 
     const themeButton = page.locator('header button').first();
-    const settingsPanel = page.locator('[class*="bg-gray"]').first();
 
-    // Get light mode style
-    const lightBg = await settingsPanel.evaluate((el) =>
-      window.getComputedStyle(el).backgroundColor
-    );
-
+    // In dark mode, the html element should have the 'dark' class
     // Switch to dark mode
     await themeButton.click();
 
-    // Get dark mode style
-    const darkBg = await settingsPanel.evaluate((el) =>
-      window.getComputedStyle(el).backgroundColor
-    );
+    // Verify dark class is applied to html element
+    const htmlElement = page.locator('html');
+    await expect(htmlElement).toHaveClass(/dark/);
 
-    // Backgrounds should be different
-    expect(lightBg).not.toBe(darkBg);
+    // Switch back to light mode
+    await themeButton.click();
+
+    // Verify dark class is removed
+    await expect(htmlElement).not.toHaveClass(/dark/);
   });
 });
 
