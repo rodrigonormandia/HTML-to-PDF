@@ -1,39 +1,45 @@
-version: "3.8"
+version: "3.7"
 
 services:
   api:
-    image: ghcr.io/engenhariabucariid/pdf-gravity-api:latest
-    restart: unless-stopped
+    image: normandiabuscarid/pdf-gravity-api:latest
+    networks:
+      - buscarIDnet
     environment:
       - PORT=8000
-    labels:
-      - "traefik.enable=true"
-      # Rota para API
-      - "traefik.http.routers.pdfgravity-api.rule=Host(`htmltopdf.buscarid.com`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.pdfgravity-api.entrypoints=websecure"
-      - "traefik.http.routers.pdfgravity-api.tls=true"
-      - "traefik.http.routers.pdfgravity-api.tls.certresolver=letsencrypt"
-      - "traefik.http.services.pdfgravity-api.loadbalancer.server.port=8000"
-    networks:
-      - traefik_network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.pdfgravity-api.rule=Host(`htmltopdf.buscarid.com`) && PathPrefix(`/api`)
+        - traefik.http.routers.pdfgravity-api.entrypoints=websecure
+        - traefik.http.routers.pdfgravity-api.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.pdfgravity-api.service=pdfgravity-api
+        - traefik.http.services.pdfgravity-api.loadbalancer.server.port=8000
 
   web:
-    image: ghcr.io/engenhariabucariid/pdf-gravity-web:latest
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      # Rota principal para frontend
-      - "traefik.http.routers.pdfgravity-web.rule=Host(`htmltopdf.buscarid.com`)"
-      - "traefik.http.routers.pdfgravity-web.entrypoints=websecure"
-      - "traefik.http.routers.pdfgravity-web.tls=true"
-      - "traefik.http.routers.pdfgravity-web.tls.certresolver=letsencrypt"
-      - "traefik.http.services.pdfgravity-web.loadbalancer.server.port=80"
-      # Prioridade menor que a API para que /api seja capturado primeiro
-      - "traefik.http.routers.pdfgravity-web.priority=1"
+    image: normandiabuscarid/pdf-gravity-web:latest
     networks:
-      - traefik_network
+      - buscarIDnet
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.pdfgravity-web.rule=Host(`htmltopdf.buscarid.com`)
+        - traefik.http.routers.pdfgravity-web.entrypoints=websecure
+        - traefik.http.routers.pdfgravity-web.priority=1
+        - traefik.http.routers.pdfgravity-web.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.pdfgravity-web.service=pdfgravity-web
+        - traefik.http.services.pdfgravity-web.loadbalancer.server.port=80
 
 networks:
-  traefik_network:
+  buscarIDnet:
     external: true
-    name: buscarIDnet
