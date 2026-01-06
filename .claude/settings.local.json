@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(docker compose:*)",
+      "Bash(git push:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh api:*)",
+      "Bash(gh run list:*)",
+      "Bash(curl:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh secret set:*)",
+      "Bash(\"https://portainer.buscarid.com/api/stacks/7?endpointId=1\" )",
+      "Bash(npm run dev:*)"
+    ]
+  }
+}
