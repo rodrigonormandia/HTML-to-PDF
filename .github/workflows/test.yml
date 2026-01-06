@@ -37,14 +37,15 @@ jobs:
 
       - name: Run pytest with coverage
         run: |
-          cd backend
-          python -m pytest --cov=. --cov-report=xml --cov-report=term-missing -v
+          python -m pytest backend/tests --cov=backend --cov-report=xml --cov-report=term-missing -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         if: always()
         with:
-          files: backend/coverage.xml
+          files: coverage.xml
           flags: backend
           name: backend-coverage
           fail_ci_if_error: false

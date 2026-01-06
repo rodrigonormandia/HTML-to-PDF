@@ -79,7 +79,6 @@ test.describe('Theme Toggle', () => {
 
     // Check that dark styles are applied
     const body = page.locator('body');
-    const header = page.locator('header');
 
     // In dark mode, background should be dark
     const bodyBg = await body.evaluate((el) =>
@@ -149,7 +148,8 @@ test.describe('Theme Toggle', () => {
       window.getComputedStyle(el).backgroundColor
     );
 
-    // Primary button color should be similar (blue)
+    // Primary button color should be consistent (blue in both modes)
+    expect(lightBg).toBeTruthy();
     expect(darkBg).toBeTruthy();
   });
 
