@@ -42,7 +42,10 @@
 - [x] Seletor de tamanho (A4, Letter, Custom)
 - [x] Orientação (Portrait/Landscape)
 - [x] Margens customizáveis
-- [x] Header/Footer personalizados (números de página)
+- [x] Header/Footer personalizados (HTML completo)
+- [x] Altura configurável do header/footer
+- [x] Exclusão de header/footer por página específica
+- [x] Quebra de página (classes CSS: page-break, page-break-before, avoid-break)
 
 ### Editor
 - [ ] Integrar CodeMirror ou Monaco Editor
@@ -208,8 +211,13 @@
 - [x] Internacionalização (pt-BR)
 - [x] Documentação da API (Swagger/ReDoc)
 - [x] Deploy no Portainer com Traefik
+- [x] Header/Footer personalizados com HTML completo
+- [x] Exclusão de header/footer por páginas específicas
+- [x] Quebra de página via CSS (page-break, page-break-before, avoid-break)
+- [x] Testes automatizados (pytest + Playwright)
+- [x] CI/CD com GitHub Actions
 
 ---
 
 **Última atualização:** 2026-01-06
-**Versão atual:** v1.2.0
+**Versão atual:** v1.3.0
