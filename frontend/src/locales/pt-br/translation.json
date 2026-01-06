@@ -15,6 +15,7 @@
     },
     "footer": {
         "apiDocs": "API Docs (Swagger)",
-        "apiRedoc": "API Docs (ReDoc)"
+        "apiRedoc": "API Docs (ReDoc)",
+        "developer": "Desenvolvido por Rodrigo Normandia"
     }
 }

@@ -54,9 +54,12 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white shadow-sm py-4 px-6 mb-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900">{t('app.title')}</h1>
-          <p className="text-gray-500">{t('app.subtitle')}</p>
+        <div className="max-w-4xl mx-auto flex items-center gap-4">
+          <img src="/logo.png" alt="PDF Gravity Logo" className="w-12 h-12" />
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">{t('app.title')}</h1>
+            <p className="text-gray-500">{t('app.subtitle')}</p>
+          </div>
         </div>
       </header>
 
@@ -108,7 +111,7 @@ function App() {
             {t('footer.apiRedoc')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Gravity</div>
+        <div>&copy; {new Date().getFullYear()} PDF Gravity v1.0.0 | {t('footer.developer')}</div>
       </footer>
 
       <ToastContainer position="bottom-right" />
