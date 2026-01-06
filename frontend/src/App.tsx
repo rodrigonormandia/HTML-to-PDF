@@ -4,6 +4,113 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const MAX_CHARS = 2097152; // 2MB
+
+const EXAMPLE_HTML = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Exemplo PDF Gravity</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2cm;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    .header {
+      border-bottom: 3px solid #3b82f6;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #3b82f6;
+    }
+    .badge {
+      display: inline-block;
+      background: #10b981;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="logo">PDF Gravity</span>
+    <span class="badge">Exemplo</span>
+  </div>
+
+  <h1 class="text-2xl font-bold mb-4">Relatório de Demonstração</h1>
+
+  <p>Este é um exemplo completo de HTML que demonstra as capacidades do <strong>PDF Gravity</strong>.</p>
+
+  <div class="card">
+    <h2 class="text-lg font-semibold mb-2">Recursos Disponíveis</h2>
+    <ul class="list-disc list-inside space-y-1">
+      <li>CSS personalizado com a tag &lt;style&gt;</li>
+      <li>Classes do TailwindCSS</li>
+      <li>Configuração de página (@page)</li>
+      <li>Fontes e cores customizadas</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 class="text-lg font-semibold mb-2">Tabela de Exemplo</h2>
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border p-2 text-left">Item</th>
+          <th class="border p-2 text-left">Descrição</th>
+          <th class="border p-2 text-right">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border p-2">Produto A</td>
+          <td class="border p-2">Descrição do produto A</td>
+          <td class="border p-2 text-right">R$ 150,00</td>
+        </tr>
+        <tr>
+          <td class="border p-2">Produto B</td>
+          <td class="border p-2">Descrição do produto B</td>
+          <td class="border p-2 text-right">R$ 250,00</td>
+        </tr>
+        <tr class="bg-gray-100 font-bold">
+          <td class="border p-2" colspan="2">Total</td>
+          <td class="border p-2 text-right">R$ 400,00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Gerado com PDF Gravity | htmltopdf.buscarid.com
+  </div>
+</body>
+</html>`;
+
 function App() {
   const { t } = useTranslation();
   const [htmlContent, setHtmlContent] = useState('');
@@ -51,6 +158,22 @@ function App() {
     }
   };
 
+  const handleClear = () => {
+    setHtmlContent('');
+  };
+
+  const handleLoadExample = () => {
+    setHtmlContent(EXAMPLE_HTML);
+    toast.info(t('editor.example_loaded'));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+      e.preventDefault();
+      handleConvert('preview');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white shadow-sm py-4 px-6 mb-8">
@@ -69,24 +192,51 @@ function App() {
             className="flex-grow w-full p-4 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
             placeholder={t('editor.placeholder')}
             value={htmlContent}
-            onChange={(e) => setHtmlContent(e.target.value)}
+            onChange={(e) => setHtmlContent(e.target.value.slice(0, MAX_CHARS))}
+            onKeyDown={handleKeyDown}
+            maxLength={MAX_CHARS}
           />
 
-          <div className="mt-4 flex justify-end gap-3">
-            <button
-              onClick={() => handleConvert('preview')}
-              disabled={loading}
-              className="px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50 font-medium"
-            >
-              {loading ? t('editor.generating') : t('editor.btn_preview')}
-            </button>
-            <button
-              onClick={() => handleConvert('download')}
-              disabled={loading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 font-medium"
-            >
-              {loading ? t('editor.generating') : t('editor.btn_download')}
-            </button>
+          <div className="mt-2 flex justify-between items-center text-sm text-gray-500">
+            <span>
+              {htmlContent.length.toLocaleString('pt-BR')} / {MAX_CHARS.toLocaleString('pt-BR')} {t('editor.characters')}
+            </span>
+            <span className="text-xs">{t('editor.shortcut_hint')}</span>
+          </div>
+
+          <div className="mt-4 flex justify-between">
+            <div className="flex gap-2">
+              <button
+                onClick={handleLoadExample}
+                disabled={loading}
+                className="px-4 py-2 bg-gray-50 text-gray-600 rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50 text-sm border border-gray-200"
+              >
+                {t('editor.btn_example')}
+              </button>
+              <button
+                onClick={handleClear}
+                disabled={loading || !htmlContent}
+                className="px-4 py-2 bg-gray-50 text-gray-600 rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50 text-sm border border-gray-200"
+              >
+                {t('editor.btn_clear')}
+              </button>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleConvert('preview')}
+                disabled={loading}
+                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50 font-medium"
+              >
+                {loading ? t('editor.generating') : t('editor.btn_preview')}
+              </button>
+              <button
+                onClick={() => handleConvert('download')}
+                disabled={loading}
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 font-medium"
+              >
+                {loading ? t('editor.generating') : t('editor.btn_download')}
+              </button>
+            </div>
           </div>
         </div>
       </main>

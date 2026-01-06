@@ -7,7 +7,12 @@
         "placeholder": "Cole seu código HTML aqui...",
         "btn_download": "Baixar PDF",
         "btn_preview": "Visualizar",
-        "generating": "Processando..."
+        "btn_clear": "Limpar",
+        "btn_example": "Carregar Exemplo",
+        "generating": "Processando...",
+        "characters": "caracteres",
+        "example_loaded": "HTML de exemplo carregado!",
+        "shortcut_hint": "Ctrl+Enter para visualizar"
     },
     "feedback": {
         "success": "Sucesso!",
