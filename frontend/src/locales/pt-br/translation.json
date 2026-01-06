@@ -12,5 +12,9 @@
     "feedback": {
         "success": "Sucesso!",
         "error": "Erro na conversão. Verifique seu HTML."
+    },
+    "footer": {
+        "apiDocs": "API Docs (Swagger)",
+        "apiRedoc": "API Docs (ReDoc)"
     }
 }

@@ -89,7 +89,26 @@ function App() {
       </main>
 
       <footer className="py-6 text-center text-gray-400 text-sm">
-        &copy; {new Date().getFullYear()} PDF Gravity
+        <div className="flex justify-center gap-4 mb-2">
+          <a
+            href={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/docs`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600 hover:underline"
+          >
+            {t('footer.apiDocs')}
+          </a>
+          <span className="text-gray-300">|</span>
+          <a
+            href={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/redoc`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600 hover:underline"
+          >
+            {t('footer.apiRedoc')}
+          </a>
+        </div>
+        <div>&copy; {new Date().getFullYear()} PDF Gravity</div>
       </footer>
 
       <ToastContainer position="bottom-right" />
