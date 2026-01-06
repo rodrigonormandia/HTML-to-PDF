@@ -58,29 +58,29 @@ class TestConvertEndpoint:
         assert response.status_code == 200
         assert response.headers["content-type"] == "application/pdf"
 
-    def test_convert_empty_html_returns_400(self, client):
-        """Convert with empty HTML should return 400."""
+    def test_convert_empty_html_returns_422(self, client):
+        """Convert with empty HTML should return 422 (Pydantic validation)."""
         response = client.post(
             "/api/convert",
             json={"html_content": "", "action": "preview"}
         )
-        assert response.status_code == 400
+        assert response.status_code == 422
 
-    def test_convert_whitespace_html_returns_400(self, client):
-        """Convert with whitespace-only HTML should return 400."""
+    def test_convert_whitespace_html_returns_422(self, client):
+        """Convert with whitespace-only HTML should return 422 (Pydantic validation)."""
         response = client.post(
             "/api/convert",
             json={"html_content": "   \n\t  ", "action": "preview"}
         )
-        assert response.status_code == 400
+        assert response.status_code == 422
 
-    def test_convert_short_html_returns_400(self, client):
-        """Convert with HTML shorter than 10 chars should return 400."""
+    def test_convert_short_html_returns_422(self, client):
+        """Convert with HTML shorter than 10 chars should return 422 (Pydantic validation)."""
         response = client.post(
             "/api/convert",
             json={"html_content": "<p>Hi</p>", "action": "preview"}
         )
-        assert response.status_code == 400
+        assert response.status_code == 422
 
 
 class TestPageSizes:
