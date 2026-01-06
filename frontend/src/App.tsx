@@ -115,14 +115,29 @@ function App() {
   const { t } = useTranslation();
   const [htmlContent, setHtmlContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [statusText, setStatusText] = useState('');
+
+  const showErrorWithSuggestion = (errorKey: string, suggestionKey: string) => {
+    toast.error(
+      <div>
+        <p className="font-medium">{t(errorKey)}</p>
+        <p className="text-sm mt-1 opacity-80">{t(suggestionKey)}</p>
+      </div>,
+      { autoClose: 5000 }
+    );
+  };
 
   const handleConvert = async (action: 'preview' | 'download') => {
     if (!htmlContent.trim()) {
-      toast.error(t('feedback.error'));
+      showErrorWithSuggestion('errors.empty_html', 'suggestions.add_content');
       return;
     }
 
     setLoading(true);
+    setProgress(0);
+    setStatusText(t('feedback.uploading'));
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/convert`,
@@ -131,10 +146,23 @@ function App() {
           action: action
         },
         {
-          responseType: 'blob'
+          responseType: 'blob',
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              setProgress(percent);
+              if (percent === 100) {
+                setStatusText(t('feedback.processing'));
+              }
+            }
+          },
+          onDownloadProgress: () => {
+            setStatusText(t('feedback.downloading'));
+          }
         }
       );
 
+      setProgress(100);
       const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
 
@@ -152,9 +180,33 @@ function App() {
       toast.success(t('feedback.success'));
     } catch (error) {
       console.error(error);
-      toast.error(t('feedback.error'));
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+
+        switch (status) {
+          case 400:
+            showErrorWithSuggestion('errors.invalid_html', 'suggestions.check_tags');
+            break;
+          case 422:
+            showErrorWithSuggestion('errors.size_limit', 'suggestions.reduce_size');
+            break;
+          case 429:
+            showErrorWithSuggestion('errors.rate_limit', 'suggestions.wait_retry');
+            break;
+          case 500:
+            showErrorWithSuggestion('errors.server_error', 'suggestions.try_again');
+            break;
+          default:
+            showErrorWithSuggestion('errors.unknown', 'suggestions.try_again');
+        }
+      } else {
+        showErrorWithSuggestion('errors.network', 'suggestions.check_connection');
+      }
     } finally {
       setLoading(false);
+      setProgress(0);
+      setStatusText('');
     }
   };
 
@@ -203,6 +255,21 @@ function App() {
             </span>
             <span className="text-xs">{t('editor.shortcut_hint')}</span>
           </div>
+
+          {loading && (
+            <div className="mt-3">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm text-blue-600 animate-pulse">{statusText}</span>
+                <span className="text-sm text-gray-500">{progress}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          )}
 
           <div className="mt-4 flex justify-between">
             <div className="flex gap-2">

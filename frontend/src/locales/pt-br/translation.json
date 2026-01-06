@@ -15,8 +15,28 @@
         "shortcut_hint": "Ctrl+Enter para visualizar"
     },
     "feedback": {
-        "success": "Sucesso!",
-        "error": "Erro na conversão. Verifique seu HTML."
+        "success": "PDF gerado com sucesso!",
+        "error": "Erro na conversão. Verifique seu HTML.",
+        "uploading": "Enviando...",
+        "processing": "Processando PDF...",
+        "downloading": "Preparando download..."
+    },
+    "errors": {
+        "empty_html": "HTML não pode estar vazio",
+        "invalid_html": "HTML inválido ou malformado",
+        "size_limit": "O HTML excede o limite de 2MB",
+        "rate_limit": "Muitas requisições. Aguarde um momento.",
+        "server_error": "Erro no servidor ao gerar o PDF",
+        "network": "Erro de conexão. Verifique sua internet.",
+        "unknown": "Ocorreu um erro inesperado"
+    },
+    "suggestions": {
+        "add_content": "Adicione conteúdo HTML antes de converter.",
+        "check_tags": "Verifique se todas as tags HTML estão fechadas corretamente.",
+        "reduce_size": "Tente remover imagens grandes ou reduzir o conteúdo.",
+        "wait_retry": "Aguarde alguns segundos e tente novamente.",
+        "try_again": "Tente novamente. Se o erro persistir, recarregue a página.",
+        "check_connection": "Verifique sua conexão com a internet."
     },
     "footer": {
         "apiDocs": "API Docs (Swagger)",

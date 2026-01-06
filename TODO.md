@@ -23,10 +23,10 @@
 - [x] Limite de tamanho de input (2MB)
 
 ### UX
-- [ ] Barra de progresso durante conversão
-- [ ] Indicador de tempo estimado
-- [ ] Mensagens de erro mais descritivas em português
-- [ ] Sugestões de correção em erros
+- [x] Barra de progresso durante conversão
+- [x] Indicador de tempo estimado
+- [x] Mensagens de erro mais descritivas em português
+- [x] Sugestões de correção em erros
 
 ### Features
 - [ ] Histórico local (últimas 5 conversões)
