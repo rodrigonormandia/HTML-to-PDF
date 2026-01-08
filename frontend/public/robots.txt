@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://pdf-gravity-web.onrender.com/sitemap.xml
+Sitemap: https://htmltopdf.buscarid.com/sitemap.xml
 
 # Disallow admin/private areas (if any in the future)
 Disallow: /admin/

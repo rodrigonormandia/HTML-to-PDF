@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 
+import enTranslation from './locales/en/translation.json';
 import ptBrTranslation from './locales/pt-br/translation.json';
 
 i18n
@@ -11,12 +12,15 @@ i18n
     .use(initReactI18next)
     .init({
         resources: {
+            'en': {
+                translation: enTranslation
+            },
             'pt-BR': {
                 translation: ptBrTranslation
             }
         },
-        fallbackLng: 'pt-BR',
-        debug: true,
+        fallbackLng: 'en',
+        debug: false,
         interpolation: {
             escapeValue: false,
         },

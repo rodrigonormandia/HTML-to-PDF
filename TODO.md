@@ -1,223 +1,274 @@
-# 📋 TODO - PDF Gravity
+# 📋 TODO - PDF Leaf
 
-## 🎯 Roadmap de Melhorias
+## 🎯 Visão do Produto
 
----
+**Inspiração:** [APITemplate.io](https://apitemplate.io)
 
-## ⚡ Quick Wins (Implementação Rápida)
+PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
+1. **Ferramenta online gratuita** - Porta de entrada, gera tráfego orgânico e leads
+2. **API para desenvolvedores** - Monetização via planos (free/pro)
 
-- [x] Limite de caracteres no textarea (max 2MB)
-- [x] Botão "Limpar" para resetar o editor
-- [x] Contador de caracteres em tempo real
-- [x] Atalhos de teclado (Ctrl+Enter para converter)
-- [x] Botão "Copiar HTML de exemplo"
-
----
-
-## 🔴 Versão 1.1 - ALTA PRIORIDADE (2 semanas)
-
-### Segurança
-- [x] Validação de HTML no backend
-- [x] Sanitização de HTML antes de processar
-- [x] Rate limiting por IP (30 req/min)
-- [x] Limite de tamanho de input (2MB)
-
-### UX
-- [x] Barra de progresso durante conversão
-- [x] Indicador de tempo estimado
-- [x] Mensagens de erro mais descritivas em português
-- [x] Sugestões de correção em erros
-
-### Features
-- [ ] Histórico local (últimas 5 conversões)
-- [ ] Botão "Carregar último HTML"
-- [ ] Opção de limpar histórico
-- [ ] LocalStorage para persistência
+### Posicionamento
+```
+"PDF Leaf: The developer-friendly HTML to PDF converter with native TailwindCSS support"
+```
 
 ---
 
-## 🟡 Versão 1.2 - MÉDIA PRIORIDADE (1 mês)
+## 🔍 Análise Competitiva
 
-### Customização de PDF
-- [x] Seletor de tamanho (A4, Letter, Custom)
-- [x] Orientação (Portrait/Landscape)
-- [x] Margens customizáveis
-- [x] Header/Footer personalizados (HTML completo)
-- [x] Altura configurável do header/footer
-- [x] Exclusão de header/footer por página específica
-- [x] Quebra de página (classes CSS: page-break, page-break-before, avoid-break)
+### Concorrentes Principais
 
-### Editor
-- [ ] Integrar CodeMirror ou Monaco Editor
-- [ ] Syntax highlighting para HTML
-- [ ] Auto-complete de tags
-- [ ] Formatação automática (prettier)
+| Serviço | Free Tier | Plano Inicial | Diferencial |
+|---------|-----------|---------------|-------------|
+| APITemplate.io | 50/mês (expira 2h) | $19/mês | Integrações no-code, templates visuais |
+| PDFShift | 50/mês | ~$9/mês | 99.99% uptime, 1.5s conversão |
+| DocRaptor | Ilimitado (watermark) | ~$15/mês | Motor Prince, HIPAA/SOC2 |
+| PDFMonkey | 20/mês | €19/mês | Templates visuais, GDPR |
+| pdflayer | 100/mês | $10/mês | Simples, barato |
 
-### Templates
-- [ ] Template de fatura
-- [ ] Template de currículo
-- [ ] Template de relatório
-- [ ] Galeria de templates
-- [ ] Botão "Usar template"
+### Nossos Diferenciais ÚNICOS
 
-### Tema
+| Feature | Concorrentes | PDF Leaf |
+|---------|--------------|----------|
+| **TailwindCSS nativo** | ❌ Nenhum | ✅ **ÚNICO** |
+| Header/Footer HTML completo | Básico | ✅ Completo |
+| Quebra de página CSS | ❌ Maioria não tem | ✅ 3 classes |
+| Exclusão header por página | ❌ | ✅ |
+| PDFs expiram | 2h (APITemplate) | ✅ **Nunca** |
+| Watermark no free | Alguns sim | ✅ **Nunca** |
+
+### Oportunidade de Mercado
+
+**NENHUM concorrente menciona TailwindCSS.** Este é um nicho inexplorado com desenvolvedores frontend como público-alvo.
+
+---
+
+## 🔑 Estratégia de SEO
+
+### Palavras-chave Prioritárias
+
+#### 🟢 Alta Oportunidade (Sem concorrência - FOCO PRINCIPAL)
+| Keyword | Concorrência | Ação |
+|---------|--------------|------|
+| `tailwindcss to pdf` | Muito baixa | Artigo pilar |
+| `html to pdf tailwind` | Muito baixa | Landing page |
+| `convert tailwind to pdf` | Muito baixa | Tutorial |
+| `tailwind css pdf export` | Muito baixa | Blog post |
+
+#### 🟡 Média Oportunidade (Long-tail)
+| Keyword | Concorrência | Ação |
+|---------|--------------|------|
+| `html to pdf with custom header footer` | Baixa | Feature page |
+| `html to pdf page break css` | Baixa | Tutorial |
+| `weasyprint online` | Baixa | Comparativo |
+| `html to pdf api free` | Média | Pricing page |
+
+#### 🔴 Alto Volume (Competir depois)
+| Keyword | Concorrência | Ação |
+|---------|--------------|------|
+| `html to pdf converter free` | Alta | SEO longo prazo |
+| `html to pdf online` | Alta | SEO longo prazo |
+| `convert html to pdf` | Alta | SEO longo prazo |
+
+### Conteúdo a Criar (Blog)
+
+#### Fase 1: Nicho TailwindCSS (Prioridade Máxima)
+- [ ] "How to Convert TailwindCSS to PDF - Complete Guide" (artigo pilar)
+- [ ] "Generate PDF Reports with TailwindCSS"
+- [ ] "TailwindCSS Invoice Template to PDF"
+- [ ] "Export Tailwind Components to PDF"
+
+#### Fase 2: Tutoriais por Linguagem
+- [ ] "Convert HTML to PDF in Python with WeasyPrint"
+- [ ] "HTML to PDF in Node.js: 4 Methods Compared"
+- [ ] "Generate PDF from HTML in PHP"
+- [ ] "HTML to PDF in JavaScript - Browser & Server"
+
+#### Fase 3: Comparativos (Authority Building)
+- [ ] "Best Free HTML to PDF Converters in 2026"
+- [ ] "APITemplate vs PDF Leaf: Which is Better?"
+- [ ] "HTML to PDF Libraries Comparison"
+
+#### Fase 4: Casos de Uso
+- [ ] "How to Generate Invoices from HTML"
+- [ ] "Creating PDF Reports with Custom Headers"
+- [ ] "Building a Resume Generator with HTML to PDF"
+
+### Páginas de Ferramenta (SEO)
+
+| Página | URL | Keyword Target |
+|--------|-----|----------------|
+| Principal | `/` | html to pdf converter |
+| Tailwind | `/tailwind-to-pdf` | tailwindcss to pdf |
+| URL to PDF | `/url-to-pdf` | convert website to pdf |
+| Markdown | `/markdown-to-pdf` | markdown to pdf online |
+
+---
+
+## 💰 Planos de Monetização
+
+### Estrutura de Preços (Competitiva)
+
+| Plano | Preço/mês | PDFs/mês | Features |
+|-------|-----------|----------|----------|
+| **Free** | $0 | 100 | Sem watermark, sem expiração, API básica |
+| **Starter** | $15 | 2,000 | API completa, webhooks, suporte email |
+| **Pro** | $49 | 10,000 | Priority support, custom domain, analytics |
+| **Enterprise** | $99 | 50,000 | SLA 99.9%, dedicated support, SSO |
+
+### Comparativo com APITemplate
+
+| Feature | APITemplate Free | PDF Leaf Free |
+|---------|------------------|---------------|
+| PDFs/mês | 50 | **100** ⬆️ |
+| Expiração | 2 horas | **Nunca** ⬆️ |
+| Watermark | Não | **Não** |
+| TailwindCSS | Manual | **Nativo** ⬆️ |
+| Templates | 3 | **Ilimitado** ⬆️ |
+| API Access | Limitado | **Sim** ⬆️ |
+
+---
+
+## 🎯 Roadmap de Implementação
+
+### ✅ Fase 1: MVP (Concluído)
+- [x] Ferramenta online funcional
+- [x] Suporte TailwindCSS nativo
+- [x] Header/Footer customizável (HTML completo)
+- [x] Quebra de página via CSS
+- [x] Exclusão de header/footer por página
+- [x] Templates prontos (fatura, currículo, relatório)
 - [x] Modo escuro
-- [x] Toggle dark/light mode
-- [x] Salvar preferência no localStorage
-- [x] Respeitar preferência do sistema
+- [x] i18n (EN padrão, PT-BR disponível)
+- [x] SEO básico otimizado
 
----
+### 🔄 Fase 2: SEO & Conteúdo (Próximo)
+- [ ] Landing page `/tailwind-to-pdf`
+- [ ] Artigo pilar: "TailwindCSS to PDF Guide"
+- [ ] Seletor de idioma na UI
+- [ ] Blog section no site
+- [ ] Schema.org para artigos
+- [ ] Sitemap dinâmico
 
-## 🟢 Versão 2.0 - LONGO PRAZO (3 meses)
+### 📝 Fase 3: Editor Avançado
+- [ ] Integrar CodeMirror 6
+- [ ] Syntax highlighting para HTML
+- [ ] Numeração de linhas
+- [ ] Auto-complete básico de tags
+- [ ] Mais templates (contrato, proposta, etc)
 
-### API Pública
+### 🔐 Fase 4: API Pública
+- [ ] Endpoint `/api/v1/convert`
 - [ ] Sistema de API Keys
-- [ ] Rate limiting por usuário
+- [ ] Rate limiting por key
+- [ ] Documentação OpenAPI/Swagger
+- [ ] SDKs (Python, Node.js, PHP)
+- [ ] Webhooks para async processing
+
+### 👤 Fase 5: Sistema de Contas
+- [ ] Cadastro/Login (email, Google, GitHub)
 - [ ] Dashboard de uso
-- [ ] Planos (free/pro)
-- [ ] Documentação da API
+- [ ] Histórico de conversões
+- [ ] Gerenciamento de API keys
+- [ ] Configurações de conta
 
-### Batch Processing
-- [ ] Upload de múltiplos HTMLs
-- [ ] Conversão em lote
-- [ ] Download em ZIP
-- [ ] Fila de processamento
+### 💳 Fase 6: Monetização
+- [ ] Integração Stripe
+- [ ] Planos Free/Starter/Pro/Enterprise
+- [ ] Billing automático
+- [ ] Invoices automáticos
+- [ ] Upgrade/downgrade de planos
 
-### Integrações
-- [ ] Salvar no Google Drive
-- [ ] Salvar no Dropbox
-- [ ] Webhook para enviar para URL
-- [ ] API REST para integração
+### 🔗 Fase 7: Integrações
+- [ ] Zapier
+- [ ] Make.com (Integromat)
+- [ ] n8n
+- [ ] Webhooks customizáveis
+- [ ] AWS S3 export
+
+### 🌍 Fase 8: Escala
+- [ ] Múltiplas regiões (US, EU)
+- [ ] CDN para assets
+- [ ] Queue processing (Redis/Celery)
+- [ ] Caching de resultados
 
 ---
 
-## 🏗️ Melhorias de Arquitetura
+## 🏗️ Melhorias Técnicas
 
 ### Backend
 - [ ] Fila de processamento (Celery + Redis)
 - [ ] Cache de resultados (Redis)
 - [ ] Logging estruturado (Loguru)
 - [ ] Integração com Sentry
-- [ ] Tratamento de erros robusto
-- [ ] Códigos de erro específicos
+- [ ] Métricas Prometheus
 
 ### Frontend
 - [ ] Code splitting e lazy loading
-- [ ] Service Worker (PWA offline)
 - [ ] Cache de assets
 - [ ] Otimização de bundle
 - [ ] Acessibilidade (ARIA labels)
-- [ ] Navegação por teclado
 
 ### DevOps
-- [x] Unit tests (pytest para backend)
-- [x] E2E tests (Playwright para frontend)
-- [x] CI/CD com GitHub Actions
-- [x] Testes automatizados em PRs
-- [x] Coverage reports
+- [x] Unit tests (pytest)
+- [x] E2E tests (Playwright)
+- [x] CI/CD (GitHub Actions)
+- [ ] Staging environment
+- [ ] Blue-green deployment
 
 ---
 
 ## 📊 Analytics e Monitoramento
 
-- [ ] Google Analytics ou Plausible
-- [ ] Métricas de conversão
-- [ ] Heatmaps (Hotjar)
+- [ ] Google Analytics 4 ou Plausible
+- [ ] Métricas de conversão (free → paid)
+- [ ] Heatmaps (Hotjar/Microsoft Clarity)
 - [ ] Error tracking (Sentry)
-- [ ] Performance monitoring
+- [ ] Performance monitoring (Lighthouse CI)
+- [ ] Uptime monitoring (UptimeRobot)
 
 ---
 
 ## 🌍 Internacionalização
 
-- [ ] Adicionar inglês (en-US)
-- [ ] Adicionar espanhol (es-ES)
-- [ ] Seletor de idioma
-- [ ] Traduzir toda a UI
-- [ ] Traduzir mensagens de erro
-
----
-
-## 📝 Documentação
-
-- [ ] README.md completo
-- [ ] Guia de contribuição
-- [ ] Documentação da API
-- [ ] Exemplos de uso
-- [ ] FAQ
-
----
-
-## 🎨 Design e Branding
-
-- [x] Logo criada
-- [x] Favicon adicionado
-- [x] Open Graph images
-- [x] Animações e micro-interações
-- [ ] Ilustrações customizadas
-- [x] Design system completo
-
----
-
-## 🔒 Segurança e Compliance
-
-- [x] HTTPS obrigatório
-- [x] CSP (Content Security Policy)
-- [x] GDPR compliance
-- [x] Política de privacidade
-- [x] Termos de uso
-
----
-
-## 💰 Monetização (Futuro)
-
-- [ ] Plano Free (limitado)
-- [ ] Plano Pro (ilimitado)
-- [ ] Stripe integration
-- [ ] Dashboard de assinatura
-- [ ] Billing automático
-
----
-
-## 📈 Priorização
-
-### Implementar AGORA (Esta semana)
-1. Quick Wins (5 itens)
-2. Validação e segurança básica
-3. Histórico local
-
-### Implementar PRÓXIMO (Próximas 2 semanas)
-1. Feedback visual melhorado
-2. Tratamento de erros robusto
-3. Customização básica de PDF
-
-### Implementar DEPOIS (Próximo mês)
-1. Editor com syntax highlighting
-2. Templates prontos
-3. Modo escuro
+- [x] Inglês como idioma padrão (en-US)
+- [x] Português brasileiro (pt-BR)
+- [ ] Espanhol (es-ES)
+- [ ] Seletor de idioma na UI
+- [ ] Detecção automática por navegador
 
 ---
 
 ## ✅ Concluído
 
 - [x] MVP funcional
-- [x] Deploy no Render
-- [x] Docker setup
-- [x] SEO otimizado
+- [x] Deploy Docker/Portainer
+- [x] SEO otimizado (meta tags, Schema.org, sitemap)
 - [x] Logo e branding
-- [x] PWA manifest
 - [x] robots.txt e sitemap.xml
-- [x] Schema.org JSON-LD
-- [x] Internacionalização (pt-BR)
 - [x] Documentação da API (Swagger/ReDoc)
-- [x] Deploy no Portainer com Traefik
 - [x] Header/Footer personalizados com HTML completo
 - [x] Exclusão de header/footer por páginas específicas
-- [x] Quebra de página via CSS (page-break, page-break-before, avoid-break)
+- [x] Quebra de página via CSS
 - [x] Testes automatizados (pytest + Playwright)
 - [x] CI/CD com GitHub Actions
+- [x] Galeria de templates
+- [x] Rebranding: PDF Gravity → PDF Leaf
+- [x] Internacionalização: EN padrão, PT-BR disponível
+- [x] Análise competitiva completa
+- [x] Estratégia de SEO definida
+- [x] Planos de monetização definidos
 
 ---
 
-**Última atualização:** 2026-01-06
-**Versão atual:** v1.3.0
+## 📚 Documentação Relacionada
+
+- `COMPETITOR_ANALYSIS.md` - Análise detalhada dos concorrentes
+- `CLAUDE.md` - Guia para desenvolvimento
+- `DEPLOY.md` - Documentação de deploy
+
+---
+
+**Última atualização:** 2026-01-07
+**Versão atual:** v1.5.0

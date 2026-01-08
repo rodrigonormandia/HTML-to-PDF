@@ -1,6 +1,6 @@
 {
     "app": {
-        "title": "PDF Gravity",
+        "title": "PDF Leaf",
         "subtitle": "Converta HTML para PDF em segundos"
     },
     "editor": {
@@ -81,5 +81,24 @@
         "apiDocs": "API Docs (Swagger)",
         "apiRedoc": "API Docs (ReDoc)",
         "developer": "Desenvolvido por Rodrigo Normandia"
+    },
+    "templates": {
+        "btn_templates": "Modelos",
+        "gallery_title": "Galeria de Modelos",
+        "gallery_subtitle": "Escolha um modelo para começar",
+        "btn_use": "Usar Modelo",
+        "template_loaded": "Modelo carregado com sucesso!",
+        "invoice": {
+            "name": "Fatura",
+            "description": "Modelo de fatura profissional com tabela de itens e totais"
+        },
+        "resume": {
+            "name": "Currículo",
+            "description": "Layout moderno com seções de experiência e habilidades"
+        },
+        "report": {
+            "name": "Relatório",
+            "description": "Estrutura empresarial com sumário executivo e tabelas"
+        }
     }
 }

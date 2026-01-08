@@ -4,13 +4,14 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTheme } from './hooks/useTheme';
+import { TemplatesGallery, type Template } from './components/TemplatesGallery';
 
 const MAX_CHARS = 2097152; // 2MB
 
 const EXAMPLE_HTML = `<!DOCTYPE html>
 <html>
 <head>
-  <title>Exemplo PDF Gravity</title>
+  <title>PDF Leaf Example</title>
   <style>
     @page {
       size: A4;
@@ -59,78 +60,78 @@ const EXAMPLE_HTML = `<!DOCTYPE html>
 </head>
 <body>
   <div class="header">
-    <span class="logo">PDF Gravity</span>
-    <span class="badge">Exemplo</span>
+    <span class="logo">PDF Leaf</span>
+    <span class="badge">Example</span>
   </div>
 
-  <h1 class="text-2xl font-bold mb-4">Relatório de Demonstração</h1>
+  <h1 class="text-2xl font-bold mb-4">Demo Report</h1>
 
-  <p>Este é um exemplo completo de HTML que demonstra as capacidades do <strong>PDF Gravity</strong>.</p>
+  <p>This is a complete HTML example demonstrating the capabilities of <strong>PDF Leaf</strong>.</p>
 
   <div class="card">
-    <h2 class="text-lg font-semibold mb-2">Recursos Disponíveis</h2>
+    <h2 class="text-lg font-semibold mb-2">Available Features</h2>
     <ul class="list-disc list-inside space-y-1">
-      <li>CSS personalizado com a tag &lt;style&gt;</li>
-      <li>Classes do TailwindCSS</li>
-      <li>Configuração de página (@page)</li>
-      <li>Fontes e cores customizadas</li>
+      <li>Custom CSS with &lt;style&gt; tag</li>
+      <li>TailwindCSS classes</li>
+      <li>Page configuration (@page)</li>
+      <li>Custom fonts and colors</li>
     </ul>
   </div>
 
   <div class="card">
-    <h2 class="text-lg font-semibold mb-2">Tabela de Exemplo</h2>
+    <h2 class="text-lg font-semibold mb-2">Example Table</h2>
     <table class="w-full border-collapse">
       <thead>
         <tr class="bg-gray-200">
           <th class="border p-2 text-left">Item</th>
-          <th class="border p-2 text-left">Descrição</th>
-          <th class="border p-2 text-right">Valor</th>
+          <th class="border p-2 text-left">Description</th>
+          <th class="border p-2 text-right">Price</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="border p-2">Produto A</td>
-          <td class="border p-2">Descrição do produto A</td>
-          <td class="border p-2 text-right">R$ 150,00</td>
+          <td class="border p-2">Product A</td>
+          <td class="border p-2">Description of product A</td>
+          <td class="border p-2 text-right">$150.00</td>
         </tr>
         <tr>
-          <td class="border p-2">Produto B</td>
-          <td class="border p-2">Descrição do produto B</td>
-          <td class="border p-2 text-right">R$ 250,00</td>
+          <td class="border p-2">Product B</td>
+          <td class="border p-2">Description of product B</td>
+          <td class="border p-2 text-right">$250.00</td>
         </tr>
         <tr class="bg-gray-100 font-bold">
           <td class="border p-2" colspan="2">Total</td>
-          <td class="border p-2 text-right">R$ 400,00</td>
+          <td class="border p-2 text-right">$400.00</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- QUEBRA DE PÁGINA: use class="page-break" para forçar nova página -->
+  <!-- PAGE BREAK: use class="page-break" to force a new page -->
   <div class="page-break"></div>
 
-  <!-- PÁGINA 2 -->
+  <!-- PAGE 2 -->
   <div class="header">
-    <span class="logo">PDF Gravity</span>
-    <span class="badge">Página 2</span>
+    <span class="logo">PDF Leaf</span>
+    <span class="badge">Page 2</span>
   </div>
 
-  <h1 class="text-2xl font-bold mb-4">Segunda Página</h1>
+  <h1 class="text-2xl font-bold mb-4">Second Page</h1>
 
   <div class="card">
-    <h2 class="text-lg font-semibold mb-2">Quebra de Página</h2>
-    <p>Use a classe <code class="bg-gray-200 px-1 rounded">page-break</code> para forçar uma nova página:</p>
+    <h2 class="text-lg font-semibold mb-2">Page Break</h2>
+    <p>Use the <code class="bg-gray-200 px-1 rounded">page-break</code> class to force a new page:</p>
     <pre class="bg-gray-800 text-green-400 p-3 rounded mt-2 text-sm">&lt;div class="page-break"&gt;&lt;/div&gt;</pre>
-    <p class="mt-3">Classes disponíveis:</p>
+    <p class="mt-3">Available classes:</p>
     <ul class="list-disc list-inside mt-2 space-y-1">
-      <li><code class="bg-gray-200 px-1 rounded">page-break</code> - quebra após o elemento</li>
-      <li><code class="bg-gray-200 px-1 rounded">page-break-before</code> - quebra antes do elemento</li>
-      <li><code class="bg-gray-200 px-1 rounded">avoid-break</code> - evita quebra dentro do elemento</li>
+      <li><code class="bg-gray-200 px-1 rounded">page-break</code> - break after the element</li>
+      <li><code class="bg-gray-200 px-1 rounded">page-break-before</code> - break before the element</li>
+      <li><code class="bg-gray-200 px-1 rounded">avoid-break</code> - avoid break inside the element</li>
     </ul>
   </div>
 
   <div class="footer">
-    Gerado com PDF Gravity | htmltopdf.buscarid.com
+    Generated with PDF Leaf | pdfleaf.com
   </div>
 </body>
 </html>`;
@@ -159,6 +160,9 @@ function App() {
   const [headerFooterUnit, setHeaderFooterUnit] = useState('cm');
   const [excludeHeaderPages, setExcludeHeaderPages] = useState('');
   const [excludeFooterPages, setExcludeFooterPages] = useState('');
+
+  // Templates Gallery
+  const [showTemplatesGallery, setShowTemplatesGallery] = useState(false);
 
   const showErrorWithSuggestion = (errorKey: string, suggestionKey: string) => {
     toast.error(
@@ -278,8 +282,8 @@ function App() {
 
   const handleLoadExample = () => {
     setHtmlContent(EXAMPLE_HTML);
-    setHeaderHtml('<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:10pt;">\n  <span style="font-weight:bold; color:#3b82f6;">PDF Gravity</span>\n  <span style="color:#666;">Relatório de Demonstração</span>\n</div>');
-    setFooterHtml('<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:9pt; color:#888;">\n  <span>Documento gerado em ' + new Date().toLocaleDateString('pt-BR') + '</span>\n  <span>Página {{page}} de {{pages}}</span>\n</div>');
+    setHeaderHtml('<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:10pt;">\n  <span style="font-weight:bold; color:#22c55e;">PDF Leaf</span>\n  <span style="color:#666;">Demo Report</span>\n</div>');
+    setFooterHtml('<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:9pt; color:#888;">\n  <span>Generated on ' + new Date().toLocaleDateString('en-US') + '</span>\n  <span>Page {{page}} of {{pages}}</span>\n</div>');
     setHeaderHeight('1.5');
     setFooterHeight('1');
     setIncludePageNumbers(true);
@@ -293,12 +297,22 @@ function App() {
     }
   };
 
+  const handleSelectTemplate = (template: Template) => {
+    setHtmlContent(template.html);
+    if (template.headerHtml) setHeaderHtml(template.headerHtml);
+    if (template.footerHtml) setFooterHtml(template.footerHtml);
+    if (template.headerHeight) setHeaderHeight(template.headerHeight);
+    if (template.footerHeight) setFooterHeight(template.footerHeight);
+    setShowTemplatesGallery(false);
+    toast.info(t('templates.template_loaded'));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       <header className="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/50 py-4 px-6 mb-8">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="PDF Gravity Logo" className="w-12 h-12" />
+            <img src="/logo.png" alt="PDF Leaf Logo" className="w-12 h-12" />
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('app.title')}</h1>
               <p className="text-gray-500 dark:text-gray-400">{t('app.subtitle')}</p>
@@ -627,6 +641,13 @@ function App() {
           <div className="mt-4 flex justify-between">
             <div className="flex gap-2">
               <button
+                onClick={() => setShowTemplatesGallery(true)}
+                disabled={loading}
+                className="px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 text-sm border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95"
+              >
+                {t('templates.btn_templates')}
+              </button>
+              <button
                 onClick={handleLoadExample}
                 disabled={loading}
                 className="px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 text-sm border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95"
@@ -695,8 +716,14 @@ function App() {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Gravity v1.2.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.5.0 | {t('footer.developer')}</div>
       </footer>
+
+      <TemplatesGallery
+        isOpen={showTemplatesGallery}
+        onClose={() => setShowTemplatesGallery(false)}
+        onSelectTemplate={handleSelectTemplate}
+      />
 
       <ToastContainer position="bottom-right" theme={theme} />
     </div>

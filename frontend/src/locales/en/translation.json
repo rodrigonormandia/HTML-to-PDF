@@ -1,0 +1,104 @@
+{
+    "app": {
+        "title": "PDF Leaf",
+        "subtitle": "Convert HTML to PDF in seconds"
+    },
+    "editor": {
+        "placeholder": "Paste your HTML code here...",
+        "btn_download": "Download PDF",
+        "btn_preview": "Preview",
+        "btn_clear": "Clear",
+        "btn_example": "Load Example",
+        "generating": "Processing...",
+        "characters": "characters",
+        "example_loaded": "Example HTML loaded!",
+        "shortcut_hint": "Ctrl+Enter to preview"
+    },
+    "feedback": {
+        "success": "PDF generated successfully!",
+        "error": "Conversion error. Check your HTML.",
+        "uploading": "Uploading...",
+        "processing": "Processing PDF...",
+        "downloading": "Preparing download..."
+    },
+    "errors": {
+        "empty_html": "HTML cannot be empty",
+        "invalid_html": "Invalid or malformed HTML",
+        "size_limit": "HTML exceeds the 2MB limit",
+        "rate_limit": "Too many requests. Please wait a moment.",
+        "server_error": "Server error while generating PDF",
+        "network": "Connection error. Check your internet.",
+        "unknown": "An unexpected error occurred"
+    },
+    "suggestions": {
+        "add_content": "Add HTML content before converting.",
+        "check_tags": "Make sure all HTML tags are properly closed.",
+        "reduce_size": "Try removing large images or reducing content.",
+        "wait_retry": "Wait a few seconds and try again.",
+        "try_again": "Try again. If the error persists, reload the page.",
+        "check_connection": "Check your internet connection."
+    },
+    "settings": {
+        "title": "PDF Settings",
+        "page_size": "Page size",
+        "orientation": "Orientation",
+        "portrait": "Portrait",
+        "landscape": "Landscape",
+        "margins": "Margins",
+        "margin_top": "Top",
+        "margin_bottom": "Bottom",
+        "margin_left": "Left",
+        "margin_right": "Right",
+        "margin_unit": "Unit",
+        "page_numbers": "Include page numbers",
+        "page_numbers_hint": "Shows 'Page X of Y' in the footer of each page",
+        "headers_footers": "Header and Footer",
+        "header_html": "Header HTML",
+        "footer_html": "Footer HTML",
+        "header_placeholder": "<div style=\"text-align:center;\">My Header</div>",
+        "footer_placeholder": "<div style=\"text-align:center;\">My Footer</div>",
+        "height": "Height",
+        "header_footer_unit": "Height unit",
+        "exclude_header_pages": "Exclude header from pages",
+        "exclude_footer_pages": "Exclude footer from pages",
+        "exclude_pages_hint": "Comma-separated numbers (e.g., 1, 3, 5)",
+        "page_break_title": "Page Break",
+        "page_break_description": "Use the CSS classes below in your HTML to control page breaks:",
+        "page_break_after": "break after the element",
+        "page_break_before": "break before the element",
+        "avoid_break": "avoid break inside the element"
+    },
+    "theme": {
+        "toggle": "Toggle theme",
+        "light": "Light mode",
+        "dark": "Dark mode"
+    },
+    "legal": {
+        "privacy": "Privacy",
+        "terms": "Terms of Use"
+    },
+    "footer": {
+        "apiDocs": "API Docs (Swagger)",
+        "apiRedoc": "API Docs (ReDoc)",
+        "developer": "Developed by Rodrigo Normandia"
+    },
+    "templates": {
+        "btn_templates": "Templates",
+        "gallery_title": "Template Gallery",
+        "gallery_subtitle": "Choose a template to get started",
+        "btn_use": "Use Template",
+        "template_loaded": "Template loaded successfully!",
+        "invoice": {
+            "name": "Invoice",
+            "description": "Professional invoice template with item table and totals"
+        },
+        "resume": {
+            "name": "Resume",
+            "description": "Modern layout with experience and skills sections"
+        },
+        "report": {
+            "name": "Report",
+            "description": "Business structure with executive summary and tables"
+        }
+    }
+}

@@ -1,11 +1,11 @@
 {
-  "name": "PDF Gravity",
-  "short_name": "PDF Gravity",
-  "description": "Converta HTML para PDF online grátis com suporte a TailwindCSS",
+  "name": "PDF Leaf",
+  "short_name": "PDF Leaf",
+  "description": "Free online HTML to PDF converter with TailwindCSS support",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "theme_color": "#22c55e",
   "orientation": "portrait-primary",
   "icons": [
     {

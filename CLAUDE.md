@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PDF Gravity is an HTML-to-PDF conversion web application. Users paste HTML code in a text area and can either preview or download the generated PDF.
+PDF Leaf is an HTML-to-PDF conversion platform inspired by [APITemplate.io](https://apitemplate.io). It offers:
+1. **Free online tool** - Users paste HTML and get PDF (drives organic traffic)
+2. **API for developers** - Future monetization via usage-based plans
 
 **Developer:** Rodrigo Normandia
 
@@ -13,7 +15,7 @@ PDF Gravity is an HTML-to-PDF conversion web application. Users paste HTML code 
 **Frontend (React + Vite + TypeScript)**
 - Located in `/frontend`
 - Uses TailwindCSS v4 for styling
-- i18next for internationalization (Portuguese-BR is the default/fallback language)
+- i18next for internationalization (English is the default language, Portuguese-BR available)
 - Axios for API calls to the backend
 - Single-page app with one main component (`App.tsx`)
 
