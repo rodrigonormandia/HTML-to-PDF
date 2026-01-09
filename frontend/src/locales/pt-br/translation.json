@@ -30,7 +30,10 @@
         "rate_limit": "Muitas requisições. Aguarde um momento.",
         "server_error": "Erro no servidor ao gerar o PDF",
         "network": "Erro de conexão. Verifique sua internet.",
-        "unknown": "Ocorreu um erro inesperado"
+        "unknown": "Ocorreu um erro inesperado",
+        "auth_error": "Erro de autenticação",
+        "quota_exceeded": "Cota mensal excedida",
+        "quota_used": "Você usou {{used}} de {{limit}} conversões este mês"
     },
     "suggestions": {
         "add_content": "Adicione conteúdo HTML antes de converter.",
@@ -38,7 +41,9 @@
         "reduce_size": "Tente remover imagens grandes ou reduzir o conteúdo.",
         "wait_retry": "Aguarde alguns segundos e tente novamente.",
         "try_again": "Tente novamente. Se o erro persistir, recarregue a página.",
-        "check_connection": "Verifique sua conexão com a internet."
+        "check_connection": "Verifique sua conexão com a internet.",
+        "login_again": "Por favor, faça login novamente para continuar.",
+        "upgrade_plan": "Faça upgrade do seu plano para mais conversões."
     },
     "settings": {
         "title": "Configurações do PDF",
@@ -101,6 +106,14 @@
         "report": {
             "name": "Relatório",
             "description": "Estrutura empresarial com sumário executivo e tabelas"
+        },
+        "contract": {
+            "name": "Contrato",
+            "description": "Modelo de contrato com cláusulas numeradas"
+        },
+        "proposal": {
+            "name": "Proposta",
+            "description": "Proposta comercial com escopo e preços"
         }
     },
     "auth": {
@@ -123,7 +136,8 @@
         "loading": "Carregando...",
         "checkEmailTitle": "Verifique seu email",
         "checkEmailMessage": "Enviamos um link de confirmação para {{email}}. Clique no link para ativar sua conta.",
-        "understood": "Entendi"
+        "understood": "Entendi",
+        "login_required_to_convert": "Faça login para converter HTML para PDF"
     },
     "nav": {
         "home": "Início",

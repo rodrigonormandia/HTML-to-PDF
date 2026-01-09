@@ -30,7 +30,10 @@
         "rate_limit": "Too many requests. Please wait a moment.",
         "server_error": "Server error while generating PDF",
         "network": "Connection error. Check your internet.",
-        "unknown": "An unexpected error occurred"
+        "unknown": "An unexpected error occurred",
+        "auth_error": "Authentication error",
+        "quota_exceeded": "Monthly quota exceeded",
+        "quota_used": "You have used {{used}} of {{limit}} conversions this month"
     },
     "suggestions": {
         "add_content": "Add HTML content before converting.",
@@ -38,7 +41,9 @@
         "reduce_size": "Try removing large images or reducing content.",
         "wait_retry": "Wait a few seconds and try again.",
         "try_again": "Try again. If the error persists, reload the page.",
-        "check_connection": "Check your internet connection."
+        "check_connection": "Check your internet connection.",
+        "login_again": "Please login again to continue.",
+        "upgrade_plan": "Upgrade your plan for more conversions."
     },
     "settings": {
         "title": "PDF Settings",
@@ -101,6 +106,14 @@
         "report": {
             "name": "Report",
             "description": "Business structure with executive summary and tables"
+        },
+        "contract": {
+            "name": "Contract",
+            "description": "Legal contract template with numbered clauses"
+        },
+        "proposal": {
+            "name": "Proposal",
+            "description": "Commercial proposal with scope and pricing"
         }
     },
     "auth": {
@@ -123,7 +136,8 @@
         "loading": "Loading...",
         "checkEmailTitle": "Check your email",
         "checkEmailMessage": "We sent a confirmation link to {{email}}. Click the link to activate your account.",
-        "understood": "Got it"
+        "understood": "Got it",
+        "login_required_to_convert": "Please login to convert HTML to PDF"
     },
     "nav": {
         "home": "Home",

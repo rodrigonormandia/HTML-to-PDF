@@ -6,10 +6,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTheme } from './hooks/useTheme';
 import { TemplatesGallery, type Template } from './components/TemplatesGallery';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Pricing from './pages/Pricing';
+import AuthModal from './components/Auth/AuthModal';
+import { HtmlEditor } from './components/HtmlEditor';
 
 const MAX_CHARS = 2097152; // 2MB
 const POLL_INTERVAL = 500; // ms
@@ -146,10 +148,12 @@ const EXAMPLE_HTML = `<!DOCTYPE html>
 function App() {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const { user } = useAuth();
   const [htmlContent, setHtmlContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('');
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // PDF Settings
   const [showSettings, setShowSettings] = useState(false);
@@ -182,6 +186,13 @@ function App() {
   };
 
   const handleConvert = async (action: 'preview' | 'download') => {
+    // Verificar se o usuário está logado
+    if (!user) {
+      toast.warning(t('auth.login_required_to_convert'));
+      setShowAuthModal(true);
+      return;
+    }
+
     if (!htmlContent.trim()) {
       showErrorWithSuggestion('errors.empty_html', 'suggestions.add_content');
       return;
@@ -194,7 +205,7 @@ function App() {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
     try {
-      // 1. Submit job
+      // 1. Submit job com user_id
       const submitResponse = await axios.post(
         `${apiUrl}/api/convert`,
         {
@@ -212,7 +223,8 @@ function App() {
           header_height: `${headerHeight}${headerFooterUnit}`,
           footer_height: `${footerHeight}${headerFooterUnit}`,
           exclude_header_pages: excludeHeaderPages || null,
-          exclude_footer_pages: excludeFooterPages || null
+          exclude_footer_pages: excludeFooterPages || null,
+          user_id: user.id
         }
       );
 
@@ -277,16 +289,40 @@ function App() {
 
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
+        const errorDetail = error.response?.data?.detail;
 
         switch (status) {
           case 400:
             showErrorWithSuggestion('errors.invalid_html', 'suggestions.check_tags');
             break;
+          case 401:
+            // Erro de autenticação
+            if (errorDetail?.error === 'authentication_required') {
+              toast.warning(t('auth.login_required_to_convert'));
+              setShowAuthModal(true);
+            } else {
+              showErrorWithSuggestion('errors.auth_error', 'suggestions.login_again');
+            }
+            break;
           case 422:
             showErrorWithSuggestion('errors.size_limit', 'suggestions.reduce_size');
             break;
           case 429:
-            showErrorWithSuggestion('errors.rate_limit', 'suggestions.wait_retry');
+            // Cota excedida ou rate limit
+            if (errorDetail?.error === 'quota_exceeded') {
+              const quota = errorDetail.quota;
+              toast.error(
+                <div>
+                  <p className="font-medium">{t('errors.quota_exceeded')}</p>
+                  <p className="text-sm mt-1 opacity-80">
+                    {t('errors.quota_used', { used: quota?.used || 0, limit: quota?.limit || 0 })}
+                  </p>
+                </div>,
+                { autoClose: 8000 }
+              );
+            } else {
+              showErrorWithSuggestion('errors.rate_limit', 'suggestions.wait_retry');
+            }
             break;
           case 500:
             showErrorWithSuggestion('errors.server_error', 'suggestions.try_again');
@@ -327,13 +363,6 @@ function App() {
     toast.info(t('editor.example_loaded'));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.ctrlKey && e.key === 'Enter') {
-      e.preventDefault();
-      handleConvert('preview');
-    }
-  };
-
   const handleSelectTemplate = (template: Template) => {
     setHtmlContent(template.html);
     if (template.headerHtml) setHeaderHtml(template.headerHtml);
@@ -346,15 +375,17 @@ function App() {
 
   const homePage = (
     <Layout>
-      <div className="container mx-auto px-4 max-w-4xl py-8 flex flex-col gap-4">
+      <div className="container mx-auto px-4 max-w-4xl py-6 flex flex-col gap-4" style={{ minHeight: 'calc(100vh - 180px)' }}>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md dark:shadow-gray-900/50 flex-grow flex flex-col">
-          <textarea
-            className="flex-grow w-full p-4 border border-gray-300 dark:border-gray-600 rounded-md font-mono text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
-            placeholder={t('editor.placeholder')}
+          <HtmlEditor
             value={htmlContent}
-            onChange={(e) => setHtmlContent(e.target.value.slice(0, MAX_CHARS))}
-            onKeyDown={handleKeyDown}
+            onChange={setHtmlContent}
+            onCtrlEnter={() => handleConvert('preview')}
             maxLength={MAX_CHARS}
+            placeholder={t('editor.placeholder')}
+            theme={theme}
+            minHeight="300px"
+            className="flex-grow"
           />
 
           <div className="mt-2 flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
@@ -695,6 +726,11 @@ function App() {
         isOpen={showTemplatesGallery}
         onClose={() => setShowTemplatesGallery(false)}
         onSelectTemplate={handleSelectTemplate}
+      />
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
       />
     </Layout>
   );

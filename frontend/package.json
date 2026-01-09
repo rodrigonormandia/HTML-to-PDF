@@ -13,8 +13,14 @@
     "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.20.0",
+    "@codemirror/commands": "^6.10.1",
+    "@codemirror/lang-html": "^6.4.11",
+    "@codemirror/language": "^6.12.1",
+    "@codemirror/state": "^6.5.3",
+    "@codemirror/view": "^6.39.9",
+    "@lezer/highlight": "^1.2.3",
     "@supabase/supabase-js": "^2.90.1",
-    "react-router-dom": "^7.2.0",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
     "i18next": "^25.6.3",
@@ -23,6 +29,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-i18next": "^16.3.5",
+    "react-router-dom": "^7.2.0",
     "react-toastify": "^11.0.5",
     "tailwind-merge": "^3.4.0"
   },

@@ -881,5 +881,787 @@ export const templates: Template[] = [
 </div>`,
     headerHeight: '1.5',
     footerHeight: '1'
+  },
+  {
+    id: 'contract',
+    nameKey: 'templates.contract.name',
+    descriptionKey: 'templates.contract.description',
+    icon: '📜',
+    html: `<!DOCTYPE html>
+<html>
+<head>
+  <title>Contrato</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2.5cm;
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      color: #1f2937;
+      line-height: 1.8;
+      font-size: 12pt;
+    }
+    .contract-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #374151;
+      padding-bottom: 1rem;
+    }
+    .contract-title {
+      font-size: 18pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 0.5rem 0;
+    }
+    .contract-subtitle {
+      font-size: 14pt;
+      color: #4b5563;
+      margin: 0;
+    }
+    .parties-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    .party {
+      margin-bottom: 1rem;
+    }
+    .party:last-child {
+      margin-bottom: 0;
+    }
+    .party-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10pt;
+      color: #6b7280;
+      letter-spacing: 0.05em;
+    }
+    .party-name {
+      font-weight: bold;
+      font-size: 12pt;
+    }
+    .party-info {
+      font-size: 11pt;
+      color: #4b5563;
+    }
+    .clause {
+      margin: 1.5rem 0;
+      text-align: justify;
+    }
+    .clause-title {
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .clause-content {
+      text-indent: 2em;
+    }
+    .clause-content p {
+      margin: 0.5rem 0;
+    }
+    .sub-clause {
+      margin-left: 2em;
+      margin-top: 0.5rem;
+    }
+    .sub-clause-item {
+      display: flex;
+      margin: 0.25rem 0;
+    }
+    .sub-clause-number {
+      min-width: 2em;
+      font-weight: 500;
+    }
+    .signature-section {
+      margin-top: 4rem;
+      page-break-inside: avoid;
+    }
+    .signature-location {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      gap: 4rem;
+    }
+    .signature-block {
+      flex: 1;
+      text-align: center;
+    }
+    .signature-line {
+      border-top: 1px solid #1f2937;
+      padding-top: 0.5rem;
+      margin-top: 4rem;
+    }
+    .signature-name {
+      font-weight: bold;
+    }
+    .signature-role {
+      font-size: 10pt;
+      color: #6b7280;
+    }
+    .witness-section {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+    .witness-title {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10pt;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+    .witnesses {
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+    .witness-block {
+      flex: 1;
+    }
+    .witness-line {
+      border-top: 1px solid #9ca3af;
+      padding-top: 0.25rem;
+      margin-top: 2rem;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+  <div class="contract-header">
+    <h1 class="contract-title">Contrato de Prestação de Serviços</h1>
+    <p class="contract-subtitle">Nº 2024/001</p>
+  </div>
+
+  <div class="parties-section">
+    <div class="party">
+      <div class="party-label">Contratante</div>
+      <div class="party-name">EMPRESA CONTRATANTE LTDA</div>
+      <div class="party-info">
+        CNPJ: 00.000.000/0001-00<br>
+        Endereço: Rua Principal, 123 - Centro - São Paulo/SP - CEP: 01000-000<br>
+        Representada por: João da Silva, CPF: 000.000.000-00
+      </div>
+    </div>
+    <div class="party">
+      <div class="party-label">Contratada</div>
+      <div class="party-name">PRESTADOR DE SERVIÇOS LTDA</div>
+      <div class="party-info">
+        CNPJ: 11.111.111/0001-11<br>
+        Endereço: Av. Secundária, 456 - Bairro - Rio de Janeiro/RJ - CEP: 20000-000<br>
+        Representada por: Maria Santos, CPF: 111.111.111-11
+      </div>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Primeira - Do Objeto</div>
+    <div class="clause-content">
+      <p>O presente contrato tem por objeto a prestação de serviços de consultoria em tecnologia da informação, incluindo análise de sistemas, desenvolvimento de software e suporte técnico, conforme especificações detalhadas no Anexo I deste instrumento.</p>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Segunda - Do Prazo</div>
+    <div class="clause-content">
+      <p>O presente contrato terá vigência de 12 (doze) meses, iniciando-se em ${new Date().toLocaleDateString('pt-BR')} e encerrando-se em ${new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}, podendo ser renovado mediante termo aditivo firmado pelas partes.</p>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Terceira - Do Valor e Forma de Pagamento</div>
+    <div class="clause-content">
+      <p>Pela prestação dos serviços objeto deste contrato, a CONTRATANTE pagará à CONTRATADA o valor mensal de R$ 15.000,00 (quinze mil reais), totalizando R$ 180.000,00 (cento e oitenta mil reais) pelo período total do contrato.</p>
+      <div class="sub-clause">
+        <div class="sub-clause-item"><span class="sub-clause-number">3.1</span> O pagamento será realizado até o dia 10 de cada mês subsequente à prestação dos serviços.</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">3.2</span> O pagamento será efetuado mediante depósito bancário na conta indicada pela CONTRATADA.</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">3.3</span> Em caso de atraso, incidirá multa de 2% e juros de 1% ao mês.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Quarta - Das Obrigações da Contratante</div>
+    <div class="clause-content">
+      <p>Constituem obrigações da CONTRATANTE:</p>
+      <div class="sub-clause">
+        <div class="sub-clause-item"><span class="sub-clause-number">a)</span> Fornecer todas as informações e documentos necessários à execução dos serviços;</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">b)</span> Efetuar os pagamentos nas datas e condições estipuladas;</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">c)</span> Disponibilizar infraestrutura e recursos necessários;</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">d)</span> Designar responsável para acompanhamento dos serviços.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Quinta - Das Obrigações da Contratada</div>
+    <div class="clause-content">
+      <p>Constituem obrigações da CONTRATADA:</p>
+      <div class="sub-clause">
+        <div class="sub-clause-item"><span class="sub-clause-number">a)</span> Executar os serviços com zelo e diligência;</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">b)</span> Cumprir os prazos estabelecidos;</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">c)</span> Manter sigilo sobre informações confidenciais;</div>
+        <div class="sub-clause-item"><span class="sub-clause-number">d)</span> Responsabilizar-se pelos encargos trabalhistas de seus funcionários.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Sexta - Da Rescisão</div>
+    <div class="clause-content">
+      <p>O presente contrato poderá ser rescindido por qualquer das partes, mediante aviso prévio de 30 (trinta) dias, sem prejuízo das obrigações já assumidas e dos serviços já prestados.</p>
+    </div>
+  </div>
+
+  <div class="clause">
+    <div class="clause-title">Cláusula Sétima - Do Foro</div>
+    <div class="clause-content">
+      <p>Fica eleito o Foro da Comarca de São Paulo/SP para dirimir quaisquer questões oriundas do presente contrato, renunciando as partes a qualquer outro, por mais privilegiado que seja.</p>
+    </div>
+  </div>
+
+  <div class="signature-section">
+    <div class="signature-location">
+      São Paulo, ${new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}.
+    </div>
+    <div class="signatures">
+      <div class="signature-block">
+        <div class="signature-line">
+          <div class="signature-name">EMPRESA CONTRATANTE LTDA</div>
+          <div class="signature-role">João da Silva - Diretor</div>
+        </div>
+      </div>
+      <div class="signature-block">
+        <div class="signature-line">
+          <div class="signature-name">PRESTADOR DE SERVIÇOS LTDA</div>
+          <div class="signature-role">Maria Santos - Sócia-Administradora</div>
+        </div>
+      </div>
+    </div>
+    <div class="witness-section">
+      <div class="witness-title">Testemunhas</div>
+      <div class="witnesses">
+        <div class="witness-block">
+          <div class="witness-line">
+            Nome: _____________________________<br>
+            CPF: _____________________________
+          </div>
+        </div>
+        <div class="witness-block">
+          <div class="witness-line">
+            Nome: _____________________________<br>
+            CPF: _____________________________
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    headerHtml: `<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:9pt; color:#666; font-family: 'Times New Roman', serif;">
+  <span>Contrato de Prestação de Serviços Nº 2024/001</span>
+  <span>Confidencial</span>
+</div>`,
+    footerHtml: `<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:8pt; color:#888; font-family: 'Times New Roman', serif;">
+  <span>Rubrica: _______ / _______</span>
+  <span>Página {{page}} de {{pages}}</span>
+</div>`,
+    headerHeight: '1',
+    footerHeight: '1'
+  },
+  {
+    id: 'proposal',
+    nameKey: 'templates.proposal.name',
+    descriptionKey: 'templates.proposal.description',
+    icon: '💼',
+    html: `<!DOCTYPE html>
+<html>
+<head>
+  <title>Proposta Comercial</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #1f2937;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .cover-page {
+      height: 297mm;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 3rem;
+      box-sizing: border-box;
+    }
+    .cover-logo {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .cover-title {
+      font-size: 2.5rem;
+      font-weight: 300;
+      margin: 2rem 0;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .cover-client {
+      font-size: 1.5rem;
+      margin: 2rem 0;
+      padding: 1rem 2rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 0.5rem;
+    }
+    .cover-date {
+      font-size: 1rem;
+      opacity: 0.8;
+      margin-top: 3rem;
+    }
+    .page-break {
+      page-break-after: always;
+    }
+    .content-page {
+      padding: 2cm;
+    }
+    .section {
+      margin: 2rem 0;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1e40af;
+      border-bottom: 3px solid #3b82f6;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .intro-text {
+      font-size: 1.125rem;
+      color: #4b5563;
+      text-align: justify;
+    }
+    .scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .scope-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      border-left: 4px solid #3b82f6;
+    }
+    .scope-card h4 {
+      color: #1e40af;
+      margin: 0 0 0.75rem 0;
+      font-size: 1rem;
+    }
+    .scope-card ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: #4b5563;
+      font-size: 0.875rem;
+    }
+    .scope-card li {
+      margin: 0.25rem 0;
+    }
+    .timeline {
+      margin: 1.5rem 0;
+    }
+    .timeline-item {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    .timeline-phase {
+      min-width: 120px;
+      font-weight: bold;
+      color: #1e40af;
+    }
+    .timeline-duration {
+      min-width: 100px;
+      color: #6b7280;
+    }
+    .timeline-tasks {
+      flex: 1;
+      color: #4b5563;
+    }
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    .pricing-table th {
+      background: #1e40af;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+    .pricing-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .pricing-table tr:hover {
+      background: #f8fafc;
+    }
+    .pricing-table .price {
+      text-align: right;
+      font-weight: 600;
+      color: #1e40af;
+    }
+    .total-row {
+      background: #eff6ff !important;
+      font-weight: bold;
+    }
+    .total-row td {
+      border-bottom: none;
+      padding: 1.25rem 1rem;
+    }
+    .total-value {
+      font-size: 1.25rem;
+      color: #1e40af !important;
+    }
+    .benefits-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .benefit-icon {
+      color: #10b981;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .benefit-text {
+      color: #4b5563;
+      font-size: 0.9375rem;
+    }
+    .terms-section {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .terms-title {
+      font-weight: bold;
+      color: #374151;
+      margin-bottom: 1rem;
+    }
+    .terms-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.875rem;
+      color: #4b5563;
+    }
+    .terms-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .terms-list li:last-child {
+      border-bottom: none;
+    }
+    .cta-section {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      color: white;
+      border-radius: 0.5rem;
+      margin: 2rem 0;
+    }
+    .cta-title {
+      font-size: 1.5rem;
+      margin: 0 0 1rem 0;
+    }
+    .cta-text {
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+    .cta-contact {
+      font-size: 1.125rem;
+    }
+    .signature-area {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 4rem;
+    }
+    .signature-box {
+      flex: 1;
+      text-align: center;
+    }
+    .signature-line {
+      border-top: 1px solid #374151;
+      padding-top: 0.5rem;
+      margin-top: 3rem;
+    }
+    .validity-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Cover Page -->
+  <div class="cover-page">
+    <div class="cover-logo">TechSolutions</div>
+    <h1 class="cover-title">Proposta Comercial</h1>
+    <div class="cover-client">
+      <strong>Preparada para:</strong><br>
+      Empresa Cliente S.A.
+    </div>
+    <div class="cover-date">
+      ${new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Content Pages -->
+  <div class="content-page">
+    <div class="section">
+      <h2 class="section-title">1. Apresentação</h2>
+      <p class="intro-text">
+        A TechSolutions tem o prazer de apresentar esta proposta para o desenvolvimento de uma plataforma
+        digital moderna e escalável. Com mais de 10 anos de experiência no mercado, nossa equipe está
+        preparada para entregar uma solução de alta qualidade que atenda às necessidades específicas
+        da Empresa Cliente S.A.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">2. Escopo do Projeto</h2>
+      <div class="scope-grid">
+        <div class="scope-card">
+          <h4>Módulo de Gestão</h4>
+          <ul>
+            <li>Painel administrativo</li>
+            <li>Gerenciamento de usuários</li>
+            <li>Controle de permissões</li>
+            <li>Dashboard analítico</li>
+          </ul>
+        </div>
+        <div class="scope-card">
+          <h4>Portal do Cliente</h4>
+          <ul>
+            <li>Cadastro e autenticação</li>
+            <li>Área do cliente</li>
+            <li>Histórico de transações</li>
+            <li>Suporte integrado</li>
+          </ul>
+        </div>
+        <div class="scope-card">
+          <h4>Integrações</h4>
+          <ul>
+            <li>API RESTful</li>
+            <li>Gateway de pagamento</li>
+            <li>Sistema ERP</li>
+            <li>Notificações (email/SMS)</li>
+          </ul>
+        </div>
+        <div class="scope-card">
+          <h4>Infraestrutura</h4>
+          <ul>
+            <li>Hospedagem em nuvem</li>
+            <li>Backup automatizado</li>
+            <li>SSL/HTTPS</li>
+            <li>Monitoramento 24/7</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">3. Cronograma</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-phase">Fase 1</span>
+          <span class="timeline-duration">2 semanas</span>
+          <span class="timeline-tasks">Levantamento de requisitos e prototipação</span>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-phase">Fase 2</span>
+          <span class="timeline-duration">6 semanas</span>
+          <span class="timeline-tasks">Desenvolvimento do backend e APIs</span>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-phase">Fase 3</span>
+          <span class="timeline-duration">4 semanas</span>
+          <span class="timeline-tasks">Desenvolvimento do frontend e integrações</span>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-phase">Fase 4</span>
+          <span class="timeline-duration">2 semanas</span>
+          <span class="timeline-tasks">Testes, ajustes e implantação</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">4. Investimento</h2>
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Descrição</th>
+            <th class="price">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Módulo de Gestão</td>
+            <td>Painel administrativo completo</td>
+            <td class="price">R$ 25.000,00</td>
+          </tr>
+          <tr>
+            <td>Portal do Cliente</td>
+            <td>Área do cliente com autenticação</td>
+            <td class="price">R$ 20.000,00</td>
+          </tr>
+          <tr>
+            <td>Integrações</td>
+            <td>APIs, pagamento e ERP</td>
+            <td class="price">R$ 15.000,00</td>
+          </tr>
+          <tr>
+            <td>Infraestrutura</td>
+            <td>Setup e configuração cloud</td>
+            <td class="price">R$ 5.000,00</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="2"><strong>Investimento Total</strong></td>
+            <td class="price total-value">R$ 65.000,00</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="validity-badge">Proposta válida por 30 dias</div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <div class="content-page">
+    <div class="section">
+      <h2 class="section-title">5. Benefícios</h2>
+      <div class="benefits-list">
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Equipe especializada com certificações</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Metodologia ágil com entregas semanais</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Código-fonte proprietário do cliente</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Documentação técnica completa</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Treinamento para a equipe interna</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Suporte pós-implantação por 90 dias</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">Garantia de correção de bugs por 6 meses</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span class="benefit-text">SLA de 99.9% de disponibilidade</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">6. Condições Comerciais</h2>
+      <div class="terms-section">
+        <div class="terms-title">Forma de Pagamento</div>
+        <ul class="terms-list">
+          <li><strong>30%</strong> na aprovação da proposta (R$ 19.500,00)</li>
+          <li><strong>40%</strong> na entrega do MVP (R$ 26.000,00)</li>
+          <li><strong>30%</strong> na entrega final e aprovação (R$ 19.500,00)</li>
+        </ul>
+      </div>
+      <div class="terms-section">
+        <div class="terms-title">O que está incluso</div>
+        <ul class="terms-list">
+          <li>Todas as funcionalidades descritas no escopo</li>
+          <li>Design responsivo para desktop, tablet e mobile</li>
+          <li>Hospedagem cloud por 12 meses</li>
+          <li>Suporte técnico por 90 dias após implantação</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h3 class="cta-title">Vamos transformar sua visão em realidade?</h3>
+      <p class="cta-text">
+        Estamos prontos para iniciar assim que você der o sinal verde.
+      </p>
+      <div class="cta-contact">
+        <strong>Contato:</strong> comercial@techsolutions.com.br | (11) 3000-0000
+      </div>
+    </div>
+
+    <div class="signature-area">
+      <div class="signature-box">
+        <div class="signature-line">
+          <strong>TechSolutions</strong><br>
+          <span style="color: #6b7280; font-size: 0.875rem;">Representante Comercial</span>
+        </div>
+      </div>
+      <div class="signature-box">
+        <div class="signature-line">
+          <strong>Empresa Cliente S.A.</strong><br>
+          <span style="color: #6b7280; font-size: 0.875rem;">Representante Legal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    headerHtml: `<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:9pt; color:#666;">
+  <span style="font-weight:bold; color:#1e40af;">TechSolutions</span>
+  <span>Proposta Comercial - Confidencial</span>
+</div>`,
+    footerHtml: `<div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:8pt; color:#888;">
+  <span>comercial@techsolutions.com.br</span>
+  <span>Página {{page}} de {{pages}}</span>
+</div>`,
+    headerHeight: '1',
+    footerHeight: '1'
   }
 ];

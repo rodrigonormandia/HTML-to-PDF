@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -147,7 +147,7 @@ export default function Layout({ children }: LayoutProps) {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.8.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.9.0 | {t('footer.developer')}</div>
       </footer>
 
       <AuthModal
