@@ -17,9 +17,11 @@
     "feedback": {
         "success": "PDF gerado com sucesso!",
         "error": "Erro na conversão. Verifique seu HTML.",
+        "submitting": "Enviando...",
+        "queued": "Na fila...",
         "uploading": "Enviando...",
-        "processing": "Processando PDF...",
-        "downloading": "Preparando download..."
+        "processing": "Gerando PDF...",
+        "downloading": "Baixando..."
     },
     "errors": {
         "empty_html": "HTML não pode estar vazio",

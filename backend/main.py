@@ -5,8 +5,11 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import bleach
+import uuid
 from datetime import datetime
 from .pdf_service import generate_pdf_from_html
+from .redis_client import set_job_status, get_job_status, get_pdf
+from .tasks import generate_pdf_task
 
 # Constantes de segurança
 MAX_HTML_SIZE = 2 * 1024 * 1024  # 2MB
@@ -424,30 +427,36 @@ class PDFRequest(BaseModel):
 
 @app.post(
     "/api/convert",
-    summary="Converter HTML para PDF",
+    summary="Converter HTML para PDF (Async)",
     description="""
-Converte conteúdo HTML em um documento PDF.
+Submete conteúdo HTML para conversão assíncrona em PDF.
+
+**Fluxo:**
+1. POST /api/convert → Retorna `job_id` e `status: pending`
+2. GET /api/jobs/{job_id} → Polling para verificar status
+3. GET /api/jobs/{job_id}/download → Baixar o PDF quando pronto
 
 **Comportamento:**
 - Se o HTML não contiver tags `<html>` ou `<body>`, será automaticamente encapsulado em um documento HTML válido
 - O TailwindCSS CDN é injetado automaticamente para permitir uso de classes utilitárias
 - O PDF é gerado usando WeasyPrint com suporte completo a CSS
 - O HTML é sanitizado para remover scripts e elementos perigosos
+- PDFs ficam disponíveis por 2 horas após geração
 
 **Segurança:**
 - Rate limit: 30 requisições por minuto por IP
 - Tamanho máximo: 2MB
 - Sanitização automática de HTML
-
-**Ações disponíveis:**
-- `preview`: Retorna o PDF para visualização inline no navegador
-- `download`: Retorna o PDF com header para download (Content-Disposition: attachment)
     """,
-    response_description="Documento PDF gerado",
+    response_description="Job ID para acompanhamento",
     responses={
         200: {
-            "content": {"application/pdf": {}},
-            "description": "PDF gerado com sucesso"
+            "description": "Job criado com sucesso",
+            "content": {
+                "application/json": {
+                    "example": {"job_id": "550e8400-e29b-41d4-a716-446655440000", "status": "pending"}
+                }
+            }
         },
         400: {
             "description": "HTML inválido",
@@ -462,14 +471,6 @@ Converte conteúdo HTML em um documento PDF.
             "content": {
                 "application/json": {
                     "example": {"detail": "Rate limit exceeded: 30 per 1 minute"}
-                }
-            }
-        },
-        500: {
-            "description": "Erro ao gerar o PDF",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "Erro ao processar o HTML"}
                 }
             }
         }
@@ -671,43 +672,100 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
     clean_header = sanitize_html(pdf_request.header_html) if pdf_request.header_html else None
     clean_footer = sanitize_html(pdf_request.footer_html) if pdf_request.footer_html else None
 
-    # 4. Gerar PDF
-    try:
-        pdf_bytes = generate_pdf_from_html(
-            html=clean_html,
-            page_size=pdf_request.page_size,
-            orientation=pdf_request.orientation,
-            margin_top=pdf_request.margin_top,
-            margin_bottom=pdf_request.margin_bottom,
-            margin_left=pdf_request.margin_left,
-            margin_right=pdf_request.margin_right,
-            include_page_numbers=pdf_request.include_page_numbers,
-            header_html=clean_header,
-            footer_html=clean_footer,
-            header_height=pdf_request.header_height,
-            footer_height=pdf_request.footer_height,
-            exclude_header_pages=pdf_request.exclude_header_pages,
-            exclude_footer_pages=pdf_request.exclude_footer_pages
-        )
+    # 4. Criar job
+    job_id = str(uuid.uuid4())
+    set_job_status(job_id, {"status": "pending"})
 
-        # Generate dynamic filename with timestamp
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"pdfGravity_{timestamp}.pdf"
-
-        headers = {
-            "Content-Type": "application/pdf",
+    # 5. Enviar para fila Celery
+    generate_pdf_task.delay(
+        job_id=job_id,
+        html=clean_html,
+        options={
+            "page_size": pdf_request.page_size,
+            "orientation": pdf_request.orientation,
+            "margin_top": pdf_request.margin_top,
+            "margin_bottom": pdf_request.margin_bottom,
+            "margin_left": pdf_request.margin_left,
+            "margin_right": pdf_request.margin_right,
+            "include_page_numbers": pdf_request.include_page_numbers,
+            "header_html": clean_header,
+            "footer_html": clean_footer,
+            "header_height": pdf_request.header_height,
+            "footer_height": pdf_request.footer_height,
+            "exclude_header_pages": pdf_request.exclude_header_pages,
+            "exclude_footer_pages": pdf_request.exclude_footer_pages,
         }
+    )
 
-        if pdf_request.action == "download":
-            headers["Content-Disposition"] = f'attachment; filename="{filename}"'
-        else:
-            headers["Content-Disposition"] = f'inline; filename="{filename}"'
+    return {"job_id": job_id, "status": "pending"}
 
-        return Response(content=pdf_bytes, media_type="application/pdf", headers=headers)
 
-    except Exception as e:
-        print(f"Error generating PDF: {e}")
-        raise HTTPException(status_code=500, detail="Erro ao gerar o PDF")
+@app.get(
+    "/api/jobs/{job_id}",
+    summary="Verificar status do job",
+    description="Retorna o status atual de um job de conversão de PDF.",
+    responses={
+        200: {
+            "description": "Status do job",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "pending": {"value": {"job_id": "xxx", "status": "pending"}},
+                        "processing": {"value": {"job_id": "xxx", "status": "processing"}},
+                        "completed": {"value": {"job_id": "xxx", "status": "completed", "size": 12345}},
+                        "failed": {"value": {"job_id": "xxx", "status": "failed", "error": "Error message"}}
+                    }
+                }
+            }
+        },
+        404: {"description": "Job não encontrado"}
+    },
+    tags=["Jobs"]
+)
+async def get_job(job_id: str):
+    """Get job status by ID."""
+    status = get_job_status(job_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return {"job_id": job_id, **status}
+
+
+@app.get(
+    "/api/jobs/{job_id}/download",
+    summary="Baixar PDF do job",
+    description="Baixa o PDF gerado de um job completado.",
+    responses={
+        200: {
+            "content": {"application/pdf": {}},
+            "description": "PDF gerado"
+        },
+        400: {"description": "PDF ainda não está pronto"},
+        404: {"description": "Job não encontrado ou PDF expirado"}
+    },
+    tags=["Jobs"]
+)
+async def download_job_pdf(job_id: str, action: str = "download"):
+    """Download PDF from completed job."""
+    status = get_job_status(job_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    if status.get("status") != "completed":
+        raise HTTPException(status_code=400, detail="PDF not ready")
+
+    pdf_bytes = get_pdf(job_id)
+    if not pdf_bytes:
+        raise HTTPException(status_code=404, detail="PDF expired")
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"pdfLeaf_{timestamp}.pdf"
+    disposition = "attachment" if action == "download" else "inline"
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'{disposition}; filename="{filename}"'}
+    )
 
 @app.get(
     "/health",

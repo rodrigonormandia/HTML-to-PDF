@@ -17,9 +17,11 @@
     "feedback": {
         "success": "PDF generated successfully!",
         "error": "Conversion error. Check your HTML.",
+        "submitting": "Submitting...",
+        "queued": "In queue...",
         "uploading": "Uploading...",
-        "processing": "Processing PDF...",
-        "downloading": "Preparing download..."
+        "processing": "Generating PDF...",
+        "downloading": "Downloading..."
     },
     "errors": {
         "empty_html": "HTML cannot be empty",

@@ -198,7 +198,7 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ## 🏗️ Melhorias Técnicas
 
 ### Backend
-- [ ] Fila de processamento (Celery + Redis)
+- [x] Fila de processamento (Celery + Redis)
 - [ ] Cache de resultados (Redis)
 - [ ] Logging estruturado (Loguru)
 - [ ] Integração com Sentry
@@ -259,6 +259,7 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Análise competitiva completa
 - [x] Estratégia de SEO definida
 - [x] Planos de monetização definidos
+- [x] Processamento assíncrono (Celery + Redis)
 
 ---
 
@@ -270,5 +271,5 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 
 ---
 
-**Última atualização:** 2026-01-07
-**Versão atual:** v1.5.0
+**Última atualização:** 2026-01-09
+**Versão atual:** v1.6.0

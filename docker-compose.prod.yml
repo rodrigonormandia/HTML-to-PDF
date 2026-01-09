@@ -1,12 +1,27 @@
-version: "3.7"
-
 services:
+  redis:
+    image: redis:7-alpine
+    networks:
+      - buscarIDnet
+    volumes:
+      - redis_data:/data
+    command: redis-server --maxmemory 256mb --maxmemory-policy volatile-ttl
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
   api:
     image: normandiabuscarid/pdf-gravity-api:latest
     networks:
       - buscarIDnet
     environment:
       - PORT=8000
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
     deploy:
       mode: replicated
       replicas: 1
@@ -20,6 +35,22 @@ services:
         - traefik.http.routers.pdfgravity-api.tls.certresolver=letsencryptresolver
         - traefik.http.routers.pdfgravity-api.service=pdfgravity-api
         - traefik.http.services.pdfgravity-api.loadbalancer.server.port=8000
+
+  celery-worker:
+    image: normandiabuscarid/pdf-gravity-api:latest
+    networks:
+      - buscarIDnet
+    command: celery -A backend.celery_app worker --loglevel=info --concurrency=2
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
 
   web:
     image: normandiabuscarid/pdf-gravity-web:latest
@@ -43,3 +74,6 @@ services:
 networks:
   buscarIDnet:
     external: true
+
+volumes:
+  redis_data:

@@ -7,6 +7,8 @@ import { useTheme } from './hooks/useTheme';
 import { TemplatesGallery, type Template } from './components/TemplatesGallery';
 
 const MAX_CHARS = 2097152; // 2MB
+const POLL_INTERVAL = 500; // ms
+const MAX_POLL_TIME = 120000; // 2 min max
 
 const EXAMPLE_HTML = `<!DOCTYPE html>
 <html>
@@ -181,12 +183,15 @@ function App() {
     }
 
     setLoading(true);
-    setProgress(0);
-    setStatusText(t('feedback.uploading'));
+    setProgress(10);
+    setStatusText(t('feedback.submitting'));
+
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/convert`,
+      // 1. Submit job
+      const submitResponse = await axios.post(
+        `${apiUrl}/api/convert`,
         {
           html_content: htmlContent,
           action: action,
@@ -203,26 +208,51 @@ function App() {
           footer_height: `${footerHeight}${headerFooterUnit}`,
           exclude_header_pages: excludeHeaderPages || null,
           exclude_footer_pages: excludeFooterPages || null
-        },
-        {
-          responseType: 'blob',
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.total) {
-              const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-              setProgress(percent);
-              if (percent === 100) {
-                setStatusText(t('feedback.processing'));
-              }
-            }
-          },
-          onDownloadProgress: () => {
-            setStatusText(t('feedback.downloading'));
-          }
         }
       );
 
+      const { job_id } = submitResponse.data;
+      setProgress(20);
+      setStatusText(t('feedback.queued'));
+
+      // 2. Poll for status
+      let status = 'pending';
+      let pollCount = 0;
+      const maxPolls = MAX_POLL_TIME / POLL_INTERVAL;
+
+      while (status !== 'completed' && status !== 'failed' && pollCount < maxPolls) {
+        await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL));
+
+        const statusResponse = await axios.get(`${apiUrl}/api/jobs/${job_id}`);
+        status = statusResponse.data.status;
+        pollCount++;
+
+        if (status === 'pending') {
+          setProgress(20 + Math.min(pollCount, 20));
+          setStatusText(t('feedback.queued'));
+        } else if (status === 'processing') {
+          setProgress(40 + Math.min(pollCount * 2, 40));
+          setStatusText(t('feedback.processing'));
+        } else if (status === 'failed') {
+          throw new Error(statusResponse.data.error || 'PDF generation failed');
+        }
+      }
+
+      if (status !== 'completed') {
+        throw new Error('Timeout waiting for PDF');
+      }
+
+      setProgress(90);
+      setStatusText(t('feedback.downloading'));
+
+      // 3. Download PDF
+      const pdfResponse = await axios.get(
+        `${apiUrl}/api/jobs/${job_id}/download?action=${action}`,
+        { responseType: 'blob' }
+      );
+
       setProgress(100);
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([pdfResponse.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
 
       if (action === 'preview') {
@@ -259,6 +289,8 @@ function App() {
           default:
             showErrorWithSuggestion('errors.unknown', 'suggestions.try_again');
         }
+      } else if (error instanceof Error) {
+        toast.error(error.message);
       } else {
         showErrorWithSuggestion('errors.network', 'suggestions.check_connection');
       }
@@ -716,7 +748,7 @@ function App() {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.5.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.6.0 | {t('footer.developer')}</div>
       </footer>
 
       <TemplatesGallery
