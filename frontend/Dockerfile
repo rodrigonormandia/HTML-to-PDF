@@ -6,8 +6,8 @@ WORKDIR /app
 # Copiar arquivos de dependências
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm ci
+# Instalar dependências (--legacy-peer-deps para react-helmet-async com React 19)
+RUN npm ci --legacy-peer-deps
 
 # Copiar código fonte
 COPY . .

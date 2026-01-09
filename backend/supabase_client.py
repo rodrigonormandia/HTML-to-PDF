@@ -3,8 +3,14 @@ Supabase client for backend operations.
 Uses service role key for admin access (bypasses RLS).
 """
 import os
+import hashlib
 from typing import Optional
 from supabase import create_client, Client
+
+
+def hash_api_key(api_key: str) -> str:
+    """Hash API key using SHA-256 for secure storage and comparison."""
+    return hashlib.sha256(api_key.encode()).hexdigest()
 
 # Initialize Supabase client with service role key
 # This key should only be used on the server side
