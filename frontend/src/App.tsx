@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Routes, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTheme } from './hooks/useTheme';
 import { TemplatesGallery, type Template } from './components/TemplatesGallery';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import AuthModal from './components/Auth/AuthModal';
+import Dashboard from './pages/Dashboard';
 
 const MAX_CHARS = 2097152; // 2MB
 const POLL_INTERVAL = 500; // ms
@@ -165,6 +169,10 @@ function App() {
 
   // Templates Gallery
   const [showTemplatesGallery, setShowTemplatesGallery] = useState(false);
+
+  // Auth Modal
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { user, signOut } = useAuth();
 
   const showErrorWithSuggestion = (errorKey: string, suggestionKey: string) => {
     toast.error(
@@ -339,7 +347,7 @@ function App() {
     toast.info(t('templates.template_loaded'));
   };
 
-  return (
+  const homePage = (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       <header className="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/50 py-4 px-6 mb-8">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -350,8 +358,35 @@ function App() {
               <p className="text-gray-500 dark:text-gray-400">{t('app.subtitle')}</p>
             </div>
           </div>
-          <button
-            onClick={toggleTheme}
+          <div className="flex items-center gap-2">
+            {user ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/dashboard"
+                  className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  {t('dashboard.title')}
+                </Link>
+                <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">
+                  {user.email}
+                </span>
+                <button
+                  onClick={() => { signOut(); toast.success(t('auth.logoutSuccess')); }}
+                  className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+                >
+                  {t('auth.logout')}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="px-4 py-1.5 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+              >
+                {t('auth.login')}
+              </button>
+            )}
+            <button
+              onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label={theme === 'dark' ? t('theme.light') : t('theme.dark')}
             title={theme === 'dark' ? t('theme.light') : t('theme.dark')}
@@ -365,7 +400,8 @@ function App() {
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
               </svg>
             )}
-          </button>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -757,9 +793,30 @@ function App() {
         onSelectTemplate={handleSelectTemplate}
       />
 
-      <ToastContainer position="bottom-right" theme={theme} />
     </div>
+  );
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={homePage} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
+      <ToastContainer position="bottom-right" theme={theme} />
+    </>
   );
 }
 
-export default App;
+function AppWithAuth() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
+
+export default AppWithAuth;

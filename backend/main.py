@@ -10,6 +10,7 @@ from datetime import datetime
 from .pdf_service import generate_pdf_from_html
 from .redis_client import set_job_status, get_job_status, get_pdf
 from .tasks import generate_pdf_task
+from .supabase_client import track_conversion
 
 # Constantes de segurança
 MAX_HTML_SIZE = 2 * 1024 * 1024  # 2MB
@@ -676,7 +677,22 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
     job_id = str(uuid.uuid4())
     set_job_status(job_id, {"status": "pending"})
 
-    # 5. Enviar para fila Celery
+    # 5. Track conversion (non-blocking, won't fail if Supabase not configured)
+    try:
+        ip_address = get_remote_address(request)
+        html_size = len(clean_html.encode('utf-8'))
+        track_conversion(
+            job_id=job_id,
+            action=pdf_request.action,
+            html_size=html_size,
+            status="pending",
+            source="web",
+            ip_address=ip_address
+        )
+    except Exception:
+        pass  # Don't fail the request if tracking fails
+
+    # 6. Enviar para fila Celery
     generate_pdf_task.delay(
         job_id=job_id,
         html=clean_html,

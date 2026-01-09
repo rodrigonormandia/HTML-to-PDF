@@ -8,3 +8,4 @@ slowapi>=0.1.9
 pikepdf>=8.0.0
 celery[redis]>=5.3.0
 redis>=5.0.0
+supabase>=2.0.0
