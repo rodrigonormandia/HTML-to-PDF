@@ -14,7 +14,8 @@
       "Bash(gh secret set:*)",
       "Bash(\"https://portainer.buscarid.com/api/stacks/7?endpointId=1\" )",
       "Bash(npm run dev:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(supabase --version:*)"
     ]
   }
 }

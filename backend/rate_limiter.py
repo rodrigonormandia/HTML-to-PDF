@@ -3,13 +3,17 @@ Rate Limiter for API Keys
 
 Implements per-API-key rate limiting using Redis.
 Different limits are applied based on the user's plan.
+Rate limits are fetched from the database (plans table) with caching.
 """
 
 from datetime import datetime
 from typing import Dict, Optional
 import redis
 
-# Rate limits per plan (requests per minute and per hour)
+from .supabase_client import get_plan_rate_limits
+
+# Fallback rate limits (used when database is unavailable or for tests)
+# These should match the defaults in the plans table
 PLAN_RATE_LIMITS = {
     "free": {"per_minute": 10, "per_hour": 100},
     "starter": {"per_minute": 30, "per_hour": 500},
@@ -49,8 +53,8 @@ class APIKeyRateLimiter:
                 - remaining: int - remaining requests in current window
                 - reset: int - seconds until the rate limit resets
         """
-        # Get limits for the plan, default to free tier
-        limits = PLAN_RATE_LIMITS.get(plan, PLAN_RATE_LIMITS["free"])
+        # Get limits for the plan from database (with cache)
+        limits = get_plan_rate_limits(plan)
 
         # Create a minute-based key that will auto-expire
         current_minute = datetime.utcnow().strftime('%Y%m%d%H%M')
@@ -94,7 +98,8 @@ class APIKeyRateLimiter:
         Returns:
             Dict with usage statistics
         """
-        limits = PLAN_RATE_LIMITS.get(plan, PLAN_RATE_LIMITS["free"])
+        # Get limits for the plan from database (with cache)
+        limits = get_plan_rate_limits(plan)
         current_minute = datetime.utcnow().strftime('%Y%m%d%H%M')
         minute_key = f"ratelimit:{api_key_id}:minute:{current_minute}"
 

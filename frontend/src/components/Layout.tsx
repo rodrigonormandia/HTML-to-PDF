@@ -156,7 +156,7 @@ export default function Layout({ children }: LayoutProps) {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.10.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.12.0 | {t('footer.developer')}</div>
       </footer>
 
       <AuthModal

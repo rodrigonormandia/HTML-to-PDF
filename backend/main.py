@@ -193,10 +193,26 @@ A resposta da API inclui informações de quota:
 ### Segurança
 
 - 🔑 Autenticação obrigatória via API key
-- ⏱️ Rate limiting: 30 requisições por minuto por IP
+- ⏱️ Rate limiting por IP (30/min) e por API key (ver tabela abaixo)
 - 📦 Limite de tamanho: 2MB
 - 🛡️ Sanitização de HTML (remoção de scripts e elementos perigosos)
 - 🔒 Headers de segurança (CSP, X-Frame-Options, etc.)
+
+### ⚡ Rate Limiting por API Key
+
+Cada plano tem limites de requisições por minuto e por hora:
+
+| Plano | Req/minuto | Req/hora |
+|-------|------------|----------|
+| **Free** | 10 | 100 |
+| **Starter** | 30 | 500 |
+| **Pro** | 60 | 1.000 |
+| **Enterprise** | 120 | 2.000 |
+
+Headers de resposta:
+- `X-RateLimit-Limit`: Limite por minuto do seu plano
+- `X-RateLimit-Remaining`: Requisições restantes
+- `X-RateLimit-Reset`: Segundos até o reset do limite
 
 ### Exemplo de Uso
 
@@ -226,7 +242,7 @@ curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
 - 🔑 [Dashboard - API Keys](https://htmltopdf.buscarid.com/dashboard)
 - 💰 [Preços](https://htmltopdf.buscarid.com/pricing)
     """,
-    version="1.9.0",
+    version="1.11.1",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",

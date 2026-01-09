@@ -4,7 +4,8 @@ Uses service role key for admin access (bypasses RLS).
 """
 import os
 import hashlib
-from typing import Optional
+from typing import Optional, Dict
+import time
 from supabase import create_client, Client
 
 
@@ -167,3 +168,54 @@ def check_user_quota(user_id: str) -> dict:
             "remaining": 100,
             "can_convert": True
         }
+
+# Cache for rate limits (avoids excessive database queries)
+_plan_rate_limits_cache: Dict[str, Dict] = {}
+_rate_limits_cache_timestamp: float = 0
+RATE_LIMITS_CACHE_TTL = 300  # 5 minutes
+
+
+def get_plan_rate_limits(plan: str) -> Dict[str, int]:
+    """
+    Get rate limits for a plan from the database.
+    Uses a 5-minute cache to avoid excessive queries.
+
+    Args:
+        plan: The plan ID (free, starter, pro, enterprise)
+
+    Returns:
+        Dict with per_minute and per_hour limits
+    """
+    global _plan_rate_limits_cache, _rate_limits_cache_timestamp
+
+    # Default fallback limits (free tier)
+    default_limits = {"per_minute": 10, "per_hour": 100}
+
+    # Check cache validity
+    now = time.time()
+    if _plan_rate_limits_cache and (now - _rate_limits_cache_timestamp) < RATE_LIMITS_CACHE_TTL:
+        return _plan_rate_limits_cache.get(plan, _plan_rate_limits_cache.get("free", default_limits))
+
+    # Fetch from database
+    try:
+        supabase = get_supabase()
+        result = supabase.table("plans").select(
+            "id, rate_limit_per_minute, rate_limit_per_hour"
+        ).execute()
+
+        # Update cache
+        _plan_rate_limits_cache = {
+            row["id"]: {
+                "per_minute": row["rate_limit_per_minute"],
+                "per_hour": row["rate_limit_per_hour"]
+            }
+            for row in result.data
+        }
+        _rate_limits_cache_timestamp = now
+
+        return _plan_rate_limits_cache.get(plan, default_limits)
+
+    except Exception as e:
+        print(f"Error fetching rate limits: {e}")
+        # Return defaults on error
+        return default_limits
