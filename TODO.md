@@ -151,12 +151,12 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [ ] Schema.org para artigos
 - [ ] Sitemap dinâmico
 
-### 📝 Fase 3: Editor Avançado
-- [ ] Integrar CodeMirror 6
-- [ ] Syntax highlighting para HTML
-- [ ] Numeração de linhas
-- [ ] Auto-complete básico de tags
-- [ ] Mais templates (contrato, proposta, etc)
+### ✅ Fase 3: Editor Avançado (Concluído)
+- [x] Integrar CodeMirror 6
+- [x] Syntax highlighting para HTML
+- [x] Numeração de linhas
+- [x] Auto-complete básico de tags
+- [x] Mais templates (contrato, proposta, etc)
 
 ### 🔐 Fase 4: API Pública
 - [ ] Endpoint `/api/v1/convert`
@@ -272,6 +272,11 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Tabela de planos no banco de dados
 - [x] Aba Billing no Dashboard
 - [x] Layout compartilhado (Header/Footer consistente)
+- [x] Editor avançado com CodeMirror 6
+- [x] Syntax highlighting para HTML
+- [x] Numeração de linhas no editor
+- [x] Auto-complete de tags HTML e atributos
+- [x] Templates de contrato e proposta comercial
 
 ---
 
@@ -284,4 +289,4 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ---
 
 **Última atualização:** 2026-01-09
-**Versão atual:** v1.8.0
+**Versão atual:** v1.9.0
