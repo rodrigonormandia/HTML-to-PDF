@@ -7,10 +7,16 @@ from slowapi.errors import RateLimitExceeded
 import bleach
 import uuid
 from datetime import datetime
+from typing import Optional
 from .pdf_service import generate_pdf_from_html
 from .redis_client import set_job_status, get_job_status, get_pdf
 from .tasks import generate_pdf_task
-from .supabase_client import track_conversion
+from .supabase_client import (
+    track_conversion,
+    hash_api_key,
+    validate_api_key,
+    check_user_quota
+)
 
 # Constantes de segurança
 MAX_HTML_SIZE = 2 * 1024 * 1024  # 2MB
@@ -49,6 +55,21 @@ ALLOWED_ATTRIBUTES = {
 limiter = Limiter(key_func=get_remote_address)
 
 
+def get_api_key_from_request(request: Request) -> Optional[str]:
+    """Extract API key from Authorization header or X-API-Key header."""
+    # Try Authorization: Bearer <key>
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        return auth_header[7:]
+
+    # Try X-API-Key header
+    api_key = request.headers.get("X-API-Key")
+    if api_key:
+        return api_key
+
+    return None
+
+
 def sanitize_html(html: str) -> str:
     """Remove elementos HTML potencialmente perigosos."""
     return bleach.clean(
@@ -74,11 +95,46 @@ def validate_html(html: str) -> tuple[bool, str]:
     return True, ""
 
 app = FastAPI(
-    title="PDF Gravity API",
+    title="PDF Leaf API",
     description="""
 ## API para conversão de HTML para PDF
 
 Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade usando WeasyPrint.
+
+### 🔐 Autenticação
+
+**A autenticação é obrigatória.** Use uma das opções abaixo:
+
+| Método | Header | Exemplo |
+|--------|--------|---------|
+| **Bearer Token** | `Authorization` | `Authorization: Bearer pk_live_abc123...` |
+| **API Key Header** | `X-API-Key` | `X-API-Key: pk_live_abc123...` |
+
+Para obter sua API key, acesse o [Dashboard](https://htmltopdf.buscarid.com/dashboard) e vá em **API Keys**.
+
+### 📊 Quotas e Limites
+
+Cada plano tem um limite mensal de conversões:
+
+| Plano | Conversões/mês | Preço |
+|-------|----------------|-------|
+| **Free** | 100 | Grátis |
+| **Starter** | 2.000 | $15/mês |
+| **Pro** | 10.000 | $49/mês |
+| **Enterprise** | 50.000 | $99/mês |
+
+A resposta da API inclui informações de quota:
+```json
+{
+  "job_id": "...",
+  "status": "pending",
+  "quota": {
+    "used": 45,
+    "limit": 100,
+    "remaining": 55
+  }
+}
+```
 
 ### Funcionalidades
 
@@ -90,18 +146,24 @@ Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade us
 | **Orientação** | Retrato (portrait) ou Paisagem (landscape) |
 | **Margens** | Customizáveis em cm, mm ou polegadas |
 | **Numeração** | Números de página automáticos no rodapé |
+| **Header/Footer** | HTML personalizado para cabeçalho e rodapé |
+| **TailwindCSS** | Suporte nativo (injetado automaticamente) |
 
 ### Configurações de PDF
 
 ```json
 {
+  "html_content": "<h1>Meu PDF</h1>",
+  "action": "download",
   "page_size": "A4",
   "orientation": "portrait",
   "margin_top": "2cm",
   "margin_bottom": "2cm",
   "margin_left": "2cm",
   "margin_right": "2cm",
-  "include_page_numbers": false
+  "include_page_numbers": false,
+  "header_html": "<div>Meu Header</div>",
+  "footer_html": "<div>Página {{page}} de {{pages}}</div>"
 }
 ```
 
@@ -118,6 +180,7 @@ Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade us
 
 ### Segurança
 
+- 🔑 Autenticação obrigatória via API key
 - ⏱️ Rate limiting: 30 requisições por minuto por IP
 - 📦 Limite de tamanho: 2MB
 - 🛡️ Sanitização de HTML (remoção de scripts e elementos perigosos)
@@ -128,6 +191,7 @@ Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade us
 ```bash
 curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
   -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer pk_live_sua_api_key_aqui" \\
   -d '{
     "html_content": "<h1>Hello World</h1>",
     "action": "download",
@@ -137,14 +201,20 @@ curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
   --output documento.pdf
 ```
 
+### Fluxo de Conversão (Async)
+
+1. `POST /api/convert` → Retorna `job_id` e `status: pending`
+2. `GET /api/jobs/{job_id}` → Polling para verificar status
+3. `GET /api/jobs/{job_id}/download` → Baixar o PDF quando `status: completed`
+
 ### Links Úteis
 
-- 🌐 [PDF Gravity App](https://htmltopdf.buscarid.com)
+- 🌐 [PDF Leaf App](https://htmltopdf.buscarid.com)
 - 📖 [Documentação ReDoc](/api/redoc)
-- 📜 [Termos de Uso](https://htmltopdf.buscarid.com/terms.html)
-- 🔐 [Política de Privacidade](https://htmltopdf.buscarid.com/privacy.html)
+- 🔑 [Dashboard - API Keys](https://htmltopdf.buscarid.com/dashboard)
+- 💰 [Preços](https://htmltopdf.buscarid.com/pricing)
     """,
-    version="1.2.0",
+    version="1.9.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
@@ -174,7 +244,7 @@ app.add_middleware(
     ],
     allow_credentials=False,
     allow_methods=["POST", "GET", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization", "X-API-Key"],
 )
 
 
@@ -350,6 +420,13 @@ class PDFRequest(BaseModel):
             "example": "1"
         }
     )
+    user_id: str | None = Field(
+        default=None,
+        description="ID do usuário autenticado (para conversões via frontend). Alternativa ao uso de API key no header.",
+        json_schema_extra={
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+        }
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -455,7 +532,15 @@ Submete conteúdo HTML para conversão assíncrona em PDF.
             "description": "Job criado com sucesso",
             "content": {
                 "application/json": {
-                    "example": {"job_id": "550e8400-e29b-41d4-a716-446655440000", "status": "pending"}
+                    "example": {
+                        "job_id": "550e8400-e29b-41d4-a716-446655440000",
+                        "status": "pending",
+                        "quota": {
+                            "used": 46,
+                            "limit": 100,
+                            "remaining": 54
+                        }
+                    }
                 }
             }
         },
@@ -467,11 +552,57 @@ Submete conteúdo HTML para conversão assíncrona em PDF.
                 }
             }
         },
-        429: {
-            "description": "Rate limit excedido",
+        401: {
+            "description": "Autenticação necessária ou API key inválida",
             "content": {
                 "application/json": {
-                    "example": {"detail": "Rate limit exceeded: 30 per 1 minute"}
+                    "examples": {
+                        "missing_auth": {
+                            "summary": "Sem autenticação",
+                            "value": {
+                                "detail": {
+                                    "error": "authentication_required",
+                                    "message": "Authentication required. Please login or provide an API key in the Authorization header (Bearer <key>) or X-API-Key header."
+                                }
+                            }
+                        },
+                        "invalid_key": {
+                            "summary": "API key inválida",
+                            "value": {
+                                "detail": {
+                                    "error": "invalid_api_key",
+                                    "message": "Invalid or expired API key."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        429: {
+            "description": "Rate limit ou quota excedidos",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "rate_limit": {
+                            "summary": "Rate limit excedido",
+                            "value": {"detail": "Rate limit exceeded: 30 per 1 minute"}
+                        },
+                        "quota_exceeded": {
+                            "summary": "Quota mensal excedida",
+                            "value": {
+                                "detail": {
+                                    "error": "quota_exceeded",
+                                    "message": "Monthly quota exceeded. Used 100/100 conversions.",
+                                    "quota": {
+                                        "used": 100,
+                                        "limit": 100,
+                                        "remaining": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -661,38 +792,96 @@ Submete conteúdo HTML para conversão assíncrona em PDF.
 )
 @limiter.limit("30/minute")
 async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
-    # 1. Validar HTML
+    # 1. Autenticação - API key ou user_id obrigatório
+    api_key = get_api_key_from_request(request)
+    user_id = None
+    api_key_id = None
+    source = "web"
+
+    if api_key:
+        # Validação via API key (chamadas de API externa)
+        key_hash = hash_api_key(api_key)
+        key_info = validate_api_key(key_hash)
+
+        if not key_info or not key_info.get("is_valid"):
+            raise HTTPException(
+                status_code=401,
+                detail={
+                    "error": "invalid_api_key",
+                    "message": "Invalid or expired API key."
+                }
+            )
+
+        user_id = key_info["user_id"]
+        api_key_id = key_info.get("api_key_id")
+        source = "api"
+
+    elif pdf_request.user_id:
+        # Usuário logado no frontend
+        user_id = pdf_request.user_id
+        source = "web"
+
+    else:
+        # Sem autenticação = erro
+        raise HTTPException(
+            status_code=401,
+            detail={
+                "error": "authentication_required",
+                "message": "Authentication required. Please login or provide an API key in the Authorization header (Bearer <key>) or X-API-Key header."
+            }
+        )
+
+    # 2. Verificar cota ANTES de processar
+    quota = check_user_quota(user_id)
+
+    if not quota.get("can_convert", False):
+        raise HTTPException(
+            status_code=429,
+            detail={
+                "error": "quota_exceeded",
+                "message": f"Monthly quota exceeded. Used {quota['used_this_month']}/{quota['monthly_limit']} conversions.",
+                "quota": {
+                    "used": quota["used_this_month"],
+                    "limit": quota["monthly_limit"],
+                    "remaining": 0
+                }
+            }
+        )
+
+    # 3. Validar HTML
     is_valid, error_msg = validate_html(pdf_request.html_content)
     if not is_valid:
         raise HTTPException(status_code=400, detail=error_msg)
 
-    # 2. Sanitizar HTML
+    # 4. Sanitizar HTML
     clean_html = sanitize_html(pdf_request.html_content)
 
-    # 3. Sanitizar header/footer HTML (se fornecido)
+    # 5. Sanitizar header/footer HTML (se fornecido)
     clean_header = sanitize_html(pdf_request.header_html) if pdf_request.header_html else None
     clean_footer = sanitize_html(pdf_request.footer_html) if pdf_request.footer_html else None
 
-    # 4. Criar job
+    # 6. Criar job
     job_id = str(uuid.uuid4())
     set_job_status(job_id, {"status": "pending"})
 
-    # 5. Track conversion (non-blocking, won't fail if Supabase not configured)
+    # 7. Track conversion com user_id e api_key_id
     try:
         ip_address = get_remote_address(request)
         html_size = len(clean_html.encode('utf-8'))
         track_conversion(
             job_id=job_id,
+            user_id=user_id,
+            api_key_id=api_key_id,
             action=pdf_request.action,
             html_size=html_size,
             status="pending",
-            source="web",
+            source=source,
             ip_address=ip_address
         )
     except Exception:
         pass  # Don't fail the request if tracking fails
 
-    # 6. Enviar para fila Celery
+    # 8. Enviar para fila Celery
     generate_pdf_task.delay(
         job_id=job_id,
         html=clean_html,
@@ -713,7 +902,16 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
         }
     )
 
-    return {"job_id": job_id, "status": "pending"}
+    # 9. Retornar resposta com info de cota
+    return {
+        "job_id": job_id,
+        "status": "pending",
+        "quota": {
+            "used": quota["used_this_month"] + 1,
+            "limit": quota["monthly_limit"],
+            "remaining": max(0, quota["remaining"] - 1)
+        }
+    }
 
 
 @app.get(
