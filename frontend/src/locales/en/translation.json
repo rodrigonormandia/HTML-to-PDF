@@ -125,6 +125,75 @@
         "checkEmailMessage": "We sent a confirmation link to {{email}}. Click the link to activate your account.",
         "understood": "Got it"
     },
+    "nav": {
+        "home": "Home",
+        "pricing": "Pricing"
+    },
+    "pricing": {
+        "title": "Simple, Transparent Pricing",
+        "subtitle": "Start free, upgrade when you need more",
+        "monthly": "/month",
+        "popular": "Most Popular",
+        "getStarted": "Get Started",
+        "subscribe": "Subscribe",
+        "currentPlan": "Current Plan",
+        "features": {
+            "pdfsPerMonth": "{count} PDFs/month",
+            "noWatermark": "No watermark",
+            "noExpiration": "PDFs never expire",
+            "apiAccess": "API access",
+            "webhooks": "Webhooks",
+            "emailSupport": "Email support",
+            "prioritySupport": "Priority support",
+            "customDomain": "Custom domain",
+            "analytics": "Analytics dashboard",
+            "sla": "99.9% SLA",
+            "dedicatedSupport": "Dedicated support",
+            "sso": "SSO / SAML"
+        },
+        "plans": {
+            "free": {
+                "name": "Free",
+                "description": "For personal projects"
+            },
+            "starter": {
+                "name": "Starter",
+                "description": "For small teams"
+            },
+            "pro": {
+                "name": "Pro",
+                "description": "For growing businesses"
+            },
+            "enterprise": {
+                "name": "Enterprise",
+                "description": "For large organizations"
+            }
+        },
+        "comparison": {
+            "title": "Why choose PDF Leaf?",
+            "feature": "Feature",
+            "others": "Others",
+            "freePdfs": "Free PDFs",
+            "expiration": "PDF Expiration",
+            "watermark": "Watermark on free",
+            "never": "Never",
+            "some": "Some"
+        }
+    },
+    "billing": {
+        "title": "Billing",
+        "currentPlan": "Current Plan",
+        "status": "Status",
+        "nextBilling": "Next billing date",
+        "manageBilling": "Manage Billing",
+        "upgrade": "Upgrade Plan",
+        "downgrade": "Downgrade",
+        "cancel": "Cancel Subscription",
+        "active": "Active",
+        "canceled": "Canceled",
+        "pastDue": "Past Due",
+        "noPlan": "No active subscription"
+    },
     "dashboard": {
         "title": "Dashboard",
         "overview": "Overview",

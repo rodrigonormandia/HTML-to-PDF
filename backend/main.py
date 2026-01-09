@@ -803,3 +803,175 @@ async def download_job_pdf(job_id: str, action: str = "download"):
 async def health_check():
     """Endpoint para verificação de saúde da API."""
     return {"status": "ok"}
+
+
+# ============================================
+# STRIPE ENDPOINTS
+# ============================================
+
+class CheckoutRequest(BaseModel):
+    """Request model for creating a Stripe checkout session."""
+    plan_id: str = Field(..., description="Plan ID (starter, pro, or enterprise)")
+    user_id: str = Field(..., description="User ID from Supabase")
+    email: str = Field(default=None, description="User email (optional, fetched from profile if not provided)")
+
+
+class PortalRequest(BaseModel):
+    """Request model for creating a Stripe customer portal session."""
+    user_id: str = Field(..., description="User ID from Supabase")
+
+
+@app.post(
+    "/api/stripe/checkout",
+    summary="Create Stripe Checkout Session",
+    description="Creates a Stripe Checkout session for subscription payment.",
+    tags=["Stripe"],
+    responses={
+        200: {
+            "description": "Checkout session created",
+            "content": {
+                "application/json": {
+                    "example": {"checkout_url": "https://checkout.stripe.com/..."}
+                }
+            }
+        },
+        400: {"description": "Invalid plan or configuration error"},
+        500: {"description": "Stripe API error"}
+    }
+)
+async def create_checkout(request: Request, checkout_request: CheckoutRequest):
+    """Create a Stripe checkout session for subscription."""
+    try:
+        from .stripe_service import create_checkout_session
+        from .supabase_client import supabase
+
+        # Get user email if not provided
+        email = checkout_request.email
+        if not email:
+            result = supabase.table("profiles").select("email").eq("id", checkout_request.user_id).single().execute()
+            if not result.data:
+                # Try auth.users via admin API
+                from supabase import Client
+                email = f"user_{checkout_request.user_id}@pdfleaf.com"  # Fallback
+            else:
+                email = result.data.get("email", f"user_{checkout_request.user_id}@pdfleaf.com")
+
+        # Create checkout session
+        base_url = str(request.base_url).rstrip("/")
+        frontend_url = "http://localhost:5173" if "localhost" in base_url else "https://htmltopdf.buscarid.com"
+
+        checkout_url = create_checkout_session(
+            user_id=checkout_request.user_id,
+            email=email,
+            plan_id=checkout_request.plan_id,
+            success_url=f"{frontend_url}/dashboard?checkout=success",
+            cancel_url=f"{frontend_url}/pricing?checkout=canceled"
+        )
+
+        return {"checkout_url": checkout_url}
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Stripe error: {str(e)}")
+
+
+@app.post(
+    "/api/stripe/portal",
+    summary="Create Stripe Customer Portal Session",
+    description="Creates a Stripe Customer Portal session for managing subscription.",
+    tags=["Stripe"],
+    responses={
+        200: {
+            "description": "Portal session created",
+            "content": {
+                "application/json": {
+                    "example": {"portal_url": "https://billing.stripe.com/..."}
+                }
+            }
+        },
+        400: {"description": "User has no Stripe customer ID"},
+        500: {"description": "Stripe API error"}
+    }
+)
+async def create_portal(request: Request, portal_request: PortalRequest):
+    """Create a Stripe customer portal session for subscription management."""
+    try:
+        from .stripe_service import create_portal_session
+
+        base_url = str(request.base_url).rstrip("/")
+        frontend_url = "http://localhost:5173" if "localhost" in base_url else "https://htmltopdf.buscarid.com"
+
+        portal_url = create_portal_session(
+            user_id=portal_request.user_id,
+            return_url=f"{frontend_url}/dashboard"
+        )
+
+        return {"portal_url": portal_url}
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Stripe error: {str(e)}")
+
+
+@app.post(
+    "/api/stripe/webhook",
+    summary="Stripe Webhook Handler",
+    description="Handles Stripe webhook events for subscription lifecycle.",
+    tags=["Stripe"],
+    include_in_schema=False  # Hide from docs since it's for Stripe only
+)
+async def stripe_webhook(request: Request):
+    """Handle Stripe webhook events."""
+    try:
+        from .stripe_service import handle_webhook_event
+
+        payload = await request.body()
+        sig_header = request.headers.get("stripe-signature", "")
+
+        result = handle_webhook_event(payload, sig_header)
+
+        if result["status"] == "error":
+            raise HTTPException(status_code=400, detail=result["message"])
+
+        return {"received": True}
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get(
+    "/api/stripe/subscription/{user_id}",
+    summary="Get Subscription Status",
+    description="Get the current subscription status for a user.",
+    tags=["Stripe"],
+    responses={
+        200: {
+            "description": "Subscription status",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "plan": "pro",
+                        "status": "active",
+                        "monthly_limit": 10000,
+                        "current_period_end": 1704067200
+                    }
+                }
+            }
+        }
+    }
+)
+async def get_subscription(user_id: str):
+    """Get user's subscription status."""
+    try:
+        from .stripe_service import get_subscription_status
+        return get_subscription_status(user_id)
+    except Exception as e:
+        # Return default free plan if there's any error (DB not configured, etc.)
+        print(f"Error getting subscription: {e}")
+        return {
+            "plan": "free",
+            "status": "active",
+            "monthly_limit": 100
+        }

@@ -166,19 +166,21 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [ ] SDKs (Python, Node.js, PHP)
 - [ ] Webhooks para async processing
 
-### 👤 Fase 5: Sistema de Contas
-- [ ] Cadastro/Login (email, Google, GitHub)
-- [ ] Dashboard de uso
-- [ ] Histórico de conversões
-- [ ] Gerenciamento de API keys
-- [ ] Configurações de conta
+### ✅ Fase 5: Sistema de Contas (Concluído)
+- [x] Cadastro/Login (email, Google, GitHub)
+- [x] Dashboard de uso
+- [x] Histórico de conversões
+- [x] Gerenciamento de API keys
+- [x] Configurações de conta
 
-### 💳 Fase 6: Monetização
-- [ ] Integração Stripe
-- [ ] Planos Free/Starter/Pro/Enterprise
-- [ ] Billing automático
-- [ ] Invoices automáticos
-- [ ] Upgrade/downgrade de planos
+### ✅ Fase 6: Monetização (Concluído)
+- [x] Integração Stripe (checkout, portal, webhooks)
+- [x] Planos Free/Starter/Pro/Enterprise
+- [x] Página de preços (/pricing)
+- [x] Aba Billing no Dashboard
+- [x] Tabela de planos no banco (plans)
+- [ ] Configurar produtos no Stripe Dashboard
+- [ ] Testar fluxo completo de pagamento
 
 ### 🔗 Fase 7: Integrações
 - [ ] Zapier
@@ -260,6 +262,16 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Estratégia de SEO definida
 - [x] Planos de monetização definidos
 - [x] Processamento assíncrono (Celery + Redis)
+- [x] Sistema de autenticação (Supabase Auth)
+- [x] Dashboard com estatísticas de uso
+- [x] Histórico de conversões
+- [x] Gerenciamento de API keys
+- [x] Configurações de conta
+- [x] Página de preços (/pricing)
+- [x] Integração Stripe (checkout, portal, webhooks)
+- [x] Tabela de planos no banco de dados
+- [x] Aba Billing no Dashboard
+- [x] Layout compartilhado (Header/Footer consistente)
 
 ---
 
@@ -272,4 +284,4 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ---
 
 **Última atualização:** 2026-01-09
-**Versão atual:** v1.6.0
+**Versão atual:** v1.8.0

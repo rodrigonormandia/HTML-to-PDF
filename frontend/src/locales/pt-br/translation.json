@@ -125,6 +125,75 @@
         "checkEmailMessage": "Enviamos um link de confirmação para {{email}}. Clique no link para ativar sua conta.",
         "understood": "Entendi"
     },
+    "nav": {
+        "home": "Início",
+        "pricing": "Preços"
+    },
+    "pricing": {
+        "title": "Preços Simples e Transparentes",
+        "subtitle": "Comece grátis, faça upgrade quando precisar",
+        "monthly": "/mês",
+        "popular": "Mais Popular",
+        "getStarted": "Começar Grátis",
+        "subscribe": "Assinar",
+        "currentPlan": "Plano Atual",
+        "features": {
+            "pdfsPerMonth": "{count} PDFs/mês",
+            "noWatermark": "Sem marca d'água",
+            "noExpiration": "PDFs nunca expiram",
+            "apiAccess": "Acesso à API",
+            "webhooks": "Webhooks",
+            "emailSupport": "Suporte por email",
+            "prioritySupport": "Suporte prioritário",
+            "customDomain": "Domínio personalizado",
+            "analytics": "Dashboard de analytics",
+            "sla": "SLA 99.9%",
+            "dedicatedSupport": "Suporte dedicado",
+            "sso": "SSO / SAML"
+        },
+        "plans": {
+            "free": {
+                "name": "Grátis",
+                "description": "Para projetos pessoais"
+            },
+            "starter": {
+                "name": "Starter",
+                "description": "Para pequenas equipes"
+            },
+            "pro": {
+                "name": "Pro",
+                "description": "Para empresas em crescimento"
+            },
+            "enterprise": {
+                "name": "Enterprise",
+                "description": "Para grandes organizações"
+            }
+        },
+        "comparison": {
+            "title": "Por que escolher PDF Leaf?",
+            "feature": "Recurso",
+            "others": "Outros",
+            "freePdfs": "PDFs gratuitos",
+            "expiration": "Expiração do PDF",
+            "watermark": "Marca d'água no grátis",
+            "never": "Nunca",
+            "some": "Alguns"
+        }
+    },
+    "billing": {
+        "title": "Faturamento",
+        "currentPlan": "Plano Atual",
+        "status": "Status",
+        "nextBilling": "Próxima cobrança",
+        "manageBilling": "Gerenciar Faturamento",
+        "upgrade": "Fazer Upgrade",
+        "downgrade": "Fazer Downgrade",
+        "cancel": "Cancelar Assinatura",
+        "active": "Ativo",
+        "canceled": "Cancelado",
+        "pastDue": "Pagamento Atrasado",
+        "noPlan": "Sem assinatura ativa"
+    },
     "dashboard": {
         "title": "Dashboard",
         "overview": "Visão Geral",
