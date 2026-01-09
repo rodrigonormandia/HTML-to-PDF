@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { toast } from 'react-toastify'
 
@@ -12,6 +13,7 @@ type AuthMode = 'login' | 'signup'
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { signIn, signUp } = useAuth()
 
   const [mode, setMode] = useState<AuthMode>('login')
@@ -88,6 +90,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         } else {
           toast.success(t('auth.loginSuccess'))
           onClose()
+          navigate('/editor')
         }
       }
     } catch {

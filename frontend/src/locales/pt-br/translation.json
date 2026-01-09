@@ -12,7 +12,9 @@
         "generating": "Processando...",
         "characters": "caracteres",
         "example_loaded": "HTML de exemplo carregado!",
-        "shortcut_hint": "Ctrl+Enter para visualizar"
+        "shortcut_hint": "Ctrl+Enter para visualizar",
+        "login_required_title": "Login Necessário",
+        "login_required_desc": "Faça login para usar o editor HTML para PDF. É grátis para começar!"
     },
     "feedback": {
         "success": "PDF gerado com sucesso!",
@@ -141,7 +143,78 @@
     },
     "nav": {
         "home": "Início",
+        "editor": "Editor",
         "pricing": "Preços"
+    },
+    "home": {
+        "hero": {
+            "title": "Converta HTML para PDF com Suporte a TailwindCSS",
+            "subtitle": "Gere PDFs profissionais a partir de HTML/CSS. Sem marca d'água, sem expiração, com plano gratuito.",
+            "bullet1": "Suporte nativo a TailwindCSS",
+            "bullet2": "Cabeçalhos e rodapés personalizados",
+            "bullet3": "Acesso à API REST",
+            "cta_primary": "Experimente Grátis",
+            "cta_secondary": "Ver Preços"
+        },
+        "features": {
+            "title": "Tudo que Você Precisa",
+            "subtitle": "Recursos poderosos para criar PDFs profissionais a partir do seu código HTML",
+            "tailwind": {
+                "title": "Suporte TailwindCSS",
+                "desc": "Use todas as suas classes Tailwind favoritas diretamente no seu HTML. Sem configuração."
+            },
+            "headers": {
+                "title": "Cabeçalhos e Rodapés",
+                "desc": "Adicione cabeçalhos e rodapés personalizados em cada página com números de página dinâmicos."
+            },
+            "async": {
+                "title": "Processamento Assíncrono",
+                "desc": "Envie jobs e receba resultados via webhook ou polling. Perfeito para documentos grandes."
+            },
+            "pagebreak": {
+                "title": "Controle de Quebra de Página",
+                "desc": "Controle exatamente onde as páginas quebram com classes CSS simples."
+            },
+            "api": {
+                "title": "API REST",
+                "desc": "Integre a geração de PDF em seus apps com nossa API REST simples."
+            },
+            "noexpire": {
+                "title": "Sem Expiração",
+                "desc": "Seus PDFs nunca expiram. Gere uma vez, use para sempre."
+            }
+        },
+        "howItWorks": {
+            "title": "Como Funciona",
+            "step1": {
+                "title": "Cole seu HTML",
+                "desc": "Escreva ou cole seu código HTML com classes TailwindCSS"
+            },
+            "step2": {
+                "title": "Configure as Opções",
+                "desc": "Defina tamanho da página, margens, cabeçalhos, rodapés e mais"
+            },
+            "step3": {
+                "title": "Baixe o PDF",
+                "desc": "Obtenha seu PDF perfeitamente formatado instantaneamente"
+            }
+        },
+        "codeExample": {
+            "title": "Integração Simples via API",
+            "subtitle": "Gere PDFs programaticamente com uma única chamada de API",
+            "viewDocs": "Ver Documentação da API"
+        },
+        "pricingPreview": {
+            "title": "Preços Simples e Transparentes",
+            "subtitle": "Comece grátis, faça upgrade conforme cresce",
+            "viewAll": "Ver Todos os Planos",
+            "custom": "Personalizado",
+            "unlimited": "Ilimitado"
+        },
+        "finalCta": {
+            "title": "Pronto para Converter HTML em PDF?",
+            "subtitle": "Comece grátis. Sem cartão de crédito."
+        }
     },
     "pricing": {
         "title": "Preços Simples e Transparentes",

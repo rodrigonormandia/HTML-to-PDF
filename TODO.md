@@ -2,7 +2,7 @@
 
 ## 🎯 Visão do Produto
 
-**Inspiração:** [APITemplate.io](https://apitemplate.io)
+**Inspiração:** [APITemplate.io](https://apitemplate.io), [HTML to PDF](https://html-to-pdf.io)
 
 PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 1. **Ferramenta online gratuita** - Porta de entrada, gera tráfego orgânico e leads
@@ -143,13 +143,17 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] i18n (EN padrão, PT-BR disponível)
 - [x] SEO básico otimizado
 
-### 🔄 Fase 2: SEO & Conteúdo (Próximo)
-- [ ] Landing page `/tailwind-to-pdf`
+### ✅ Fase 2: SEO & Conteúdo (Concluído)
+- [x] Landing page `/tailwind-to-pdf`
+- [x] Landing page `/html-to-pdf`
 - [ ] Artigo pilar: "TailwindCSS to PDF Guide"
-- [ ] Seletor de idioma na UI
-- [ ] Blog section no site
-- [ ] Schema.org para artigos
-- [ ] Sitemap dinâmico
+- [x] Seletor de idioma na UI
+- [X] Blog section no site
+- [x] Schema.org (WebApplication, SoftwareApplication)
+- [x] Open Graph meta tags
+- [x] Json LD estruturado
+- [x] Sitemap.xml atualizado
+- [x] react-helmet-async para SEO dinâmico
 
 ### ✅ Fase 3: Editor Avançado (Concluído)
 - [x] Integrar CodeMirror 6
@@ -157,6 +161,15 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Numeração de linhas
 - [x] Auto-complete básico de tags
 - [x] Mais templates (contrato, proposta, etc)
+
+### ✅ Fase 3.5: Home Page Redesign (Concluído)
+- [x] Nova home page de marketing (inspirada em APITemplate.io e html-to-pdf.io)
+- [x] Seções: Hero, Features, How It Works, Code Example, Pricing Preview, Final CTA
+- [x] Editor movido para `/editor` (rota exclusiva)
+- [x] Autenticação obrigatória no editor
+- [x] Redirect para `/editor` após login
+- [x] Traduções EN e PT-BR atualizadas
+- [x] Link "Editor" adicionado ao header
 
 ### 🔐 Fase 4: API Pública
 - [ ] Endpoint `/api/v1/convert`
@@ -277,6 +290,13 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Numeração de linhas no editor
 - [x] Auto-complete de tags HTML e atributos
 - [x] Templates de contrato e proposta comercial
+- [x] Nova home page de marketing (v1.10.0)
+- [x] Editor em rota exclusiva `/editor` com auth obrigatória
+- [x] Redirect para editor após login
+- [x] Landing pages SEO (`/tailwind-to-pdf`, `/html-to-pdf`)
+- [x] react-helmet-async para meta tags dinâmicas
+- [x] Schema.org JSON-LD estruturado
+- [x] Seletor de idioma na UI
 
 ---
 
@@ -289,4 +309,4 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ---
 
 **Última atualização:** 2026-01-09
-**Versão atual:** v1.9.0
+**Versão atual:** v1.10.0

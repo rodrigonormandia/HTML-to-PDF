@@ -12,7 +12,9 @@
         "generating": "Processing...",
         "characters": "characters",
         "example_loaded": "Example HTML loaded!",
-        "shortcut_hint": "Ctrl+Enter to preview"
+        "shortcut_hint": "Ctrl+Enter to preview",
+        "login_required_title": "Login Required",
+        "login_required_desc": "Please log in to use the HTML to PDF editor. It's free to get started!"
     },
     "feedback": {
         "success": "PDF generated successfully!",
@@ -141,7 +143,78 @@
     },
     "nav": {
         "home": "Home",
+        "editor": "Editor",
         "pricing": "Pricing"
+    },
+    "home": {
+        "hero": {
+            "title": "Convert HTML to PDF with TailwindCSS Support",
+            "subtitle": "Generate beautiful PDFs from HTML/CSS. No watermark, no expiration, free tier available.",
+            "bullet1": "Native TailwindCSS support",
+            "bullet2": "Custom headers & footers",
+            "bullet3": "REST API access",
+            "cta_primary": "Try Editor Free",
+            "cta_secondary": "View Pricing"
+        },
+        "features": {
+            "title": "Everything You Need",
+            "subtitle": "Powerful features to create professional PDFs from your HTML code",
+            "tailwind": {
+                "title": "TailwindCSS Support",
+                "desc": "Use all your favorite Tailwind classes directly in your HTML. No setup required."
+            },
+            "headers": {
+                "title": "Headers & Footers",
+                "desc": "Add custom headers and footers to every page with dynamic page numbers."
+            },
+            "async": {
+                "title": "Async Processing",
+                "desc": "Submit jobs and get results via webhook or polling. Perfect for large documents."
+            },
+            "pagebreak": {
+                "title": "Page Break Control",
+                "desc": "Control exactly where pages break with simple CSS classes."
+            },
+            "api": {
+                "title": "REST API",
+                "desc": "Integrate PDF generation into your apps with our simple REST API."
+            },
+            "noexpire": {
+                "title": "No Expiration",
+                "desc": "Your PDFs never expire. Generate once, use forever."
+            }
+        },
+        "howItWorks": {
+            "title": "How It Works",
+            "step1": {
+                "title": "Paste Your HTML",
+                "desc": "Write or paste your HTML code with TailwindCSS classes"
+            },
+            "step2": {
+                "title": "Configure Options",
+                "desc": "Set page size, margins, headers, footers and more"
+            },
+            "step3": {
+                "title": "Download PDF",
+                "desc": "Get your perfectly formatted PDF instantly"
+            }
+        },
+        "codeExample": {
+            "title": "Simple API Integration",
+            "subtitle": "Generate PDFs programmatically with a single API call",
+            "viewDocs": "View API Documentation"
+        },
+        "pricingPreview": {
+            "title": "Simple, Transparent Pricing",
+            "subtitle": "Start free, upgrade as you grow",
+            "viewAll": "View All Plans",
+            "custom": "Custom",
+            "unlimited": "Unlimited"
+        },
+        "finalCta": {
+            "title": "Ready to Convert HTML to PDF?",
+            "subtitle": "Start for free. No credit card required."
+        }
     },
     "pricing": {
         "title": "Simple, Transparent Pricing",

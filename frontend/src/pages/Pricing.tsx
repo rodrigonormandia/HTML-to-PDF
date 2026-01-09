@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import Layout from '../components/Layout'
+import { SEO, schemas } from '../components/SEO'
 
 interface Plan {
   id: string
@@ -104,8 +105,25 @@ export default function Pricing() {
   const isPopular = (planId: string) => planId === 'pro'
   const formatPrice = (cents: number) => (cents / 100).toFixed(0)
 
+  const pricingSchema = schemas.product(
+    'PDF Leaf - HTML to PDF Converter Plans',
+    'Choose the perfect plan for your PDF generation needs. From free tier to enterprise solutions.',
+    [
+      { name: 'Free', price: '0' },
+      { name: 'Starter', price: '15' },
+      { name: 'Pro', price: '49' },
+      { name: 'Enterprise', price: '99' },
+    ]
+  )
+
   return (
     <Layout>
+      <SEO
+        title="Pricing Plans - HTML to PDF API"
+        description="Choose the perfect PDF Leaf plan. Free tier with 100 PDFs/month, no watermark, no expiration. Paid plans from $15/month with higher limits and priority support."
+        path="/pricing"
+        jsonLd={pricingSchema}
+      />
       <div className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Title */}

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { useTheme } from '../hooks/useTheme'
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './Auth/AuthModal'
+import { LanguageSelector } from './LanguageSelector'
 
 interface LayoutProps {
   children: ReactNode
@@ -48,6 +49,16 @@ export default function Layout({ children }: LayoutProps) {
               {t('nav.home')}
             </Link>
             <Link
+              to="/editor"
+              className={`px-3 py-1.5 text-sm transition-colors ${
+                isActive('/editor')
+                  ? 'text-blue-600 dark:text-blue-400 font-medium'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              {t('nav.editor')}
+            </Link>
+            <Link
               to="/pricing"
               className={`px-3 py-1.5 text-sm transition-colors ${
                 isActive('/pricing')
@@ -69,9 +80,6 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   {t('dashboard.title')}
                 </Link>
-                <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">
-                  {user.email}
-                </span>
                 <button
                   onClick={handleSignOut}
                   className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
@@ -87,6 +95,7 @@ export default function Layout({ children }: LayoutProps) {
                 {t('auth.login')}
               </button>
             )}
+            <LanguageSelector />
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -147,7 +156,7 @@ export default function Layout({ children }: LayoutProps) {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.9.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.10.0 | {t('footer.developer')}</div>
       </footer>
 
       <AuthModal

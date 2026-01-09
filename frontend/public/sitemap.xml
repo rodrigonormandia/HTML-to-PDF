@@ -1,13 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage -->
   <url>
     <loc>https://htmltopdf.buscarid.com/</loc>
-    <lastmod>2026-01-07</lastmod>
+    <lastmod>2026-01-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://htmltopdf.buscarid.com/" />
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://htmltopdf.buscarid.com/?lang=pt-BR" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://htmltopdf.buscarid.com/" />
   </url>
+
+  <!-- HTML to PDF Landing Page -->
+  <url>
+    <loc>https://htmltopdf.buscarid.com/html-to-pdf</loc>
+    <lastmod>2026-01-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://htmltopdf.buscarid.com/html-to-pdf" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://htmltopdf.buscarid.com/html-to-pdf?lang=pt-BR" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://htmltopdf.buscarid.com/html-to-pdf" />
+  </url>
+
+  <!-- TailwindCSS to PDF Landing Page -->
+  <url>
+    <loc>https://htmltopdf.buscarid.com/tailwind-to-pdf</loc>
+    <lastmod>2026-01-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://htmltopdf.buscarid.com/tailwind-to-pdf" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://htmltopdf.buscarid.com/tailwind-to-pdf?lang=pt-BR" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://htmltopdf.buscarid.com/tailwind-to-pdf" />
+  </url>
+
+  <!-- Editor Page -->
+  <url>
+    <loc>https://htmltopdf.buscarid.com/editor</loc>
+    <lastmod>2026-01-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://htmltopdf.buscarid.com/editor" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://htmltopdf.buscarid.com/editor?lang=pt-BR" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://htmltopdf.buscarid.com/editor" />
+  </url>
+
+  <!-- Pricing Page -->
+  <url>
+    <loc>https://htmltopdf.buscarid.com/pricing</loc>
+    <lastmod>2026-01-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://htmltopdf.buscarid.com/pricing" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://htmltopdf.buscarid.com/pricing?lang=pt-BR" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://htmltopdf.buscarid.com/pricing" />
+  </url>
+
 </urlset>
