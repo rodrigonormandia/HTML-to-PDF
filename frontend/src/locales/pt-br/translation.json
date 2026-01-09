@@ -321,5 +321,9 @@
         "status": "Status",
         "loginRequired": "Faça login para acessar o dashboard.",
         "backToHome": "Voltar para Home"
+    },
+    "guide": {
+        "title": "O Guia Completo para Conversão de TailwindCSS para PDF",
+        "subtitle": "Tudo o que você precisa saber sobre converter HTML estilizado com TailwindCSS em documentos PDF profissionais."
     }
 }

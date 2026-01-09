@@ -8,6 +8,7 @@ import Editor from './pages/Editor';
 import Dashboard from './pages/Dashboard';
 import Pricing from './pages/Pricing';
 import TailwindToPdf from './pages/TailwindToPdf';
+import TailwindToPdfGuide from './pages/TailwindToPdfGuide';
 import HtmlToPdf from './pages/HtmlToPdf';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/tailwind-to-pdf" element={<TailwindToPdf />} />
+        <Route path="/guide/tailwind-to-pdf" element={<TailwindToPdfGuide />} />
         <Route path="/html-to-pdf" element={<HtmlToPdf />} />
       </Routes>
       <ToastContainer position="bottom-right" theme={theme} />

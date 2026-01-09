@@ -17,6 +17,18 @@ from .supabase_client import (
     validate_api_key,
     check_user_quota
 )
+from .redis_client import get_redis
+from .rate_limiter import APIKeyRateLimiter, get_rate_limit_headers
+
+# Initialize rate limiter with Redis
+_rate_limiter = None
+
+def get_rate_limiter():
+    """Get or create rate limiter singleton."""
+    global _rate_limiter
+    if _rate_limiter is None:
+        _rate_limiter = APIKeyRateLimiter(get_redis())
+    return _rate_limiter
 
 # Constantes de segurança
 MAX_HTML_SIZE = 2 * 1024 * 1024  # 2MB
@@ -797,6 +809,7 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
     user_id = None
     api_key_id = None
     source = "web"
+    rate_result = None  # Will be set if using API key
 
     if api_key:
         # Validação via API key (chamadas de API externa)
@@ -814,7 +827,27 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
 
         user_id = key_info["user_id"]
         api_key_id = key_info.get("api_key_id")
+        plan = key_info.get("plan", "free")
         source = "api"
+
+        # Check rate limit for API key
+        rate_limiter = get_rate_limiter()
+        rate_result = rate_limiter.check_rate_limit(str(api_key_id), plan)
+
+        if not rate_result["allowed"]:
+            raise HTTPException(
+                status_code=429,
+                detail={
+                    "error": "rate_limit_exceeded",
+                    "message": f"Rate limit exceeded. Try again in {rate_result['reset']} seconds.",
+                    "rate_limit": {
+                        "limit": rate_result["limit"],
+                        "remaining": 0,
+                        "reset": rate_result["reset"]
+                    }
+                },
+                headers=get_rate_limit_headers(rate_result)
+            )
 
     elif pdf_request.user_id:
         # Usuário logado no frontend
@@ -902,8 +935,8 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
         }
     )
 
-    # 9. Retornar resposta com info de cota
-    return {
+    # 9. Retornar resposta com info de cota e rate limit
+    response_data = {
         "job_id": job_id,
         "status": "pending",
         "quota": {
@@ -912,6 +945,16 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
             "remaining": max(0, quota["remaining"] - 1)
         }
     }
+
+    # Add rate limit info for API key users
+    if rate_result:
+        response_data["rate_limit"] = {
+            "limit": rate_result["limit"],
+            "remaining": rate_result["remaining"],
+            "reset": rate_result["reset"]
+        }
+
+    return response_data
 
 
 @app.get(

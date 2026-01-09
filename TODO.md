@@ -146,7 +146,7 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ### ✅ Fase 2: SEO & Conteúdo (Concluído)
 - [x] Landing page `/tailwind-to-pdf`
 - [x] Landing page `/html-to-pdf`
-- [ ] Artigo pilar: "TailwindCSS to PDF Guide"
+- [x] Artigo pilar: "TailwindCSS to PDF Guide"
 - [x] Seletor de idioma na UI
 - [X] Blog section no site
 - [x] Schema.org (WebApplication, SoftwareApplication)
@@ -174,7 +174,7 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ### 🔐 Fase 4: API Pública
 - [ ] Endpoint `/api/v1/convert`
 - [ ] Sistema de API Keys
-- [ ] Rate limiting por key
+- [x] Rate limiting por key
 - [ ] Documentação OpenAPI/Swagger
 - [ ] SDKs (Python, Node.js, PHP)
 - [ ] Webhooks para async processing
@@ -297,6 +297,8 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] react-helmet-async para meta tags dinâmicas
 - [x] Schema.org JSON-LD estruturado
 - [x] Seletor de idioma na UI
+- [x] Artigo pilar "TailwindCSS to PDF Guide" (`/guide/tailwind-to-pdf`)
+- [x] Rate limiting por API key (Redis-based, limites por plano)
 
 ---
 
@@ -309,4 +311,4 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 ---
 
 **Última atualização:** 2026-01-09
-**Versão atual:** v1.10.0
+**Versão atual:** v1.11.0

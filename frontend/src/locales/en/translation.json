@@ -321,5 +321,9 @@
         "status": "Status",
         "loginRequired": "Please log in to access the dashboard.",
         "backToHome": "Back to Home"
+    },
+    "guide": {
+        "title": "The Complete Guide to TailwindCSS to PDF Conversion",
+        "subtitle": "Everything you need to know about converting TailwindCSS-styled HTML to beautiful PDF documents."
     }
 }
