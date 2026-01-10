@@ -113,6 +113,14 @@ app = FastAPI(
 
 Esta API permite converter conteúdo HTML em documentos PDF de alta qualidade usando WeasyPrint.
 
+### 📦 API Version
+
+A API atual é **v1**. Todos os endpoints estão disponíveis em `/api/v1/`.
+
+Endpoints legados (`/api/convert`, `/api/jobs/...`) continuam funcionando para compatibilidade.
+
+Header de resposta: `X-API-Version: 1.0`
+
 ### 🔐 Autenticação
 
 **A autenticação é obrigatória.** Use uma das opções abaixo:
@@ -160,6 +168,39 @@ A resposta da API inclui informações de quota:
 | **Numeração** | Números de página automáticos no rodapé |
 | **Header/Footer** | HTML personalizado para cabeçalho e rodapé |
 | **TailwindCSS** | Suporte nativo (injetado automaticamente) |
+| **Webhooks** | Notificações assíncronas para conclusão de jobs |
+
+### 🔔 Webhooks
+
+Configure webhooks para receber notificações quando jobs são concluídos:
+
+**Endpoints:**
+- `POST /api/v1/webhooks` - Criar webhook
+- `GET /api/v1/webhooks` - Listar webhooks
+- `DELETE /api/v1/webhooks/{id}` - Remover webhook
+
+**Eventos disponíveis:**
+- `job.completed` - Job concluído com sucesso
+- `job.failed` - Job falhou
+
+**Payload do webhook:**
+```json
+{
+  "event": "job.completed",
+  "job_id": "abc123",
+  "timestamp": "2026-01-10T12:00:00Z",
+  "data": {
+    "status": "completed",
+    "size": 12345,
+    "processing_time_ms": 1500
+  }
+}
+```
+
+**Headers do webhook:**
+- `X-PDFLeaf-Signature`: `sha256=<HMAC-SHA256 signature>`
+- `X-PDFLeaf-Event`: `job.completed`
+- `Content-Type`: `application/json`
 
 ### Configurações de PDF
 
@@ -214,26 +255,104 @@ Headers de resposta:
 - `X-RateLimit-Remaining`: Requisições restantes
 - `X-RateLimit-Reset`: Segundos até o reset do limite
 
-### Exemplo de Uso
+### 📚 SDKs Oficiais
 
+| Linguagem | Instalação | Versão | Características |
+|-----------|------------|--------|-----------------|
+| **TypeScript/JavaScript** | `npm install @pdfleaf/sdk` | 1.0.0 | Browser + Node.js, async/await |
+| **Python** | `pip install pdfleaf` | 1.0.0 | Sync + Async (httpx), type hints |
+| **PHP** | `composer require pdfleaf/sdk` | 1.0.0 | PHP 8.0+, Guzzle HTTP |
+
+Todos os SDKs incluem:
+- ✅ Conversão HTML → PDF
+- ✅ Gerenciamento de webhooks
+- ✅ Verificação de assinatura HMAC-SHA256
+- ✅ Tipagem completa
+- ✅ Tratamento de erros
+
+### Exemplos de Uso por Linguagem
+
+**cURL:**
 ```bash
-curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
+curl -X POST "https://htmltopdf.buscarid.com/api/v1/convert" \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer pk_live_sua_api_key_aqui" \\
-  -d '{
-    "html_content": "<h1>Hello World</h1>",
-    "action": "download",
-    "page_size": "A4",
-    "orientation": "portrait"
-  }' \\
-  --output documento.pdf
+  -d '{"html_content": "<h1>Hello World</h1>", "action": "download"}'
+```
+
+**TypeScript/JavaScript:**
+```javascript
+import { PDFLeaf } from '@pdfleaf/sdk';
+
+const client = new PDFLeaf({ apiKey: 'pk_live_...' });
+
+// Conversão simples
+const pdf = await client.convert('<h1>Hello World</h1>');
+
+// Com opções
+const pdf = await client.convert('<h1>Report</h1>', {
+  pageSize: 'Letter',
+  orientation: 'landscape',
+  headerHtml: '<div>Header</div>'
+});
+
+// Webhook
+const webhook = await client.createWebhook({
+  url: 'https://yourapp.com/webhook',
+  events: ['job.completed']
+});
+```
+
+**Python:**
+```python
+from pdfleaf import PDFLeaf, PDFOptions
+
+client = PDFLeaf(api_key="pk_live_...")
+
+# Conversão simples
+pdf = client.convert("<h1>Hello World</h1>")
+
+# Com opções
+pdf = client.convert("<h1>Report</h1>", options=PDFOptions(
+    page_size="Letter",
+    orientation="landscape"
+))
+
+# Async
+async with PDFLeaf(api_key="pk_live_...") as client:
+    pdf = await client.convert_async("<h1>Hello</h1>")
+
+# Verificar webhook
+PDFLeaf.verify_webhook_signature(payload, signature, secret)
+```
+
+**PHP:**
+```php
+use PDFLeaf\\PDFLeaf;
+use PDFLeaf\\PDFOptions;
+
+$client = new PDFLeaf('pk_live_...');
+
+// Conversão simples
+$pdf = $client->convert('<h1>Hello World</h1>');
+
+// Com opções
+$pdf = $client->convert('<h1>Report</h1>', new PDFOptions(
+    pageSize: 'Letter',
+    orientation: 'landscape'
+));
+
+// Verificar webhook
+PDFLeaf::verifyWebhookSignature($payload, $signature, $secret);
 ```
 
 ### Fluxo de Conversão (Async)
 
-1. `POST /api/convert` → Retorna `job_id` e `status: pending`
-2. `GET /api/jobs/{job_id}` → Polling para verificar status
-3. `GET /api/jobs/{job_id}/download` → Baixar o PDF quando `status: completed`
+1. `POST /api/v1/convert` → Retorna `job_id` e `status: pending`
+2. `GET /api/v1/jobs/{job_id}` → Polling para verificar status
+3. `GET /api/v1/jobs/{job_id}/download` → Baixar o PDF quando `status: completed`
+
+**Ou use webhooks:** Configure um webhook para receber notificações quando o job for concluído.
 
 ### Links Úteis
 
@@ -241,8 +360,9 @@ curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
 - 📖 [Documentação ReDoc](/api/redoc)
 - 🔑 [Dashboard - API Keys](https://htmltopdf.buscarid.com/dashboard)
 - 💰 [Preços](https://htmltopdf.buscarid.com/pricing)
+- 📦 [SDKs no GitHub](https://github.com/EngenhariaBucarId/HTML-to-PDF-Antigravity/tree/main/sdks)
     """,
-    version="1.11.1",
+    version="1.13.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
@@ -254,7 +374,25 @@ curl -X POST "https://htmltopdf.buscarid.com/api/convert" \\
     license_info={
         "name": "MIT License",
         "url": "https://opensource.org/licenses/MIT"
-    }
+    },
+    openapi_tags=[
+        {
+            "name": "conversion",
+            "description": "Endpoints para conversão de HTML para PDF"
+        },
+        {
+            "name": "jobs",
+            "description": "Endpoints para gerenciamento e download de jobs"
+        },
+        {
+            "name": "webhooks",
+            "description": "Endpoints para configuração de webhooks"
+        },
+        {
+            "name": "health",
+            "description": "Health check e status do serviço"
+        }
+    ]
 )
 
 # Configurar rate limiter
@@ -307,6 +445,16 @@ async def add_security_headers(request: Request, call_next):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
 
     return response
+
+
+# API Version Header Middleware
+@app.middleware("http")
+async def add_api_version_header(request: Request, call_next):
+    """Add API version header to all responses."""
+    response = await call_next(request)
+    response.headers["X-API-Version"] = "1.0"
+    return response
+
 
 class PDFRequest(BaseModel):
     """
@@ -531,6 +679,34 @@ class PDFRequest(BaseModel):
                 raise ValueError("Números de páginas devem ser inteiros positivos separados por vírgula. Exemplo: '1, 3, 5'")
         return v
 
+# Versioned API endpoints (v1) - same handlers, aliased paths
+@app.post(
+    "/api/v1/convert",
+    summary="Converter HTML para PDF (Async)",
+    description="""
+Submete conteúdo HTML para conversão assíncrona em PDF.
+
+**Fluxo:**
+1. POST /api/v1/convert → Retorna `job_id` e `status: pending`
+2. GET /api/v1/jobs/{job_id} → Polling para verificar status
+3. GET /api/v1/jobs/{job_id}/download → Baixar o PDF quando pronto
+
+**Comportamento:**
+- Se o HTML não contiver tags `<html>` ou `<body>`, será automaticamente encapsulado em um documento HTML válido
+- O TailwindCSS CDN é injetado automaticamente para permitir uso de classes utilitárias
+- O PDF é gerado usando WeasyPrint com suporte completo a CSS
+- O HTML é sanitizado para remover scripts e elementos perigosos
+- PDFs ficam disponíveis por 2 horas após geração
+
+**Segurança:**
+- Rate limit: 30 requisições por minuto por IP
+- Tamanho máximo: 2MB
+- Sanitização automática de HTML
+    """,
+    response_description="Job ID para acompanhamento",
+    tags=["API v1"],
+    include_in_schema=True
+)
 @app.post(
     "/api/convert",
     summary="Converter HTML para PDF (Async)",
@@ -636,6 +812,7 @@ Submete conteúdo HTML para conversão assíncrona em PDF.
         }
     },
     tags=["Conversão"],
+    include_in_schema=False,
     openapi_extra={
         "requestBody": {
             "content": {
@@ -948,7 +1125,8 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
             "footer_height": pdf_request.footer_height,
             "exclude_header_pages": pdf_request.exclude_header_pages,
             "exclude_footer_pages": pdf_request.exclude_footer_pages,
-        }
+        },
+        user_id=user_id  # For webhook notifications
     )
 
     # 9. Retornar resposta com info de cota e rate limit
@@ -973,6 +1151,29 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
     return response_data
 
 
+# Versioned job status endpoint (v1)
+@app.get(
+    "/api/v1/jobs/{job_id}",
+    summary="Verificar status do job",
+    description="Retorna o status atual de um job de conversão de PDF.",
+    responses={
+        200: {
+            "description": "Status do job",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "pending": {"value": {"job_id": "xxx", "status": "pending"}},
+                        "processing": {"value": {"job_id": "xxx", "status": "processing"}},
+                        "completed": {"value": {"job_id": "xxx", "status": "completed", "size": 12345}},
+                        "failed": {"value": {"job_id": "xxx", "status": "failed", "error": "Error message"}}
+                    }
+                }
+            }
+        },
+        404: {"description": "Job não encontrado"}
+    },
+    tags=["API v1"]
+)
 @app.get(
     "/api/jobs/{job_id}",
     summary="Verificar status do job",
@@ -993,7 +1194,8 @@ async def convert_html_to_pdf(request: Request, pdf_request: PDFRequest):
         },
         404: {"description": "Job não encontrado"}
     },
-    tags=["Jobs"]
+    tags=["Jobs"],
+    include_in_schema=False
 )
 async def get_job(job_id: str):
     """Get job status by ID."""
@@ -1003,6 +1205,21 @@ async def get_job(job_id: str):
     return {"job_id": job_id, **status}
 
 
+# Versioned download endpoint (v1)
+@app.get(
+    "/api/v1/jobs/{job_id}/download",
+    summary="Baixar PDF do job",
+    description="Baixa o PDF gerado de um job completado.",
+    responses={
+        200: {
+            "content": {"application/pdf": {}},
+            "description": "PDF gerado"
+        },
+        400: {"description": "PDF ainda não está pronto"},
+        404: {"description": "Job não encontrado ou PDF expirado"}
+    },
+    tags=["API v1"]
+)
 @app.get(
     "/api/jobs/{job_id}/download",
     summary="Baixar PDF do job",
@@ -1015,7 +1232,8 @@ async def get_job(job_id: str):
         400: {"description": "PDF ainda não está pronto"},
         404: {"description": "Job não encontrado ou PDF expirado"}
     },
-    tags=["Jobs"]
+    tags=["Jobs"],
+    include_in_schema=False
 )
 async def download_job_pdf(job_id: str, action: str = "download"):
     """Download PDF from completed job."""
@@ -1040,6 +1258,222 @@ async def download_job_pdf(job_id: str, action: str = "download"):
         headers={"Content-Disposition": f'{disposition}; filename="{filename}"'}
     )
 
+
+# ============================================================================
+# Webhook Management Endpoints (API v1)
+# ============================================================================
+
+class WebhookCreateRequest(BaseModel):
+    """Request model for creating a webhook configuration."""
+    url: str = Field(..., description="URL to receive webhook notifications")
+    events: list[str] = Field(
+        default=["job.completed", "job.failed"],
+        description="Events to subscribe to. Available: job.completed, job.failed"
+    )
+
+    @field_validator('url')
+    @classmethod
+    def validate_url(cls, v):
+        if not v.startswith(('http://', 'https://')):
+            raise ValueError("URL must start with http:// or https://")
+        return v
+
+    @field_validator('events')
+    @classmethod
+    def validate_events(cls, v):
+        valid_events = {'job.completed', 'job.failed'}
+        for event in v:
+            if event not in valid_events:
+                raise ValueError(f"Invalid event: {event}. Valid events: {valid_events}")
+        return v
+
+
+@app.post(
+    "/api/v1/webhooks",
+    summary="Create webhook configuration",
+    description="""
+Create a new webhook configuration to receive notifications when PDF jobs complete or fail.
+
+**Webhook Payload:**
+```json
+{
+    "event": "job.completed",
+    "job_id": "550e8400-e29b-41d4-a716-446655440000",
+    "timestamp": "2026-01-10T12:00:00Z",
+    "data": {
+        "status": "completed",
+        "size": 12345
+    }
+}
+```
+
+**Signature Verification:**
+Each webhook includes an `X-PDFLeaf-Signature` header containing a HMAC-SHA256 signature.
+Verify it by computing `sha256=HMAC-SHA256(payload, secret)`.
+    """,
+    responses={
+        200: {
+            "description": "Webhook created successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "id": "550e8400-e29b-41d4-a716-446655440000",
+                        "url": "https://your-server.com/webhook",
+                        "secret": "whsec_...",
+                        "events": ["job.completed", "job.failed"]
+                    }
+                }
+            }
+        },
+        401: {"description": "Authentication required"},
+        400: {"description": "Invalid request"}
+    },
+    tags=["API v1 - Webhooks"]
+)
+async def create_webhook(request: Request, webhook_request: WebhookCreateRequest):
+    """Create a new webhook configuration."""
+    import secrets
+    from .supabase_client import supabase
+
+    # Get API key and validate
+    api_key = get_api_key_from_request(request)
+    if not api_key:
+        raise HTTPException(status_code=401, detail="API key required")
+
+    key_hash = hash_api_key(api_key)
+    key_info = validate_api_key(key_hash)
+    if not key_info or not key_info.get("is_valid"):
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    user_id = key_info["user_id"]
+
+    # Generate webhook secret
+    webhook_secret = f"whsec_{secrets.token_urlsafe(32)}"
+
+    # Create webhook config
+    try:
+        result = supabase.table("webhook_configs").insert({
+            "user_id": user_id,
+            "url": webhook_request.url,
+            "secret": webhook_secret,
+            "events": webhook_request.events,
+            "is_active": True
+        }).execute()
+
+        if result.data:
+            config = result.data[0]
+            return {
+                "id": config["id"],
+                "url": config["url"],
+                "secret": webhook_secret,  # Only returned once at creation
+                "events": config["events"],
+                "created_at": config["created_at"]
+            }
+        else:
+            raise HTTPException(status_code=500, detail="Failed to create webhook")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    "/api/v1/webhooks",
+    summary="List webhook configurations",
+    description="List all webhook configurations for the authenticated user.",
+    responses={
+        200: {
+            "description": "List of webhooks",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "webhooks": [
+                            {
+                                "id": "550e8400-e29b-41d4-a716-446655440000",
+                                "url": "https://your-server.com/webhook",
+                                "events": ["job.completed", "job.failed"],
+                                "is_active": True,
+                                "created_at": "2026-01-10T12:00:00Z"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        401: {"description": "Authentication required"}
+    },
+    tags=["API v1 - Webhooks"]
+)
+async def list_webhooks(request: Request):
+    """List all webhook configurations for the user."""
+    from .supabase_client import supabase
+
+    # Get API key and validate
+    api_key = get_api_key_from_request(request)
+    if not api_key:
+        raise HTTPException(status_code=401, detail="API key required")
+
+    key_hash = hash_api_key(api_key)
+    key_info = validate_api_key(key_hash)
+    if not key_info or not key_info.get("is_valid"):
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    user_id = key_info["user_id"]
+
+    try:
+        result = supabase.table("webhook_configs").select(
+            "id, url, events, is_active, created_at, updated_at"
+        ).eq("user_id", user_id).execute()
+
+        return {"webhooks": result.data if result.data else []}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete(
+    "/api/v1/webhooks/{webhook_id}",
+    summary="Delete webhook configuration",
+    description="Delete a webhook configuration.",
+    responses={
+        200: {"description": "Webhook deleted"},
+        401: {"description": "Authentication required"},
+        404: {"description": "Webhook not found"}
+    },
+    tags=["API v1 - Webhooks"]
+)
+async def delete_webhook(request: Request, webhook_id: str):
+    """Delete a webhook configuration."""
+    from .supabase_client import supabase
+
+    # Get API key and validate
+    api_key = get_api_key_from_request(request)
+    if not api_key:
+        raise HTTPException(status_code=401, detail="API key required")
+
+    key_hash = hash_api_key(api_key)
+    key_info = validate_api_key(key_hash)
+    if not key_info or not key_info.get("is_valid"):
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    user_id = key_info["user_id"]
+
+    try:
+        # Check if webhook exists and belongs to user
+        check = supabase.table("webhook_configs").select("id").eq(
+            "id", webhook_id
+        ).eq("user_id", user_id).execute()
+
+        if not check.data:
+            raise HTTPException(status_code=404, detail="Webhook not found")
+
+        # Delete webhook
+        supabase.table("webhook_configs").delete().eq("id", webhook_id).execute()
+
+        return {"message": "Webhook deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get(
     "/health",
     summary="Health Check",
@@ -1055,7 +1489,8 @@ async def download_job_pdf(job_id: str, action: str = "download"):
             }
         }
     },
-    tags=["Sistema"]
+    tags=["Sistema"],
+    include_in_schema=False
 )
 async def health_check():
     """Endpoint para verificação de saúde da API."""
@@ -1083,6 +1518,7 @@ class PortalRequest(BaseModel):
     summary="Create Stripe Checkout Session",
     description="Creates a Stripe Checkout session for subscription payment.",
     tags=["Stripe"],
+    include_in_schema=False,
     responses={
         200: {
             "description": "Checkout session created",
@@ -1138,6 +1574,7 @@ async def create_checkout(request: Request, checkout_request: CheckoutRequest):
     summary="Create Stripe Customer Portal Session",
     description="Creates a Stripe Customer Portal session for managing subscription.",
     tags=["Stripe"],
+    include_in_schema=False,
     responses={
         200: {
             "description": "Portal session created",
@@ -1203,6 +1640,7 @@ async def stripe_webhook(request: Request):
     summary="Get Subscription Status",
     description="Get the current subscription status for a user.",
     tags=["Stripe"],
+    include_in_schema=False,
     responses={
         200: {
             "description": "Subscription status",

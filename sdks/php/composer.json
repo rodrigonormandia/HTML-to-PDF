@@ -1,0 +1,58 @@
+{
+    "name": "pdfleaf/sdk",
+    "description": "Official PDF Leaf SDK for PHP - Convert HTML to PDF with native TailwindCSS support",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PDF Leaf",
+            "email": "support@pdfleaf.com"
+        },
+        {
+            "name": "Rodrigo Normandia",
+            "email": "contato@buscarid.com"
+        }
+    ],
+    "homepage": "https://htmltopdf.buscarid.com",
+    "support": {
+        "issues": "https://github.com/EngenhariaBucarId/HTML-to-PDF-Antigravity/issues",
+        "source": "https://github.com/EngenhariaBucarId/HTML-to-PDF-Antigravity"
+    },
+    "keywords": [
+        "pdf",
+        "html-to-pdf",
+        "html2pdf",
+        "pdf-generator",
+        "tailwindcss",
+        "weasyprint",
+        "api",
+        "sdk"
+    ],
+    "require": {
+        "php": ">=8.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PDFLeaf\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PDFLeaf\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse src --level=8"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}

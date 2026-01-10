@@ -171,13 +171,20 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Traduções EN e PT-BR atualizadas
 - [x] Link "Editor" adicionado ao header
 
-### 🔐 Fase 4: API Pública
-- [ ] Endpoint `/api/v1/convert`
-- [ ] Sistema de API Keys
-- [x] Rate limiting por key
-- [ ] Documentação OpenAPI/Swagger
-- [ ] SDKs (Python, Node.js, PHP)
-- [ ] Webhooks para async processing
+### ✅ Fase 4: API Pública (Concluído)
+- [x] Endpoint `/api/v1/convert` (versionamento da API)
+- [x] Sistema de API Keys (SHA-256, Supabase)
+- [x] Rate limiting por key (Redis-based, limites por plano)
+- [x] Documentação OpenAPI/Swagger (v1.13.0)
+- [x] SDKs oficiais:
+  - [x] TypeScript/JavaScript (`@pdfleaf/sdk`) - Browser + Node.js
+  - [x] Python (`pdfleaf`) - Sync + Async com httpx
+  - [x] PHP (`pdfleaf/sdk`) - PHP 8.0+ com Guzzle
+- [x] Webhooks para async processing:
+  - [x] Endpoints: POST/GET/DELETE `/api/v1/webhooks`
+  - [x] Eventos: `job.completed`, `job.failed`
+  - [x] Assinatura HMAC-SHA256
+  - [x] Integração com Celery tasks
 
 ### ✅ Fase 5: Sistema de Contas (Concluído)
 - [x] Cadastro/Login (email, Google, GitHub)
@@ -199,7 +206,7 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [ ] Zapier
 - [ ] Make.com (Integromat)
 - [ ] n8n
-- [ ] Webhooks customizáveis
+- [x] Webhooks customizáveis (implementado na Fase 4)
 - [ ] AWS S3 export
 
 ### 🌍 Fase 8: Escala
@@ -299,6 +306,13 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - [x] Seletor de idioma na UI
 - [x] Artigo pilar "TailwindCSS to PDF Guide" (`/guide/tailwind-to-pdf`)
 - [x] Rate limiting por API key (Redis-based, limites por plano)
+- [x] API versionada (`/api/v1/`) com header `X-API-Version`
+- [x] Sistema de webhooks completo (v1.13.0)
+- [x] SDK TypeScript/JavaScript (`@pdfleaf/sdk`)
+- [x] SDK Python (`pdfleaf`)
+- [x] SDK PHP (`pdfleaf/sdk`)
+- [x] Documentação OpenAPI atualizada com exemplos de SDKs
+- [x] Testes para API v1 e webhooks
 
 ---
 
@@ -307,8 +321,11 @@ PDF Leaf é uma plataforma de conversão HTML para PDF que oferece:
 - `COMPETITOR_ANALYSIS.md` - Análise detalhada dos concorrentes
 - `CLAUDE.md` - Guia para desenvolvimento
 - `DEPLOY.md` - Documentação de deploy
+- `sdks/typescript/README.md` - Documentação SDK TypeScript/JavaScript
+- `sdks/python/README.md` - Documentação SDK Python
+- `sdks/php/README.md` - Documentação SDK PHP
 
 ---
 
-**Última atualização:** 2026-01-09
-**Versão atual:** v1.11.0
+**Última atualização:** 2026-01-10
+**Versão atual:** v1.13.0

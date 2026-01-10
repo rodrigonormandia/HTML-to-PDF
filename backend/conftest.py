@@ -136,7 +136,7 @@ def client():
     """
     from backend.pdf_service import generate_pdf_from_html
 
-    def sync_task_delay(job_id, html, options):
+    def sync_task_delay(job_id, html, options, user_id=None):
         """Execute PDF generation synchronously for testing."""
         try:
             _mock_set_job_status(job_id, {"status": "processing"})
@@ -172,7 +172,7 @@ def client_no_auth():
     """
     from backend.pdf_service import generate_pdf_from_html
 
-    def sync_task_delay(job_id, html, options):
+    def sync_task_delay(job_id, html, options, user_id=None):
         try:
             _mock_set_job_status(job_id, {"status": "processing"})
             pdf_bytes = generate_pdf_from_html(html=html, **options)
@@ -207,7 +207,7 @@ def client_quota_exceeded():
     """
     from backend.pdf_service import generate_pdf_from_html
 
-    def sync_task_delay(job_id, html, options):
+    def sync_task_delay(job_id, html, options, user_id=None):
         try:
             _mock_set_job_status(job_id, {"status": "processing"})
             pdf_bytes = generate_pdf_from_html(html=html, **options)
@@ -242,7 +242,7 @@ def client_rate_limited():
     """
     from backend.pdf_service import generate_pdf_from_html
 
-    def sync_task_delay(job_id, html, options):
+    def sync_task_delay(job_id, html, options, user_id=None):
         try:
             _mock_set_job_status(job_id, {"status": "processing"})
             pdf_bytes = generate_pdf_from_html(html=html, **options)
@@ -277,7 +277,7 @@ def client_invalid_api_key():
     """
     from backend.pdf_service import generate_pdf_from_html
 
-    def sync_task_delay(job_id, html, options):
+    def sync_task_delay(job_id, html, options, user_id=None):
         try:
             _mock_set_job_status(job_id, {"status": "processing"})
             pdf_bytes = generate_pdf_from_html(html=html, **options)

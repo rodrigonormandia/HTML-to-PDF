@@ -1,0 +1,58 @@
+{
+  "name": "@pdfleaf/sdk",
+  "version": "1.0.0",
+  "description": "Official PDF Leaf SDK for TypeScript/JavaScript - Convert HTML to PDF with native TailwindCSS support",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "pdf",
+    "html-to-pdf",
+    "html2pdf",
+    "pdf-generator",
+    "tailwindcss",
+    "tailwind",
+    "weasyprint",
+    "api",
+    "sdk"
+  ],
+  "author": "PDF Leaf <support@pdfleaf.com>",
+  "license": "MIT",
+  "homepage": "https://htmltopdf.buscarid.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EngenhariaBucarId/HTML-to-PDF-Antigravity"
+  },
+  "bugs": {
+    "url": "https://github.com/EngenhariaBucarId/HTML-to-PDF-Antigravity/issues"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "eslint": "^8.54.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  }
+}

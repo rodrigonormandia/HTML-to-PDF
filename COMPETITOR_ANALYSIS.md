@@ -1,7 +1,7 @@
 # Análise Competitiva: PDF Leaf vs Mercado
 
-**Data:** 2026-01-07
-**Foco:** APITemplate.io e concorrentes do segmento HTML-to-PDF
+**Data:** 2026-01-09 (atualizado)
+**Foco:** APITemplate.io, HTML-to-PDF.io e concorrentes do segmento HTML-to-PDF
 
 ---
 
@@ -71,13 +71,122 @@
 
 ---
 
-## 2. Análise dos Concorrentes
+## 2. Análise do HTML-to-PDF.io
 
-### 2.1 Comparativo de Preços
+### 2.1 Visão Geral
+- **Website:** [html-to-pdf.io](https://html-to-pdf.io)
+- **Empresa:** Mote Software Ltd (Reino Unido)
+- **Versão atual:** 0.2.0
+- **Proposta:** API de geração de PDFs com foco em desenvolvedores web
+- **Modelo:** API-first (sem ferramenta online gratuita)
+- **Infraestrutura:** Serverless
+
+### 2.2 Planos e Preços (GBP - Libras Esterlinas)
+
+#### Mensal
+| Plano | Preço | PDFs/mês | Custo por PDF |
+|-------|-------|----------|---------------|
+| Always Free | £0 | 10 | £0 |
+| Start-up | £10 | 100 | £0.10 |
+| Boost | £25 | 500 | £0.05 |
+| Growth | £75 | 2,000 | £0.0375 |
+| Enterprise | Custom | Custom | Negociável |
+
+#### Anual (desconto ~10%)
+| Plano | Preço/ano | PDFs/mês |
+|-------|-----------|----------|
+| Start-up | £108 | 100 |
+| Boost | £270 | 500 |
+| Growth | £810 | 2,000 |
+
+### 2.3 Funcionalidades
+
+#### Pontos Fortes
+- ✅ SDK oficial para TypeScript/JavaScript (Browser & Node.js)
+- ✅ REST API com especificação OpenAPI
+- ✅ Suporte a HTML5 e CSS3
+- ✅ Batch processing (múltiplos PDFs simultaneamente)
+- ✅ Privacy-first (não armazena PDFs após geração)
+- ✅ Infraestrutura serverless escalável
+- ✅ Tempo médio de conversão: **800ms**
+- ✅ 2GB RAM por requisição
+- ✅ Até 30 segundos de compute time para requisições grandes
+- ✅ Exemplos para React e Vue
+
+#### Limitações
+- ❌ **SDK apenas para JavaScript** (não tem Python, PHP, C#, Java, etc.)
+- ❌ **Free tier muito limitado** (apenas 10 PDFs/mês)
+- ❌ **Sem ferramenta online gratuita** (apenas API)
+- ❌ **Preços em GBP** (pode confundir clientes globais)
+- ❌ **Documentação limitada** (apenas básico)
+- ❌ **Sem menção a TailwindCSS**
+- ❌ **Sem integrações no-code** (Zapier, Make.com, etc.)
+- ❌ **Sem webhooks**
+- ❌ **Sem headers/footers customizáveis** (não mencionado)
+- ❌ **Sem templates visuais**
+- ❌ **Produto novo** (versão 0.2.0, poucos usuários)
+
+### 2.4 Tecnologia
+- **Infraestrutura:** Serverless (provável AWS Lambda ou similar)
+- **SDK:** Pacote npm `@html-to-pdf.io/sdk-javascript` (6 versões, 0 dependentes)
+- **API:** REST com OpenAPI spec
+- **Motor de renderização:** Não especificado (provável Puppeteer/Chromium)
+
+### 2.5 Análise SWOT do HTML-to-PDF.io
+
+| Forças | Fraquezas |
+|--------|-----------|
+| Velocidade (800ms) | Free tier muito pequeno |
+| Privacy-first | Apenas SDK JavaScript |
+| Preço competitivo (£10/100 PDFs) | Sem ferramenta online |
+| Serverless escalável | Documentação limitada |
+
+| Oportunidades | Ameaças |
+|---------------|---------|
+| Mercado em crescimento | Concorrentes estabelecidos |
+| Developers JS/TS | APITemplate mais completo |
+| Europa (UK-based) | PDF Leaf com TailwindCSS |
+
+### 2.6 Comparativo Direto: HTML-to-PDF.io vs PDF Leaf
+
+| Feature | HTML-to-PDF.io | PDF Leaf |
+|---------|----------------|----------|
+| **Free tier** | 10/mês | **100/mês** |
+| **Ferramenta online** | ❌ Não | **✅ Sim** |
+| **TailwindCSS** | ❌ Não | **✅ Nativo** |
+| **SDKs** | Apenas JavaScript | Python (WeasyPrint) |
+| **Headers/Footers** | Não especificado | **✅ HTML completo** |
+| **Velocidade** | **~800ms** | Variável |
+| **Armazenamento** | Não armazena | **Não armazena** |
+| **Preço inicial** | £10/mês (~$13) | **Grátis** |
+
+### 2.7 Conclusão sobre HTML-to-PDF.io
+
+**Posicionamento:** Produto novo, focado em desenvolvedores JavaScript, com proposta de simplicidade e privacidade.
+
+**Vantagens do PDF Leaf sobre HTML-to-PDF.io:**
+1. Free tier 10x maior (100 vs 10)
+2. Ferramenta online gratuita (lead generation)
+3. Suporte nativo a TailwindCSS
+4. Headers/Footers com HTML completo
+5. Não precisa de conta para usar ferramenta básica
+
+**O que aprender com HTML-to-PDF.io:**
+1. Velocidade de conversão é um diferencial (800ms)
+2. Privacy-first é valorizado por desenvolvedores
+3. Serverless permite escala sem preocupação
+4. SDK bem documentado facilita adoção
+
+---
+
+## 3. Análise dos Concorrentes
+
+### 3.1 Comparativo de Preços
 
 | Serviço | Free Tier | Plano Inicial | Diferencial |
 |---------|-----------|---------------|-------------|
 | **APITemplate.io** | 50/mês | $19/mês | Integrações no-code, templates visuais |
+| **HTML-to-PDF.io** | 10/mês | £10/mês (~$13) | Serverless, privacy-first, SDK JS |
 | **PDFShift** | 50/mês | ~$9/mês | 99.99% uptime, 1.5s conversão |
 | **DocRaptor** | Ilimitado (watermark) | ~$15/mês | Motor Prince, HIPAA/SOC2 |
 | **PDFMonkey** | 20/mês | €19/mês | Templates visuais, GDPR |
@@ -85,7 +194,7 @@
 | **CustomJS** | 600/mês | ? | Melhor free tier |
 | **html2pdf.app** | 100/mês | ? | Baseado em tamanho |
 
-### 2.2 Pontos Fortes por Concorrente
+### 3.2 Pontos Fortes por Concorrente
 
 | Concorrente | Força Principal |
 |-------------|-----------------|
@@ -94,12 +203,13 @@
 | PDFMonkey | UX visual, Europa-focused |
 | pdflayer | Preço baixo, simplicidade |
 | APITemplate.io | Ecossistema completo (PDF+imagens), no-code |
+| HTML-to-PDF.io | Velocidade (800ms), privacy-first, serverless |
 
 ---
 
-## 3. Oportunidades para PDF Leaf
+## 4. Oportunidades para PDF Leaf
 
-### 3.1 Gaps no Mercado
+### 4.1 Gaps no Mercado
 
 | Gap | Oportunidade |
 |-----|-------------|
@@ -109,7 +219,7 @@
 | **Simplicidade** | Interface mais limpa que APITemplate |
 | **Transparência** | Sem expiração de PDFs (vs 2h do APITemplate) |
 
-### 3.2 Diferenciais Exclusivos do PDF Leaf
+### 4.2 Diferenciais Exclusivos do PDF Leaf
 
 1. **Suporte nativo a TailwindCSS** (único no mercado!)
 2. **Header/Footer com HTML completo** (não apenas texto)
@@ -118,7 +228,7 @@
 5. **Sem watermark no free tier**
 6. **PDFs não expiram**
 
-### 3.3 Estratégia de Posicionamento
+### 4.3 Estratégia de Posicionamento
 
 ```
 "PDF Leaf: The developer-friendly HTML to PDF converter with native TailwindCSS support"
@@ -128,9 +238,9 @@
 
 ---
 
-## 4. Estratégia de SEO Recomendada
+## 5. Estratégia de SEO Recomendada
 
-### 4.1 Palavras-chave Prioritárias
+### 5.1 Palavras-chave Prioritárias
 
 #### Alta Prioridade (Diferencial)
 | Keyword | Volume Est. | Concorrência | Oportunidade |
@@ -153,7 +263,7 @@
 | `html to pdf page break css` | Baixo | Baixa | ⭐⭐⭐⭐ |
 | `weasyprint online` | Baixo | Muito baixa | ⭐⭐⭐⭐ |
 
-### 4.2 Conteúdo a Criar (Blog)
+### 5.2 Conteúdo a Criar (Blog)
 
 #### Fase 1: Fundação
 1. "How to Convert HTML to PDF with TailwindCSS" (artigo pilar)
@@ -170,7 +280,7 @@
 8. "Creating PDF Reports with TailwindCSS"
 9. "Building a Resume Generator with HTML to PDF"
 
-### 4.3 Páginas de Ferramenta (SEO)
+### 5.3 Páginas de Ferramenta (SEO)
 
 | Página | URL Sugerida | Keyword Target |
 |--------|--------------|----------------|
@@ -181,9 +291,9 @@
 
 ---
 
-## 5. Planos Sugeridos para PDF Leaf
+## 6. Planos Sugeridos para PDF Leaf
 
-### 5.1 Estrutura de Pricing (Competitiva)
+### 6.1 Estrutura de Pricing (Competitiva)
 
 | Plano | Preço | PDFs/mês | Diferencial |
 |-------|-------|----------|-------------|
@@ -192,7 +302,7 @@
 | **Pro** | $49 | 10,000 | Priority support, custom domain |
 | **Enterprise** | $99 | 50,000 | SLA, dedicated support |
 
-### 5.2 Comparativo com APITemplate
+### 6.2 Comparativo com APITemplate
 
 | Feature | APITemplate Free | PDF Leaf Free |
 |---------|------------------|---------------|
@@ -204,7 +314,7 @@
 
 ---
 
-## 6. Roadmap Sugerido
+## 7. Roadmap Sugerido
 
 ### Fase 1: Fundação (Atual)
 - [x] Ferramenta online funcional
@@ -237,7 +347,7 @@
 
 ---
 
-## 7. Conclusão
+## 8. Conclusão
 
 ### Vantagens Competitivas do PDF Leaf
 
@@ -263,6 +373,10 @@ Focar em **TailwindCSS como diferencial único** e construir autoridade nesse ni
 
 - [APITemplate.io](https://apitemplate.io)
 - [APITemplate.io Pricing](https://apitemplate.io/pricing/)
+- [HTML-to-PDF.io](https://html-to-pdf.io)
+- [HTML-to-PDF.io Pricing](https://html-to-pdf.io/pricing)
+- [HTML-to-PDF.io Docs](https://html-to-pdf.io/docs/intro)
+- [HTML-to-PDF.io npm SDK](https://www.npmjs.com/package/@html-to-pdf.io/sdk-javascript)
 - [PDFShift](https://pdfshift.io/)
 - [DocRaptor](https://docraptor.com/)
 - [PDFMonkey](https://www.pdfmonkey.io/pricing)
