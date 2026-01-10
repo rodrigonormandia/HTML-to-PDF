@@ -170,7 +170,7 @@ export default function Layout({ children }: LayoutProps) {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.14.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.15.0 | {t('footer.developer')}</div>
       </footer>
 
       <AuthModal

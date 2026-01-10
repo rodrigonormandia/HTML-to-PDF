@@ -148,40 +148,61 @@
     },
     "home": {
         "hero": {
-            "title": "Convert HTML to PDF with TailwindCSS Support",
-            "subtitle": "Generate beautiful PDFs from HTML/CSS. No watermark, no expiration, free tier available.",
-            "bullet1": "Native TailwindCSS support",
-            "bullet2": "Custom headers & footers",
-            "bullet3": "REST API access",
-            "cta_primary": "Try Editor Free",
-            "cta_secondary": "View Pricing"
+            "title": "The Easiest Way to Generate PDFs from HTML",
+            "subtitle": "Stop fighting with PDF generation libraries. Create beautiful documents using the HTML & CSS you already know.",
+            "bullet1": "Pixel-perfect TailwindCSS rendering",
+            "bullet2": "Complex layouts made simple",
+            "bullet3": "Ready for production scale",
+            "cta_primary": "Start Building Free",
+            "cta_secondary": "View Pricing",
+            "stats": {
+                "users": "Happy Developers",
+                "uptime": "Uptime SLA",
+                "latency": "Avg Latency"
+            }
+        },
+        "useCases": {
+            "title": "Built for Every Document Type",
+            "subtitle": "From simple receipts to complex multi-page reports",
+            "invoice": {
+                "title": "Invoices",
+                "desc": "Generate pixel-perfect invoices with dynamic tables and totals."
+            },
+            "report": {
+                "title": "Financial Reports",
+                "desc": "Create charts, data grids, and beautiful summaries."
+            },
+            "resume": {
+                "title": "Resumes",
+                "desc": "Modern layouts with custom fonts and professional styling."
+            }
         },
         "features": {
-            "title": "Key Features for HTML to PDF Conversion",
-            "subtitle": "Powerful features to create professional PDFs from your HTML code",
+            "title": "Why Developers Choose PDF Leaf",
+            "subtitle": "Everything you need to build generation features without the headache",
             "tailwind": {
-                "title": "TailwindCSS Support",
-                "desc": "Use all your favorite Tailwind classes directly in your HTML. No setup required."
+                "title": "Bring Your Own CSS",
+                "desc": "Don't learn a new styling syntax. Use standard CSS or Tailwind classes directly."
             },
             "headers": {
-                "title": "Headers & Footers",
-                "desc": "Add custom headers and footers to every page with dynamic page numbers."
+                "title": "Professional Formatting",
+                "desc": "Add intelligent page numbers, headers, and footers that adapt to your content."
             },
             "async": {
-                "title": "Async Processing",
-                "desc": "Submit jobs and get results via webhook or polling. Perfect for large documents."
+                "title": "Built for Scale",
+                "desc": "Handle thousands of documents concurrently with our robust infrastructure."
             },
             "pagebreak": {
-                "title": "Page Break Control",
-                "desc": "Control exactly where pages break with simple CSS classes."
+                "title": "Smart Page Breaks",
+                "desc": "Control flow precisely. Avoid awkward breaks inside tables or images."
             },
             "api": {
-                "title": "REST API",
-                "desc": "Integrate PDF generation into your apps with our simple REST API."
+                "title": "Developer Friendly",
+                "desc": "A clean, intuitive API that fits into your workflow in minutes."
             },
             "noexpire": {
-                "title": "No Expiration",
-                "desc": "Your PDFs never expire. Generate once, use forever."
+                "title": "Permanent Storage",
+                "desc": "We store your generated PDFs securely so you don't have to."
             }
         },
         "howItWorks": {
@@ -200,9 +221,9 @@
             }
         },
         "codeExample": {
-            "title": "Simple API Integration",
-            "subtitle": "Generate PDFs programmatically with a single API call",
-            "viewDocs": "View API Documentation"
+            "title": "Integrates in Minutes",
+            "subtitle": "No complex setup. Install the SDK and generate your first PDF in 3 lines of code.",
+            "viewDocs": "Read the Docs"
         },
         "pricingPreview": {
             "title": "Simple, Transparent Pricing",

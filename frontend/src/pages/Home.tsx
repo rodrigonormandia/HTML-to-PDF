@@ -54,6 +54,31 @@ const CheckIcon = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
+
+const LightningIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </svg>
+);
+
+const DocumentIcon = () => (
+  <svg className="w-12 h-12 text-blue-600 dark:text-blue-400 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <polyline points="10 9 9 9 8 9" />
+  </svg>
+);
+
 export default function Home() {
   const { t } = useTranslation();
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -134,8 +159,15 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 py-16 lg:py-24">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 py-16 lg:py-24">
+        {/* Animated Background */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute -top-20 -left-20 w-96 h-96 bg-purple-300 dark:bg-purple-900/30 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-3xl opacity-30 animate-blob"></div>
+          <div className="absolute top-40 -right-20 w-96 h-96 bg-blue-300 dark:bg-blue-900/30 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-20 left-40 w-96 h-96 bg-emerald-300 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div className="relative z-10 container mx-auto px-4 max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: Text */}
             <div>
@@ -229,6 +261,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <section className="bg-blue-600 py-12">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
+            <div className="flex flex-col items-center">
+              <div className="bg-white/10 p-4 rounded-full mb-4">
+                <UserIcon />
+              </div>
+              <div className="text-3xl font-bold mb-1">10,000+</div>
+              <div className="text-blue-100">{t('home.hero.stats.users')}</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-white/10 p-4 rounded-full mb-4">
+                <CheckIcon />
+              </div>
+              <div className="text-3xl font-bold mb-1">99.99%</div>
+              <div className="text-blue-100">{t('home.hero.stats.uptime')}</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-white/10 p-4 rounded-full mb-4">
+                <LightningIcon />
+              </div>
+              <div className="text-3xl font-bold mb-1">~800ms</div>
+              <div className="text-blue-100">{t('home.hero.stats.latency')}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-16 lg:py-24 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl">
@@ -256,6 +317,65 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases Section */}
+      <section className="py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h2 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 dark:text-white mb-4">
+            {t('home.useCases.title')}
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
+            {t('home.useCases.subtitle')}
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Invoice */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all">
+              <div className="h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-b border-gray-100 dark:border-gray-700 p-4">
+                <img
+                  src="/images/invoice-preview.png"
+                  alt="Invoice Template"
+                  className="h-full w-auto object-contain shadow-sm rounded-md"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('home.useCases.invoice.title')}</h3>
+                <p className="text-gray-600 dark:text-gray-400">{t('home.useCases.invoice.desc')}</p>
+              </div>
+            </div>
+
+            {/* Resume */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all">
+              <div className="h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-b border-gray-100 dark:border-gray-700 p-4">
+                <img
+                  src="/images/resume-preview.png"
+                  alt="Resume Template"
+                  className="h-full w-auto object-contain shadow-sm rounded-md"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('home.useCases.resume.title')}</h3>
+                <p className="text-gray-600 dark:text-gray-400">{t('home.useCases.resume.desc')}</p>
+              </div>
+            </div>
+
+            {/* Report */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all">
+              <div className="h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-b border-gray-100 dark:border-gray-700 p-4">
+                <img
+                  src="/images/report-preview.png"
+                  alt="Report Template"
+                  className="h-full w-auto object-contain shadow-sm rounded-md"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('home.useCases.report.title')}</h3>
+                <p className="text-gray-600 dark:text-gray-400">{t('home.useCases.report.desc')}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -297,14 +417,12 @@ export default function Home() {
 
           <div className="bg-gray-900 rounded-xl p-6 overflow-x-auto">
             <pre className="text-sm text-gray-300">
-              <code>{`curl -X POST ${apiUrl}/api/convert \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "html_content": "<h1 class=\\"text-2xl font-bold\\">Hello PDF!</h1>",
-    "action": "download",
-    "page_size": "A4"
-  }'`}</code>
+              <code>{`import { PdfLeaf } from '@pdfleaf/sdk';
+
+const pdf = await PdfLeaf.convert({
+  html: '<h1 class="text-3xl text-blue-600">Hello PDF!</h1>',
+  format: 'A4'
+});`}</code>
             </pre>
           </div>
 

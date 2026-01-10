@@ -148,40 +148,61 @@
     },
     "home": {
         "hero": {
-            "title": "Converta HTML para PDF com Suporte a TailwindCSS",
-            "subtitle": "Gere PDFs profissionais a partir de HTML/CSS. Sem marca d'água, sem expiração, com plano gratuito.",
-            "bullet1": "Suporte nativo a TailwindCSS",
-            "bullet2": "Cabeçalhos e rodapés personalizados",
-            "bullet3": "Acesso à API REST",
-            "cta_primary": "Experimente Grátis",
-            "cta_secondary": "Ver Preços"
+            "title": "A Forma Mais Fácil de Gerar PDFs",
+            "subtitle": "Pare de lutar com bibliotecas complexas. Crie documentos lindos usando o HTML e CSS que você já conhece.",
+            "bullet1": "Renderização TailwindCSS perfeita",
+            "bullet2": "Layouts complexos simplificados",
+            "bullet3": "Pronto para escala em produção",
+            "cta_primary": "Comece Grátis",
+            "cta_secondary": "Ver Preços",
+            "stats": {
+                "users": "Devs Satisfeitos",
+                "uptime": "Uptime SLA",
+                "latency": "Latência Média"
+            }
+        },
+        "useCases": {
+            "title": "Feito para Todo Tipo de Documento",
+            "subtitle": "De recibos simples a relatórios complexos de múltiplas páginas",
+            "invoice": {
+                "title": "Faturas",
+                "desc": "Gere faturas perfeitas com tabelas dinâmicas e totais."
+            },
+            "report": {
+                "title": "Relatórios Financeiros",
+                "desc": "Crie gráficos, grids de dados e resumos bonitos."
+            },
+            "resume": {
+                "title": "Currículos",
+                "desc": "Layouts modernos com fontes customizadas e estilo profissional."
+            }
         },
         "features": {
-            "title": "Principais Recursos para Conversão HTML para PDF",
-            "subtitle": "Recursos poderosos para criar PDFs profissionais a partir do seu código HTML",
+            "title": "Por Que Desenvolvedores Escolhem o PDF Leaf",
+            "subtitle": "Tudo que você precisa para criar recursos de geração de documentos sem dor de cabeça",
             "tailwind": {
-                "title": "Suporte TailwindCSS",
-                "desc": "Use todas as suas classes Tailwind favoritas diretamente no seu HTML. Sem configuração."
+                "title": "Traga Seu Próprio CSS",
+                "desc": "Não aprenda uma nova sintaxe. Use CSS padrão ou classes Tailwind diretamente."
             },
             "headers": {
-                "title": "Cabeçalhos e Rodapés",
-                "desc": "Adicione cabeçalhos e rodapés personalizados em cada página com números de página dinâmicos."
+                "title": "Formatação Profissional",
+                "desc": "Adicione números de página inteligentes, cabeçalhos e rodapés que se adaptam ao conteúdo."
             },
             "async": {
-                "title": "Processamento Assíncrono",
-                "desc": "Envie jobs e receba resultados via webhook ou polling. Perfeito para documentos grandes."
+                "title": "Feito para Escalar",
+                "desc": "Processe milhares de documentos simultaneamente com nossa infraestrutura robusta."
             },
             "pagebreak": {
-                "title": "Controle de Quebra de Página",
-                "desc": "Controle exatamente onde as páginas quebram com classes CSS simples."
+                "title": "Quebras de Página Inteligentes",
+                "desc": "Controle o fluxo com precisão. Evite quebras estranhas dentro de tabelas ou imagens."
             },
             "api": {
-                "title": "API REST",
-                "desc": "Integre a geração de PDF em seus apps com nossa API REST simples."
+                "title": "Amigável ao Desenvolvedor",
+                "desc": "Uma API limpa e intuitiva que se encaixa no seu workflow em minutos."
             },
             "noexpire": {
-                "title": "Sem Expiração",
-                "desc": "Seus PDFs nunca expiram. Gere uma vez, use para sempre."
+                "title": "Armazenamento Permanente",
+                "desc": "Nós armazenamos seus PDFs gerados com segurança para que você não precise se preocupar."
             }
         },
         "howItWorks": {
@@ -200,9 +221,9 @@
             }
         },
         "codeExample": {
-            "title": "Integração Simples via API",
-            "subtitle": "Gere PDFs programaticamente com uma única chamada de API",
-            "viewDocs": "Ver Documentação da API"
+            "title": "Integração em Minutos",
+            "subtitle": "Sem configuração complexa. Instale o SDK e gere seu primeiro PDF em 3 linhas de código.",
+            "viewDocs": "Ler Documentação"
         },
         "pricingPreview": {
             "title": "Preços Simples e Transparentes",
