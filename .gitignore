@@ -34,3 +34,7 @@ Thumbs.db
 # Auto Claude data directory
 .auto-claude/
 nul
+
+# Binaries
+*.exe
+supabase.exe

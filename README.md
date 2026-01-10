@@ -1,177 +1,148 @@
-# Supabase CLI
+# PDF Leaf
 
-[![Coverage Status](https://coveralls.io/repos/github/supabase/cli/badge.svg?branch=main)](https://coveralls.io/github/supabase/cli?branch=main) [![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/supabase-cli/setup-cli/master?style=flat-square&label=Bitbucket%20Canary)](https://bitbucket.org/supabase-cli/setup-cli/pipelines) [![Gitlab Pipeline Status](https://img.shields.io/gitlab/pipeline-status/sweatybridge%2Fsetup-cli?label=Gitlab%20Canary)
-](https://gitlab.com/sweatybridge/setup-cli/-/pipelines)
+The developer-friendly HTML to PDF converter with native TailwindCSS support.
 
-[Supabase](https://supabase.io) is an open source Firebase alternative. We're building the features of Firebase using enterprise-grade open source tools.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-1.14.0-green.svg)](https://github.com/rodrigonormandia/HTML-to-PDF)
 
-This repository contains all the functionality for Supabase CLI.
+## Features
 
-- [x] Running Supabase locally
-- [x] Managing database migrations
-- [x] Creating and deploying Supabase Functions
-- [x] Generating types directly from your database schema
-- [x] Making authenticated HTTP requests to [Management API](https://supabase.com/docs/reference/api/introduction)
+- **TailwindCSS Native Support** - Use Tailwind classes directly in your HTML
+- **Custom Headers & Footers** - Full HTML support with page exclusion options
+- **Page Break Control** - CSS classes for precise page breaks
+- **Async Processing** - Queue-based PDF generation with job status tracking
+- **Webhooks** - Get notified when your PDFs are ready
+- **No Watermark** - Clean PDFs on all plans
+- **No Expiration** - Your PDFs never expire
 
-## Getting started
+## Quick Start
 
-### Install the CLI
-
-Available via [NPM](https://www.npmjs.com) as dev dependency. To install:
-
-```bash
-npm i supabase --save-dev
-```
-
-When installing with yarn 4, you need to disable experimental fetch with the following nodejs config.
-
-```
-NODE_OPTIONS=--no-experimental-fetch yarn add supabase
-```
-
-> **Note**
-For Bun versions below v1.0.17, you must add `supabase` as a [trusted dependency](https://bun.sh/guides/install/trusted) before running `bun add -D supabase`.
-
-<details>
-  <summary><b>macOS</b></summary>
-
-  Available via [Homebrew](https://brew.sh). To install:
-
-  ```sh
-  brew install supabase/tap/supabase
-  ```
-
-  To install the beta release channel:
-  
-  ```sh
-  brew install supabase/tap/supabase-beta
-  brew link --overwrite supabase-beta
-  ```
-  
-  To upgrade:
-
-  ```sh
-  brew upgrade supabase
-  ```
-</details>
-
-<details>
-  <summary><b>Windows</b></summary>
-
-  Available via [Scoop](https://scoop.sh). To install:
-
-  ```powershell
-  scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
-  scoop install supabase
-  ```
-
-  To upgrade:
-
-  ```powershell
-  scoop update supabase
-  ```
-</details>
-
-<details>
-  <summary><b>Linux</b></summary>
-
-  Available via [Homebrew](https://brew.sh) and Linux packages.
-
-  #### via Homebrew
-
-  To install:
-
-  ```sh
-  brew install supabase/tap/supabase
-  ```
-
-  To upgrade:
-
-  ```sh
-  brew upgrade supabase
-  ```
-
-  #### via Linux packages
-
-  Linux packages are provided in [Releases](https://github.com/supabase/cli/releases). To install, download the `.apk`/`.deb`/`.rpm`/`.pkg.tar.zst` file depending on your package manager and run the respective commands.
-
-  ```sh
-  sudo apk add --allow-untrusted <...>.apk
-  ```
-
-  ```sh
-  sudo dpkg -i <...>.deb
-  ```
-
-  ```sh
-  sudo rpm -i <...>.rpm
-  ```
-
-  ```sh
-  sudo pacman -U <...>.pkg.tar.zst
-  ```
-</details>
-
-<details>
-  <summary><b>Other Platforms</b></summary>
-
-  You can also install the CLI via [go modules](https://go.dev/ref/mod#go-install) without the help of package managers.
-
-  ```sh
-  go install github.com/supabase/cli@latest
-  ```
-
-  Add a symlink to the binary in `$PATH` for easier access:
-
-  ```sh
-  ln -s "$(go env GOPATH)/bin/cli" /usr/bin/supabase
-  ```
-
-  This works on other non-standard Linux distros.
-</details>
-
-<details>
-  <summary><b>Community Maintained Packages</b></summary>
-
-  Available via [pkgx](https://pkgx.sh/). Package script [here](https://github.com/pkgxdev/pantry/blob/main/projects/supabase.com/cli/package.yml).
-  To install in your working directory:
-
-  ```bash
-  pkgx install supabase
-  ```
-
-  Available via [Nixpkgs](https://nixos.org/). Package script [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/supabase-cli/default.nix).
-</details>
-
-### Run the CLI
+### Using the API
 
 ```bash
-supabase bootstrap
+curl -X POST "https://htmltopdf.buscarid.com/api/v1/convert" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{"html_content": "<h1 class=\"text-blue-500\">Hello TailwindCSS!</h1>"}'
 ```
 
-Or using npx:
+### Using SDKs
+
+**TypeScript/JavaScript:**
+```typescript
+import { PDFLeaf } from '@pdfleaf/sdk';
+
+const client = new PDFLeaf({ apiKey: 'pk_live_...' });
+const pdf = await client.convert('<h1 class="text-blue-500">Hello!</h1>');
+```
+
+**Python:**
+```python
+from pdfleaf import PDFLeaf
+
+client = PDFLeaf(api_key="pk_live_...")
+pdf = client.convert('<h1 class="text-blue-500">Hello!</h1>')
+```
+
+**PHP:**
+```php
+use PDFLeaf\PDFLeaf;
+
+$client = new PDFLeaf('pk_live_...');
+$pdf = $client->convert('<h1 class="text-blue-500">Hello!</h1>');
+```
+
+## Installation
+
+### SDKs
+
+| Language | Installation |
+|----------|--------------|
+| TypeScript/JavaScript | `npm install @pdfleaf/sdk` |
+| Python | `pip install pdfleaf` |
+| PHP | `composer require pdfleaf/sdk` |
+
+## API Reference
+
+### Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/convert` | Convert HTML to PDF |
+| GET | `/api/v1/jobs/{job_id}` | Check job status |
+| GET | `/api/v1/jobs/{job_id}/download` | Download PDF |
+| POST | `/api/v1/webhooks` | Create webhook |
+| GET | `/api/v1/webhooks` | List webhooks |
+| DELETE | `/api/v1/webhooks/{id}` | Delete webhook |
+
+### PDF Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `page_size` | string | `A4` | A3, A4, A5, Letter, Legal, B4, B5 |
+| `orientation` | string | `portrait` | portrait or landscape |
+| `margin_top` | string | `2cm` | Top margin (cm, mm, in) |
+| `margin_bottom` | string | `2cm` | Bottom margin |
+| `margin_left` | string | `2cm` | Left margin |
+| `margin_right` | string | `2cm` | Right margin |
+| `header_html` | string | null | Custom header HTML |
+| `footer_html` | string | null | Custom footer HTML |
+| `include_page_numbers` | boolean | false | Add page numbers |
+
+## Documentation
+
+- [API Docs (Swagger)](https://htmltopdf.buscarid.com/api/docs)
+- [API Docs (ReDoc)](https://htmltopdf.buscarid.com/api/redoc)
+- [TailwindCSS to PDF Guide](https://htmltopdf.buscarid.com/guide/tailwind-to-pdf)
+
+## Development
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.11+
+- Docker & Docker Compose
+
+### Running Locally
 
 ```bash
-npx supabase bootstrap
+# Clone the repository
+git clone https://github.com/rodrigonormandia/HTML-to-PDF.git
+cd HTML-to-PDF
+
+# Start with Docker Compose
+docker compose up
+
+# Frontend: http://localhost:5173
+# Backend: http://localhost:8000
+# API Docs: http://localhost:8000/api/docs
 ```
 
-The bootstrap command will guide you through the process of setting up a Supabase project using one of the [starter](https://github.com/supabase-community/supabase-samples/blob/main/samples.json) templates.
+### Project Structure
 
-## Docs
-
-Command & config reference can be found [here](https://supabase.com/docs/reference/cli/about).
-
-## Breaking changes
-
-We follow semantic versioning for changes that directly impact CLI commands, flags, and configurations.
-
-However, due to dependencies on other service images, we cannot guarantee that schema migrations, seed.sql, and generated types will always work for the same CLI major version. If you need such guarantees, we encourage you to pin a specific version of CLI in package.json.
-
-## Developing
-
-To run from source:
-
-```sh
-# Go >= 1.22
-go run . help
 ```
+├── frontend/          # React + Vite + TypeScript
+├── backend/           # Python + FastAPI + WeasyPrint
+├── sdks/
+│   ├── typescript/    # @pdfleaf/sdk
+│   ├── python/        # pdfleaf
+│   └── php/           # pdfleaf/sdk
+└── supabase/          # Database migrations
+```
+
+## Pricing
+
+| Plan | PDFs/month | Price |
+|------|------------|-------|
+| Free | 100 | $0 |
+| Starter | 2,000 | $15/mo |
+| Pro | 10,000 | $49/mo |
+| Enterprise | 50,000 | $99/mo |
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Author
+
+**Rodrigo Normandia** - [buscarid.com](https://buscarid.com)
