@@ -6,51 +6,51 @@ import { SEO, schemas } from '../components/SEO';
 // Feature icons as SVG components
 const TailwindIcon = () => (
   <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"/>
+    <path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z" />
   </svg>
 );
 
 const HeaderFooterIcon = () => (
   <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="3" width="18" height="18" rx="2"/>
-    <line x1="3" y1="7" x2="21" y2="7"/>
-    <line x1="3" y1="17" x2="21" y2="17"/>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <line x1="3" y1="7" x2="21" y2="7" />
+    <line x1="3" y1="17" x2="21" y2="17" />
   </svg>
 );
 
 const AsyncIcon = () => (
   <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
   </svg>
 );
 
 const PageBreakIcon = () => (
   <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="4" y="2" width="16" height="8" rx="1"/>
-    <rect x="4" y="14" width="16" height="8" rx="1"/>
-    <line x1="2" y1="12" x2="6" y2="12" strokeDasharray="2 2"/>
-    <line x1="10" y1="12" x2="14" y2="12" strokeDasharray="2 2"/>
-    <line x1="18" y1="12" x2="22" y2="12" strokeDasharray="2 2"/>
+    <rect x="4" y="2" width="16" height="8" rx="1" />
+    <rect x="4" y="14" width="16" height="8" rx="1" />
+    <line x1="2" y1="12" x2="6" y2="12" strokeDasharray="2 2" />
+    <line x1="10" y1="12" x2="14" y2="12" strokeDasharray="2 2" />
+    <line x1="18" y1="12" x2="22" y2="12" strokeDasharray="2 2" />
   </svg>
 );
 
 const ApiIcon = () => (
   <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M4 17l6-6-6-6M12 19h8"/>
+    <path d="M4 17l6-6-6-6M12 19h8" />
   </svg>
 );
 
 const NoExpireIcon = () => (
   <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M12 6v6l4 2"/>
-    <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" strokeWidth="2.5"/>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 6v6l4 2" />
+    <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" strokeWidth="2.5" />
   </svg>
 );
 
 const CheckIcon = () => (
   <svg className="w-5 h-5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-    <path d="M5 13l4 4L19 7"/>
+    <path d="M5 13l4 4L19 7" />
   </svg>
 );
 
@@ -122,7 +122,15 @@ export default function Home() {
         title="Free Online HTML to PDF Converter with TailwindCSS Support"
         description="Convert HTML to PDF instantly with native TailwindCSS support. Custom headers, footers, page breaks. No watermark, no expiration. Free online tool and API."
         path="/"
-        jsonLd={schemas.webApplication}
+        jsonLd={[
+          schemas.webApplication,
+          schemas.faqPage([
+            { question: t('home.faq.q1'), answer: t('home.faq.a1') },
+            { question: t('home.faq.q2'), answer: t('home.faq.a2') },
+            { question: t('home.faq.q3'), answer: t('home.faq.a3') },
+            { question: t('home.faq.q4'), answer: t('home.faq.a4') }
+          ])
+        ]}
       />
 
       {/* Hero Section */}
@@ -197,7 +205,7 @@ export default function Home() {
                 {/* Arrow */}
                 <div className="flex justify-center my-4">
                   <svg className="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                    <path d="M12 5v14M19 12l-7 7-7-7" />
                   </svg>
                 </div>
 
@@ -235,9 +243,9 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow"
+                className="group p-6 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-4">
+                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -309,9 +317,65 @@ export default function Home() {
             >
               {t('home.codeExample.viewDocs')}
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
               </svg>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h2 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 dark:text-white mb-4">
+            {t('home.testimonials.title')}
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
+            {t('home.testimonials.subtitle')}
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                <div className="flex gap-1 text-yellow-400 mb-4">
+                  {[...Array(5)].map((_, star) => (
+                    <svg key={star} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 italic">"{t(`home.testimonials.review${i}.text`)}"</p>
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">{t(`home.testimonials.review${i}.author`)}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{t(`home.testimonials.review${i}.role`)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 lg:py-24 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h2 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 dark:text-white mb-4">
+            {t('home.faq.title')}
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
+            {t('home.faq.subtitle')}
+          </p>
+
+          <div className="space-y-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="border-b border-gray-200 dark:border-gray-800 pb-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  {t(`home.faq.q${i}`)}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {t(`home.faq.a${i}`)}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -330,11 +394,10 @@ export default function Home() {
             {plans.map((plan, index) => (
               <div
                 key={index}
-                className={`p-6 rounded-xl border ${
-                  index === 2
-                    ? 'bg-emerald-600 border-emerald-600 text-white'
-                    : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700'
-                }`}
+                className={`p-6 rounded-xl border ${index === 2
+                  ? 'bg-emerald-600 border-emerald-600 text-white'
+                  : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700'
+                  }`}
               >
                 <h3 className={`text-lg font-semibold mb-2 ${index === 2 ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                   {plan.name}
@@ -357,7 +420,7 @@ export default function Home() {
             >
               {t('home.pricingPreview.viewAll')}
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
           </div>

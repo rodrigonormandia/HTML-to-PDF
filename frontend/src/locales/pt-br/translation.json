@@ -157,7 +157,7 @@
             "cta_secondary": "Ver Preços"
         },
         "features": {
-            "title": "Tudo que Você Precisa",
+            "title": "Principais Recursos para Conversão HTML para PDF",
             "subtitle": "Recursos poderosos para criar PDFs profissionais a partir do seu código HTML",
             "tailwind": {
                 "title": "Suporte TailwindCSS",
@@ -214,6 +214,37 @@
         "finalCta": {
             "title": "Pronto para Converter HTML em PDF?",
             "subtitle": "Comece grátis. Sem cartão de crédito."
+        },
+        "testimonials": {
+            "title": "Aprovado por Desenvolvedores",
+            "subtitle": "Junte-se a milhares de desenvolvedores gerando PDFs com PDF Leaf",
+            "review1": {
+                "text": "Finalmente um gerador de PDF que respeita minhas classes Tailwind! Me poupou horas de estilização.",
+                "author": "Sarah Chen",
+                "role": "Líder Frontend"
+            },
+            "review2": {
+                "text": "A API é incrivelmente rápida e confiável. Usamos para gerar mais de 10k faturas mensalmente.",
+                "author": "Mark Davidson",
+                "role": "CTO na FinTech Co"
+            },
+            "review3": {
+                "text": "Quebras de página e cabeçalhos costumam ser um pesadelo em HTML-para-PDF. O PDF Leaf lida perfeitamente.",
+                "author": "Alex Rodriguez",
+                "role": "Full Stack Dev"
+            }
+        },
+        "faq": {
+            "title": "Perguntas Frequentes",
+            "subtitle": "Dúvidas comuns sobre nossa API de HTML para PDF",
+            "q1": "O PDF Leaf é gratuito?",
+            "a1": "Sim! Temos um plano gratuito generoso que permite 100 conversões por mês sem marca d'água e sem expiração.",
+            "q2": "Suporta recursos modernos de CSS?",
+            "a2": "Com certeza. Suportamos Flexbox, Grid e propriedades CSS3 modernas. Nosso motor é otimizado para renderização TailwindCSS.",
+            "q3": "Como adiciono números de página?",
+            "a3": "Basta definir 'include_page_numbers' como true na sua requisição API, ou ativar a opção no Editor.",
+            "q4": "Posso ocultar cabeçalhos na primeira página?",
+            "a4": "Sim, você pode usar o parâmetro 'exclude_header_pages' para especificar páginas onde cabeçalhos/rodapés não devem aparecer."
         }
     },
     "pricing": {

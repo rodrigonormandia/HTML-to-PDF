@@ -157,7 +157,7 @@
             "cta_secondary": "View Pricing"
         },
         "features": {
-            "title": "Everything You Need",
+            "title": "Key Features for HTML to PDF Conversion",
             "subtitle": "Powerful features to create professional PDFs from your HTML code",
             "tailwind": {
                 "title": "TailwindCSS Support",
@@ -214,6 +214,37 @@
         "finalCta": {
             "title": "Ready to Convert HTML to PDF?",
             "subtitle": "Start for free. No credit card required."
+        },
+        "testimonials": {
+            "title": "Loved by Developers",
+            "subtitle": "Join thousands of developers generating PDFs with PDF Leaf",
+            "review1": {
+                "text": "Finally a PDF generator that respects my Tailwind classes! Saved me hours of styling work.",
+                "author": "Sarah Chen",
+                "role": "Frontend Lead"
+            },
+            "review2": {
+                "text": "The API is incredibly fast and reliable. We use it to generate 10k+ invoices monthly.",
+                "author": "Mark Davidson",
+                "role": "CTO at FinTech Co"
+            },
+            "review3": {
+                "text": "Page breaks and headers are usually a nightmare in HTML-to-PDF. PDF Leaf handles them perfectly.",
+                "author": "Alex Rodriguez",
+                "role": "Full Stack Dev"
+            }
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "subtitle": "Common questions about our HTML to PDF API",
+            "q1": "Is PDF Leaf free to use?",
+            "a1": "Yes! We have a generous free tier that allows 100 conversions per month with no watermark and no expiration.",
+            "q2": "Does it support modern CSS features?",
+            "a2": "Absolutely. We support Flexbox, Grid, and modern CSS3 properties. Our engine is optimized for TailwindCSS rendering.",
+            "q3": "How do I add page numbers?",
+            "a3": "Simply set 'include_page_numbers' to true in your API request, or toggle the option in the Editor.",
+            "q4": "Can I hide headers on the first page?",
+            "a4": "Yes, you can use the 'exclude_header_pages' parameter to specify pages where headers/footers should not appear."
         }
     },
     "pricing": {

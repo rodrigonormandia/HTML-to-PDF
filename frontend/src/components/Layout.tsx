@@ -33,7 +33,7 @@ export default function Layout({ children }: LayoutProps) {
           <Link to="/" className="flex items-center gap-4">
             <img src="/logo.png" alt="PDF Leaf Logo" className="w-12 h-12" />
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('app.title')}</h1>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{t('app.title')}</div>
               <p className="text-gray-500 dark:text-gray-400">{t('app.subtitle')}</p>
             </div>
           </Link>
@@ -133,6 +133,20 @@ export default function Layout({ children }: LayoutProps) {
             {t('footer.apiDocs')}
           </a>
           <span className="text-gray-300 dark:text-gray-600">|</span>
+          <Link
+            to="/guide/tailwind-to-pdf"
+            className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
+          >
+            Guide
+          </Link>
+          <span className="text-gray-300 dark:text-gray-600">|</span>
+          <Link
+            to="/html-to-pdf"
+            className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
+          >
+            HTML to PDF
+          </Link>
+          <span className="text-gray-300 dark:text-gray-600">|</span>
           <a
             href={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/redoc`}
             target="_blank"
@@ -156,7 +170,7 @@ export default function Layout({ children }: LayoutProps) {
             {t('legal.terms')}
           </a>
         </div>
-        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.12.0 | {t('footer.developer')}</div>
+        <div>&copy; {new Date().getFullYear()} PDF Leaf v1.14.0 | {t('footer.developer')}</div>
       </footer>
 
       <AuthModal
